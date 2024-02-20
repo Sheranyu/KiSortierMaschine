@@ -8,7 +8,8 @@ class App(cck.CTk):
         self.geometry("400x150")
 
         mainwindow = Mainwindows(self)
-        mainwindow.pack()
+        
+        mainwindow.pack(side="bottom")
 
       
 
