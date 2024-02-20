@@ -1,6 +1,5 @@
 import flet as ft
 
-
 def main(page: ft.Page):
     def add_clicked(e):
         tasks_view.controls.append(ft.Checkbox(label=Task_field.value))

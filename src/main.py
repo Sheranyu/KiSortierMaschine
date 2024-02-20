@@ -10,8 +10,6 @@ class App(cck.CTk):
         mainwindow = Mainwindows(self)
         mainwindow.pack()
 
-      
-
 if __name__ == "__main__":
     app = App()
     app.mainloop()
