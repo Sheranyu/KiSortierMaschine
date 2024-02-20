@@ -13,21 +13,13 @@ def main(page: ft.Page):
     
     button = ft.FloatingActionButton(icon=ft.icons.ADD, on_click=add_clicked)
    
-    rowdata =  ft.Row(
-                controls=[
-                    Task_field,
-                    button
-                ],
-            )
+    rowdata =  ft.Row(controls=[Task_field, button])
 
     view=ft.Column(
         width=600,
         controls=[
         rowdata,
-        ft.Column(controls=[
-            tasks_view
-        ])       
-        ],
+        ft.Column(controls=[tasks_view])],
     )
     container = ft.Container(content=view, bgcolor=ft.colors.BLUE_GREY_900)
 
