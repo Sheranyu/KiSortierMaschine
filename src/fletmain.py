@@ -10,16 +10,20 @@ def main(page: ft.Page):
 
     Task_field = ft.TextField(hint_text="Whats needs to be done?", expand=True)
     tasks_view = ft.Column()
+    
+    button = ft.FloatingActionButton(icon=ft.icons.ADD, on_click=add_clicked)
    
+    rowdata =  ft.Row(
+                controls=[
+                    Task_field,
+                    button
+                ],
+            )
+
     view=ft.Column(
         width=600,
         controls=[
-            ft.Row(
-                controls=[
-                    Task_field,
-                    ft.FloatingActionButton(icon=ft.icons.ADD, on_click=add_clicked),
-                ],
-            ),
+        rowdata,
         ft.Column(controls=[
             tasks_view
         ])       
