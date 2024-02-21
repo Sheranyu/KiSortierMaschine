@@ -1,29 +1,41 @@
 
 import flet as ft
 
-class Mainwindow():
-    def __init__(self,page: ft.Page) -> ft.Row:
-      self.page = page
-    def mainwindow(self):
-        
-        self.button = ft.CupertinoButton(text="Hallo click mich", 
-                                         on_click=lambda e: self.page.go("/second"),
-                                         bgcolor=ft.colors.BLUE,
-                                         )
+class BaseWindow:
+    _page = None  # Klassenattribut für das page-Objekt
 
-        self.row = ft.Row(controls=[self.button], alignment=ft.MainAxisAlignment.CENTER)
-        self.container = ft.Container(content=self.row,expand=True)
-        self.container.alignment = ft.alignment.top_center
-        return self.container
+    @classmethod
+    def set_page(cls, page: ft.Page) -> None:
+        cls._page = page
     
-class secondclass():
-    def __new__(self, page: ft.Page) -> None:
-        self.page = page
-        self.button = ft.FloatingActionButton(text="CLick!", on_click=self.pagegeher)
+    def __init__(cls,page: ft.Page) -> None:
+        cls._page = page
 
-        self.row = ft.Row(controls=[self.button])
+
+class Mainwindow(BaseWindow):
+    def __new__(cls,page: ft.Page) -> ft.Row:
+        cls.page = page
+        cls.button = ft.CupertinoButton(text="Hallo click mich", 
+                                            on_click=lambda e: cls.page.go("/second"),
+                                            bgcolor=ft.colors.BLUE,
+                                            )
+
+        cls.row = ft.Row(controls=[cls.button], alignment=ft.MainAxisAlignment.CENTER)
+        cls.container = ft.Container(content=cls.row,expand=True)
+        cls.container.alignment = ft.alignment.top_center
+        return cls.container
+    def mainwindow(self):
+        pass
         
-        return self.button
+    
+class secondclass(BaseWindow):
+    def __new__(cls, page: ft.Page) -> None:
+        cls.page = page
+        cls.button = ft.FloatingActionButton(text="CLick!", on_click=cls.pagegeher)
+
+        cls.row = ft.Row(controls=[cls.button])
+        
+        return cls.button
 
     def pagegeher(self):
         self.page.go("/")

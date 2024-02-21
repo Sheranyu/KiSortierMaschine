@@ -3,14 +3,9 @@ from mainwindow.fletmaininhalt import Mainwindow, secondclass
 
 class Router:
     def __init__(self, page: ft.Page) -> None:
-
         self.page = page
+        self.register_route()
        
-        self.pageseite = Mainwindow(self.page)
-        self.routes = {
-            "/second": ft.View("/second",controls=[secondclass(self.page)], 
-                               appbar=ft.AppBar(title=ft.Text("Store"), bgcolor=ft.colors.SURFACE_VARIANT))
-        }
    
     def view_pop(self,view):
 
@@ -22,14 +17,21 @@ class Router:
         self.page.views.clear()
         
         self.page.views.append(
-            ft.View("/",controls=[self.pageseite.mainwindow()], appbar=ft.AppBar(title=ft.Text("Store"), bgcolor=ft.colors.BLUE))
+            ft.View("/",controls=[Mainwindow(self.page)], appbar=ft.AppBar(title=ft.Text("Store"), bgcolor=ft.colors.BLUE))
         )  
         for key, value in self.routes.items():
             if self.page.route == key:
                 self.page.views.append(value)
 
-        
         self.page.update()
+
+    def register_route(self) -> None:
+        
+        self.routes = {
+            "/second": ft.View("/second",controls=[secondclass(self.page)], 
+                               appbar=ft.AppBar(title=ft.Text("Store"), bgcolor=ft.colors.SURFACE_VARIANT))
+        }
+        
 
     # def route_change(self, route: ft.RouteChangeEvent):
     #     self.body.content = self.routes[route.route]
