@@ -8,19 +8,21 @@ class Router:
        
         self.pageseite = Mainwindow(self.page)
         self.routes = {
-            "/second": ft.View("/second",controls=[
-                                secondclass(self.page)], appbar=ft.AppBar(title=ft.Text("Store"), bgcolor=ft.colors.SURFACE_VARIANT))
+            "/second": ft.View("/second",controls=[secondclass(self.page)], 
+                               appbar=ft.AppBar(title=ft.Text("Store"), bgcolor=ft.colors.SURFACE_VARIANT))
         }
    
     def view_pop(self,view):
+
         self.page.views.pop()
         top_view = self.page.views[-1]
         self.page.go(top_view.route)
         
     def routechange(self,route):
         self.page.views.clear()
+        
         self.page.views.append(
-            ft.View("/",controls=[self.pageseite.mainwindow()], appbar=ft.AppBar(title=ft.Text("Store"), bgcolor=ft.colors.SURFACE_VARIANT))
+            ft.View("/",controls=[self.pageseite.mainwindow()], appbar=ft.AppBar(title=ft.Text("Store"), bgcolor=ft.colors.BLUE))
         )  
         for key, value in self.routes.items():
             if self.page.route == key:

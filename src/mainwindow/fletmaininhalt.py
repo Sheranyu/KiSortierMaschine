@@ -8,12 +8,11 @@ class Mainwindow():
         
         self.button = ft.CupertinoButton(text="Hallo click mich", 
                                          on_click=lambda e: self.page.go("/second"),
-                                         bgcolor=ft.colors.BLUE
-                                         
+                                         bgcolor=ft.colors.BLUE,
                                          )
 
         self.row = ft.Row(controls=[self.button], alignment=ft.MainAxisAlignment.CENTER)
-        self.container = ft.Container(content=self.row,expand=True, height=200)
+        self.container = ft.Container(content=self.row,expand=True)
         self.container.alignment = ft.alignment.top_center
         return self.container
     
@@ -24,7 +23,7 @@ class secondclass():
 
         self.row = ft.Row(controls=[self.button])
         
-        return self.row
+        return self.button
 
     def pagegeher(self):
         self.page.go("/")
