@@ -13,8 +13,6 @@ class Router:
         }
    
     def view_pop(self,view):
-        
-        print("hallo welt")
         self.page.views.pop()
         top_view = self.page.views[-1]
         self.page.go(top_view.route)
