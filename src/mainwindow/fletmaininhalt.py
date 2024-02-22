@@ -1,4 +1,5 @@
 
+from typing import Any, List
 import flet as ft
 
 class BaseWindow:
@@ -38,5 +39,23 @@ class secondclass(BaseWindow):
         return cls.button
 
     def pagegeher(self):
-        self.page.go("/")
+        self.page.go("/home")
+
+
+class testneu(ft.UserControl):
+    def __init__(self,page: ft.Page ):
+        super().__init__()
+        self.page = page
+        
+    def build(self):
+        
+        self.button = ft.TextButton(text="CLick!", on_click=self.goto,height=200)
+
+        self.row = ft.Row(controls=[self.button])
+        
+        return self.button
+    def goto(self):
+        self.page.go("/home")
+   
+        
   

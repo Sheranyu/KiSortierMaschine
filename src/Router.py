@@ -1,5 +1,5 @@
 import flet as ft
-from mainwindow.fletmaininhalt import Mainwindow, secondclass
+from mainwindow.fletmaininhalt import Mainwindow, secondclass, testneu
 
 class Router:
     def __init__(self, page: ft.Page) -> None:
@@ -29,7 +29,8 @@ class Router:
         
         self.routes = {
             "/second": ft.View("/second",controls=[secondclass(self.page)], 
-                               appbar=ft.AppBar(title=ft.Text("Store"), bgcolor=ft.colors.SURFACE_VARIANT))
+                               appbar=ft.AppBar(title=ft.Text("Store"), bgcolor=ft.colors.SURFACE_VARIANT)),
+            "/home" : ft.View("/home", controls=[testneu(self.page)],appbar=ft.AppBar(title=ft.Text("Store"), bgcolor=ft.colors.SURFACE_VARIANT))
         }
         
 
