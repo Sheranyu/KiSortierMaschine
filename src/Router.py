@@ -1,6 +1,5 @@
 import flet as ft
 from mainwindow.fletmaininhalt import Mainwindow, secondclass, CreateModelPage, LoadModelPage, StartApplicationPage
-
 class Router:
     def __init__(self, page: ft.Page) -> None:
         self.page = page
