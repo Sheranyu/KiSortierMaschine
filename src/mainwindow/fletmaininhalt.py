@@ -41,10 +41,10 @@ class CreateModelPage(ft.UserControl):
         self.page = page
     
     def build(self):
-        self.title = ft.Text("Modell erstellen", style="headlineMedium")
+        self.title = ft.Text("Modell erstellen", theme_style=ft.TextThemeStyle.HEADLINE_LARGE)
         self.instructions = ft.Text("Neues Modell erstellen")
         self.model_name = ft.TextField(label="Modell Name")
-        self.submit_button = ft.ElevatedButton(text="erstellen", on_click=self.create_model)
+        self.submit_button = ft.OutlinedButton(text="erstellen", on_click=self.create_model)
 
         return ft.Column(
             controls=[self.title, self.instructions, self.model_name, self.submit_button],
