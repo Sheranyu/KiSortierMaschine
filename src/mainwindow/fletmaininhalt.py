@@ -33,7 +33,7 @@ class secondclass(BaseWindow):
         return cls.button
 
     def pagegeher(self):
-        self.page.go("/home")
+        self.page.go("/start-application")
     
 class CreateModelPage(ft.UserControl):
     def __init__(self, page: ft.Page):

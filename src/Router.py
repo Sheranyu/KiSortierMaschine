@@ -4,34 +4,31 @@ class Router:
     def __init__(self, page: ft.Page) -> None:
         self.page = page
         self.register_route()
-        self.view_stack = []
+        self.view_list = []
+        self.vorherigelement = ""
        
     def view_pop(self,view):
         self.page.views.pop()
-        self.view_stack.pop()
+        self.view_list.pop()    
         top_view = self.page.views[-1]
+        self.vorherigelement = top_view.route
         self.page.go(top_view.route)
         
-    def routechange(self,route):       
-        #verhindert das der Route immer mit neu reingelegt wird
-        if self.page.route != "/":
-            self.view_stack.append(self.page.views.copy())
+    def routechange(self,route):
+        
+        if self.vorherigelement != self.page.route:
+            self.view_list.append(self.page.route)
             
         self.page.views.clear()
         
-        #route wird immer als grundbaustein hinzugefügt
         self.page.views.append(
-            ft.View("/", controls=[Mainwindow(self.page)], appbar=ft.AppBar(title=ft.Text("Sortiermaschine"), bgcolor=ft.colors.BLUE))
-        )
-        
-        #legt die älteren routen mit rein
-        for views_s in self.view_stack:
-            self.page.views.extend(views_s)
-        # fügt die aktuellste route hinzu
-        for key, value in self.routes.items():
-            if self.page.route == key:
-                self.page.views.append(value)
-
+            ft.View("/",controls=[Mainwindow(self.page)], appbar=ft.AppBar(title=ft.Text("Sortiermaschine"), bgcolor=ft.colors.BLUE))
+        )  
+        for route in self.view_list:
+            for key, value in self.routes.items():
+                if route.startswith(key):
+                    self.page.views.append(value)
+        print(self.view_list)
         self.page.update()
 
     def register_route(self) -> None:
