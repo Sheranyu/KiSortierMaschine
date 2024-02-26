@@ -77,7 +77,6 @@ class CreateModelPage(ft.UserControl):
         self.model_name = ft.TextField(label="Modell Name")
         self.submit_button = ft.FloatingActionButton(text="erstellen", on_click=self.create_model)
  
-
         self.submit_button = ft.FloatingActionButton(on_click=self.create_model,content=ft.Row(
             [ft.Icon(ft.icons.ADD)], alignment="center", spacing=5
         ))
