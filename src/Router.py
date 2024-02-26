@@ -1,5 +1,5 @@
 import flet as ft
-from mainwindow.fletmaininhalt import Mainwindow, secondclass, CreateModelPage, LoadModelPage, StartApplicationPage
+from mainwindow.fletmaininhalt import Mainwindow, CreateModelPage, LoadModelPage, StartApplicationPage
 class Router:
     def __init__(self, page: ft.Page) -> None:
         self.page = page
@@ -33,8 +33,6 @@ class Router:
 
     def register_route(self) -> None:
         self.routes = {
-            "/second": ft.View("/second",controls=[secondclass(self.page)], 
-                appbar=ft.AppBar(title=ft.Text("Store"), bgcolor=ft.colors.SURFACE_VARIANT)),
             "/create-model": ft.View("/create-model", controls=[CreateModelPage(self.page)],
                 appbar=ft.AppBar(title=ft.Text("Modell erstellen"), bgcolor=ft.colors.SURFACE_VARIANT)),
             "/load-model": ft.View("/load-model", controls=[LoadModelPage(self.page)], 

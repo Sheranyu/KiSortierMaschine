@@ -12,28 +12,58 @@ class BaseWindow:
 
 class Mainwindow(BaseWindow):
     def __new__(cls,page: ft.Page) -> ft.Row:
+        cls.weite = 500
+        cls.breite = 75
         cls.page = page
-        cls.button1 = ft.CupertinoButton(text="Hallo click mich", on_click=lambda e: cls.page.go("/second"), bgcolor=ft.colors.BLUE)
-        cls.button2 = ft.CupertinoButton(text="Neues Modell erstellen", on_click=lambda e: cls.page.go("/create-model"), bgcolor=ft.colors.BLUE)
-        cls.button3 = ft.CupertinoButton(text="Modell laden", on_click=lambda e: cls.page.go("/load-model"), bgcolor=ft.colors.BLUE)
-        cls.button4 = ft.CupertinoButton(text="Sortieren!!!", on_click=lambda e: cls.page.go("/start-application"), bgcolor=ft.colors.BLUE)
-        cls.row = ft.Row(controls=[cls.button1, cls.button2, cls.button3, cls.button4], alignment=ft.MainAxisAlignment.CENTER)
+
+        cls.button1 = ft.Container(
+            content=ft.CupertinoButton(text="Neues Modell erstellen", on_click=lambda e: cls.page.go("/create-model"), bgcolor=ft.colors.BLUE),
+            width=cls.weite,
+            height=cls.breite,
+        )
+        cls.button2 = ft.Container(
+            content=ft.CupertinoButton(text="Modell laden", on_click=lambda e: cls.page.go("/load-model"), bgcolor=ft.colors.BLUE),
+            width=cls.weite,
+            height=cls.breite,
+        )
+        cls.button3 = ft.Container(
+            content=ft.CupertinoButton(text="Sortieren", on_click=lambda e: cls.page.go("/start-application"), bgcolor=ft.colors.BLUE),
+            width=cls.weite,
+            height=cls.breite,
+        )
+        cls.button4 = ft.Container(
+            content=ft.CupertinoButton(text="Statistiken", on_click=lambda e: cls.page.go("/start-application"), bgcolor=ft.colors.BLUE),
+            width=cls.weite,
+            height=cls.breite,
+        )
+        cls.button5 = ft.Container(
+            content=ft.CupertinoButton(text="Exit!", on_click=lambda e: cls.exit_application(page), bgcolor=ft.colors.BLUE),
+            width=cls.weite,
+            height=cls.breite,
+        )
+        cls.row = ft.Column(controls=[
+                        cls.button1, cls.button2, cls.button3, cls.button4, cls.button5],
+                        alignment=ft.MainAxisAlignment.CENTER,
+                        spacing=20,
+                        )
         cls.container = ft.Container(content=cls.row, expand=True)
         cls.container.alignment = ft.alignment.top_center
         return cls.container
     
+    def exit_application(cls):
+        pass
+
     def mainwindow(self):
         pass
         
-class secondclass(BaseWindow):
-    def __new__(cls, page: ft.Page) -> None:
-        cls.page = page
-        cls.button = ft.FloatingActionButton(text="Mehr Durstlöscher kaufen!", width=200, on_click=cls.pagegeher)
-        cls.row = ft.Row(controls=[cls.button])
-        return cls.button
-
-    def pagegeher(self):
-        self.page.go("/start-application")
+# class secondclass(BaseWindow):
+#     def __new__(cls, page: ft.Page) -> None:
+#         cls.page = page
+#         cls.button = ft.FloatingActionButton(text="Mehr Durstlöscher kaufen!", width=200, on_click=cls.pagegeher)
+#         cls.row = ft.Row(controls=[cls.button])
+#         return cls.button
+#     def pagegeher(self):
+#         self.page.go("/start-application")
     
 class CreateModelPage(ft.UserControl):
     def __init__(self, page: ft.Page):
@@ -60,7 +90,7 @@ class LoadModelPage(ft.UserControl):
         self.page = page
     
     def build(self):
-        self.title = ft.Text("Modell Laden", style="headlineMedium")
+        self.title = ft.Text("Modell Laden", theme_style=ft.TextThemeStyle.HEADLINE_LARGE)
         self.instructions = ft.Text("Wähle ein Modell zum laden aus.")
         #self.file_picker = ft.FilePicker(accept=".model", on_result=self.load_model)
 
@@ -78,7 +108,7 @@ class StartApplicationPage(ft.UserControl):
         self.page = page
     
     def build(self):
-        self.title = ft.Text("Start Application", style="headlineMedium")
+        self.title = ft.Text("Start Application", theme_style="headlineMedium")
         self.instructions = ft.Text("Wähle deine Sortieroptionen.")
         
         self.sorting_options = ft.Dropdown(
