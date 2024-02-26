@@ -1,4 +1,5 @@
 import flet as ft
+from Ki.opencvcode import TrainiertesModel
 
 class BaseWindow:
     _page = None  # Klassenattribut für das page-Objekt
@@ -11,45 +12,46 @@ class BaseWindow:
         cls._page = page
 
 class Mainwindow(BaseWindow):
-    def __new__(cls,page: ft.Page) -> ft.Row:
-        cls.weite = 500
-        cls.breite = 75
-        cls.page = page
+    def __new__(self,page: ft.Page) -> ft.Row:
+        
+        self.weite = 500
+        self.breite = 75
+        self.page = page
         #cls.text1 = ft.Text("Neues Modell erstellen", theme_style=ft.TextTheme.label_large)
 
-        cls.button1 = ft.Container(
-            content=ft.CupertinoButton(text="Neues Modell erstellen", on_click=lambda e: cls.page.go("/create-model"), bgcolor=ft.colors.BLUE),
-            width=cls.weite,
-            height=cls.breite,
+        self.button1 = ft.Container(
+            content=ft.CupertinoButton(text="Neues Modell erstellen", on_click=lambda e: self.page.go("/create-model"), bgcolor=ft.colors.BLUE),
+            width=self.weite,
+            height=self.breite,
         )
-        cls.button2 = ft.Container(
-            content=ft.CupertinoButton(text="Modell laden", on_click=lambda e: cls.page.go("/load-model"), bgcolor=ft.colors.BLUE),
-            width=cls.weite,
-            height=cls.breite,
+        self.button2 = ft.Container(
+            content=ft.CupertinoButton(text="Modell laden", on_click=lambda e: self.page.go("/load-model"), bgcolor=ft.colors.BLUE),
+            width=self.weite,
+            height=self.breite,
         )
-        cls.button3 = ft.Container(
-            content=ft.CupertinoButton(text="Sortieren", on_click=lambda e: cls.page.go("/start-application"), bgcolor=ft.colors.BLUE),
-            width=cls.weite,
-            height=cls.breite,
+        self.button3 = ft.Container(
+            content=ft.CupertinoButton(text="Starte Anwendung", on_click=lambda e: self.page.go("/start-application"), bgcolor=ft.colors.BLUE),
+            width=self.weite,
+            height=self.breite,
         )
-        cls.button4 = ft.Container(
-            content=ft.CupertinoButton(text="Statistiken", on_click=lambda e: cls.page.go("/start-application"), bgcolor=ft.colors.BLUE),
-            width=cls.weite,
-            height=cls.breite,
+        self.button4 = ft.Container(
+            content=ft.CupertinoButton(text="Statistiken", on_click=lambda e: self.page.go("/statistik"), bgcolor=ft.colors.BLUE),
+            width=self.weite,
+            height=self.breite,
         )
-        cls.button5 = ft.Container(
-            content=ft.CupertinoButton(text="Exit!", on_click=lambda e: cls.exit_application(page), bgcolor=ft.colors.BLUE),
-            width=cls.weite,
-            height=cls.breite,
+        self.button5 = ft.Container(
+            content=ft.CupertinoButton(text="Exit!", on_click=lambda e: self.exit_application(page), bgcolor=ft.colors.BLUE),
+            width=self.weite,
+            height=self.breite,
         )
-        cls.row = ft.Column(controls=[
-                        cls.button1, cls.button2, cls.button3, cls.button4, cls.button5],
+        self.row = ft.Column(controls=[
+                        self.button1, self.button2, self.button3, self.button4, self.button5],
                         alignment=ft.MainAxisAlignment.CENTER,
                         spacing=20,
                         )
-        cls.container = ft.Container(content=cls.row, expand=True)
-        cls.container.alignment = ft.alignment.top_center
-        return cls.container
+        self.container = ft.Container(content=self.row, expand=True)
+        self.container.alignment = ft.alignment.top_center
+        return self.container
     
     def exit_application(cls):
         pass
@@ -109,27 +111,30 @@ class LoadModelPage(ft.UserControl):
 class StartApplicationPage(ft.UserControl):
     def __init__(self, page: ft.Page):
         super().__init__()
+        self.model = TrainiertesModel()
         self.page = page
-    
+        
     def build(self):
         self.title = ft.Text("Start Application", theme_style="headlineMedium")
-        self.instructions = ft.Text("Wähle deine Sortieroptionen.")
         
-        self.sorting_options = ft.Dropdown(
-            label="Sortieren nach",
-            options=[
-                #ft.DropdownOption("Farbe", "farbe"),
-                #ft.DropdownOption("Form", "form")
-            ]
-        )
-        self.start_button = ft.ElevatedButton(text="Start", on_click=self.start_application)
+        
 
-        return ft.Column(
-            controls=[self.title, self.instructions, self.sorting_options, self.start_button],
-            spacing=10
-        )
+        return self.title
     
     def start_application(self, e):
+        self.model.loadmodel()
+
+    def abbruch():
         pass
 
-  
+class Statistik(ft.UserControl):
+    def __init__(self, page: ft.Page):
+        super().__init__()
+        self.page = page
+        
+    def build(self):
+        self.title = ft.Text("Alle Statisiken", theme_style="headlineMedium")
+
+        return self.title
+    
+   
