@@ -15,6 +15,7 @@ class Mainwindow(BaseWindow):
         cls.weite = 500
         cls.breite = 75
         cls.page = page
+        #cls.text1 = ft.Text("Neues Modell erstellen", theme_style=ft.TextTheme.label_large)
 
         cls.button1 = ft.Container(
             content=ft.CupertinoButton(text="Neues Modell erstellen", on_click=lambda e: cls.page.go("/create-model"), bgcolor=ft.colors.BLUE),
@@ -74,13 +75,18 @@ class CreateModelPage(ft.UserControl):
         self.title = ft.Text("Modell erstellen", theme_style=ft.TextThemeStyle.HEADLINE_LARGE)
         self.instructions = ft.Text("Neues Modell erstellen")
         self.model_name = ft.TextField(label="Modell Name")
-        self.submit_button = ft.OutlinedButton(text="erstellen", on_click=self.create_model)
+        self.submit_button = ft.FloatingActionButton(text="erstellen", on_click=self.create_model)
+ 
+
+        self.submit_button = ft.FloatingActionButton(on_click=self.create_model,content=ft.Row(
+            [ft.Icon(ft.icons.ADD)], alignment="center", spacing=5
+        ))
 
         return ft.Column(
             controls=[self.title, self.instructions, self.model_name, self.submit_button],
             spacing=10
         )
-    
+
     def create_model(self, e):
         pass
 
@@ -92,7 +98,6 @@ class LoadModelPage(ft.UserControl):
     def build(self):
         self.title = ft.Text("Modell Laden", theme_style=ft.TextThemeStyle.HEADLINE_LARGE)
         self.instructions = ft.Text("Wähle ein Modell zum laden aus.")
-        #self.file_picker = ft.FilePicker(accept=".model", on_result=self.load_model)
 
         return ft.Column(
             controls=[self.title, self.instructions],
