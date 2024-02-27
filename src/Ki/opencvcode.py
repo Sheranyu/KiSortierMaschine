@@ -1,14 +1,20 @@
 
 import os
+from typing import Any, Generator
 from keras.models import load_model  # TensorFlow is required for Keras to work
 import cv2  # Install opencv-python
 import numpy as np
+from modele.DatenModele import KiData
+
+
+
+
 
 class TrainiertesModel():
     def __init__(self) -> None:
         pass
 
-    def loadmodel(self):
+    def loadmodel(self) -> Generator[KiData, Any, Any]:
         aktueller_ordner = os.path.dirname(os.path.abspath(__file__))
 
       # Übergeordneter Ordner (A) erhalten
@@ -55,9 +61,11 @@ class TrainiertesModel():
             confidence_score = prediction[0][index]
 
             # Print prediction and confidence score
-            print("Class:", class_name[2:], end="")
-            print("Confidence Score:", str(np.round(confidence_score * 100))[:-2], "%")
-
+            #print("Class:", class_name[2:], end="")
+            
+            
+            #print("Confidence Score:", str(np.round(confidence_score * 100))[:-2], "%")
+            yield KiData(class_name[2:],str(np.round(confidence_score * 100))[:-2])
             # Listen to the keyboard for presses.
             keyboard_input = cv2.waitKey(1)
 

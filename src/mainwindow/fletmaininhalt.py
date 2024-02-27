@@ -116,13 +116,16 @@ class StartApplicationPage(ft.UserControl):
         
     def build(self):
         self.title = ft.Text("Start Application", theme_style="headlineMedium")
+        self.startbutton = ft.ElevatedButton("Start",bgcolor=ft.colors.BLUE, on_click=self.start_application)
         
-        
-
-        return self.title
+       
+        self.columendcontainer = ft.Column([self.title,self.startbutton])
+        self.container = ft.Container(content=self.columendcontainer)
+        return self.container
     
     def start_application(self, e):
-        self.model.loadmodel()
+        for item in self.model.loadmodel():
+            print(item.class_name, item.confidence_score)
 
     def abbruch():
         pass
@@ -136,5 +139,8 @@ class Statistik(ft.UserControl):
         self.title = ft.Text("Alle Statisiken", theme_style="headlineMedium")
 
         return self.title
+    
+
+    
     
    
