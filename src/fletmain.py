@@ -1,5 +1,5 @@
 import flet as ft
-from mainwindow.fletmaininhalt import Mainwindow 
+from windows.fletmaininhalt import Mainwindow 
 from Router import Router
 
 def main(page: ft.Page):

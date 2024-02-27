@@ -1,5 +1,12 @@
+import datetime
+from io import TextIOWrapper
+import json
+from anyio import sleep
 import flet as ft
 from Ki.opencvcode import TrainiertesModel
+from logic.kilauflogic import KiDatenVerarbeitung
+
+from shared.shareddata import Shareddata
 
 class BaseWindow:
     _page = None  # Klassenattribut für das page-Objekt
@@ -111,23 +118,23 @@ class LoadModelPage(ft.UserControl):
 class StartApplicationPage(ft.UserControl):
     def __init__(self, page: ft.Page):
         super().__init__()
-        self.model = TrainiertesModel()
+        self.ki_logic = KiDatenVerarbeitung() 
         self.page = page
         
     def build(self):
         self.title = ft.Text("Start Application", theme_style="headlineMedium")
-        self.startbutton = ft.ElevatedButton("Start",bgcolor=ft.colors.BLUE, on_click=self.start_application)
+        self.startbutton = ft.ElevatedButton("Start",bgcolor=ft.colors.BLUE, on_click=self.start)
         
        
         self.columendcontainer = ft.Column([self.title,self.startbutton])
         self.container = ft.Container(content=self.columendcontainer)
         return self.container
     
-    def start_application(self, e):
-        for item in self.model.loadmodel():
-            print(item.class_name, item.confidence_score)
-
-    def abbruch():
+    def start(self):
+        self.startbutton.visible = False
+        self.ki_logic.start_application()
+        
+    def abbruch(self):
         pass
 
 class Statistik(ft.UserControl):
@@ -136,10 +143,24 @@ class Statistik(ft.UserControl):
         self.page = page
         
     def build(self):
+        #oberflächeninhalt was ich brauche:
+        #
+        #Anzeige für wie viele teile Sortiert worden sind
+        #Anzeige für wie viele dem entsprechenden Modus: Ob Farbe oder Form
+        #Anzeige: Was wurde mehr sortiert Farbe oder Form
+        #Anzeige: Laufzeit der Sortiermaschine
+        #Funktion: Laden der vergangenen Daten
+        #Bonus oder je nach Kontext: Speichern der statistik
+        #Hinweiß: Speichern kann auch automatisch erfolgen
+        #Bonus: wie weit sich der Motor drehen musste. 
         self.title = ft.Text("Alle Statisiken", theme_style="headlineMedium")
+        self.button = ft.CupertinoButton("Bekomme Daten", on_click=self.getdata)
 
-        return self.title
+        self.rowcontainer = ft.Row([self.title,self.button])
+        return self.rowcontainer
     
+    def getdata(self,e):
+        Shareddata.loaddata()
 
     
     
