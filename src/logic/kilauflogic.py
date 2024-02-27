@@ -5,7 +5,6 @@ import os
 import time
 from Ki.opencvcode import TrainiertesModel
 from modele.DatenModele import KiData
-from shared.shareddata import Shareddata
 from typing import List
 from jsonconverter.converter import converttoJson
 from pathlib import Path

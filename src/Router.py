@@ -1,5 +1,5 @@
 import flet as ft
-from windows.fletmaininhalt import Mainwindow, CreateModelPage, LoadModelPage, StartApplicationPage, Statistik
+from windows.fletmaininhalt import Mainwindow, CreateModelPage, LoadModelPage, StartApplicationPage, Statistiken
 class Router:
     def __init__(self, page: ft.Page) -> None:
         self.page = page
@@ -39,7 +39,7 @@ class Router:
                 appbar=ft.AppBar(title=ft.Text("Modell laden"), bgcolor=ft.colors.SURFACE_VARIANT)),
             "/start-application": ft.View("/start-application", controls=[StartApplicationPage()], 
                 appbar=ft.AppBar(title=ft.Text("Anwendung starten"), bgcolor=ft.colors.SURFACE_VARIANT)),
-            "/statistik": ft.View("/statistik", controls=[Statistik(self.page)],
+            "/statistik": ft.View("/statistik", controls=[Statistiken(self.page)],
                 appbar=ft.AppBar(title=ft.Text("Statisiken"), bgcolor=ft.colors.SURFACE_VARIANT)),
         }
         

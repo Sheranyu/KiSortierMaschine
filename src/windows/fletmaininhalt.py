@@ -1,13 +1,9 @@
-import datetime
-from io import TextIOWrapper
-import json
-from anyio import sleep
+
 import flet as ft
-from Ki.opencvcode import TrainiertesModel
 from logic.kilauflogic import KiDatenVerarbeitung
-
-from shared.shareddata import Shareddata , LaufZeitConfig
-
+from db.CRUD.Readdata import Datenverteiler
+from shared.shareddata import LaufZeitConfig
+from db.db_and_models.models import Statistik
 class BaseWindow:
     _page = None  # Klassenattribut für das page-Objekt
 
@@ -131,12 +127,14 @@ class StartApplicationPage(ft.UserControl):
         return self.container
     
     def start(self,e):
-        LaufZeitConfig.islaufzeit = True
-        self.startbutton.visible = False
-        self.update()
-        self.ki_logic.start_application()
-        self.startbutton.visible = True
-        self.update()
+        daten = Statistik(class_name="testneu",  confidence_score=80)
+        Datenverteiler().savestatistik(daten)
+        # LaufZeitConfig.islaufzeit = True
+        # self.startbutton.visible = False
+        # self.update()
+        # self.ki_logic.start_application()
+        # self.startbutton.visible = True
+        # self.update()
     
     def will_unmount(self):
         LaufZeitConfig.islaufzeit = False
@@ -145,7 +143,7 @@ class StartApplicationPage(ft.UserControl):
     def abbruch(self):
         pass
 
-class Statistik(ft.UserControl):
+class Statistiken(ft.UserControl):
     def __init__(self, page: ft.Page):
         super().__init__()
         self.page = page
@@ -168,8 +166,7 @@ class Statistik(ft.UserControl):
         return self.rowcontainer
     
     def getdata(self,e):
-        Shareddata.loaddata()
-
+        Datenverteiler().loadstatistik()
     
     
    
