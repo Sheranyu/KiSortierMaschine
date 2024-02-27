@@ -13,7 +13,7 @@ from datetime import datetime
 class KiDatenVerarbeitung():
     def __init__(self) -> None:
         self.model = TrainiertesModel()
-        self.data_to_save: dict[List] = {"data" : []}
+        self.data_to_save: List[KiData] = []
     
     def start_application(self):
         self.dateiname = self._erstelle_speicherdateiname()
@@ -33,12 +33,15 @@ class KiDatenVerarbeitung():
 
         return Kidatei
 
-    def _verarbeitedaten(self,item: KiData, json_file: TextIOWrapper):
-        self.jsondata = converttoJson(item)
-        self.data_to_save["data"].append(self.jsondata)
-        json_file.seek(0)  # Setzt den Dateizeiger an den Anfang der Datei
-        json_file.truncate() 
-        json.dump(self.data_to_save,json_file,indent=2)
+    def _verarbeitedaten(self,item: List[KiData], json_file: TextIOWrapper):
+        self.data_to_save.append(item)
+       # self.jsondata = converttoJson(self.data_to_save)
+        
+        json_file.seek(0) 
+        data = json.dumps([vars(data) for data in self.data_to_save], indent=2)
+        json_file.write(data) # Setzt den Dateizeiger an den Anfang der Datei
+        #json_file.write(self.data_to_save)
+        #json.dump(self.data_to_save,json_file,indent=2)
         # Daten in JSON-Format umwandeln
        
         
