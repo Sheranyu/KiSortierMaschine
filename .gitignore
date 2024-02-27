@@ -3,3 +3,4 @@ myvenv
 
 ./src/build
 src/build
+src/statistikdata/output*

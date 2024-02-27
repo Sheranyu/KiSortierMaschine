@@ -9,4 +9,9 @@ class Datenverteiler():
         print(self.shareddata)
 
 
+class LaufZeitConfig():
+    islaufzeit:bool = False
+
+
+
 Shareddata = Datenverteiler()

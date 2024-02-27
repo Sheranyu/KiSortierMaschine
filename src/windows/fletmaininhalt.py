@@ -6,7 +6,7 @@ import flet as ft
 from Ki.opencvcode import TrainiertesModel
 from logic.kilauflogic import KiDatenVerarbeitung
 
-from shared.shareddata import Shareddata
+from shared.shareddata import Shareddata , LaufZeitConfig
 
 class BaseWindow:
     _page = None  # Klassenattribut für das page-Objekt
@@ -116,10 +116,10 @@ class LoadModelPage(ft.UserControl):
         pass
 
 class StartApplicationPage(ft.UserControl):
-    def __init__(self, page: ft.Page):
+    def __init__(self):
         super().__init__()
         self.ki_logic = KiDatenVerarbeitung() 
-        self.page = page
+        
         
     def build(self):
         self.title = ft.Text("Start Application", theme_style="headlineMedium")
@@ -130,10 +130,18 @@ class StartApplicationPage(ft.UserControl):
         self.container = ft.Container(content=self.columendcontainer)
         return self.container
     
-    def start(self):
+    def start(self,e):
+        LaufZeitConfig.islaufzeit = True
         self.startbutton.visible = False
+        self.update()
         self.ki_logic.start_application()
+        self.startbutton.visible = True
+        self.update()
+    
+    def will_unmount(self):
+        LaufZeitConfig.islaufzeit = False
         
+
     def abbruch(self):
         pass
 

@@ -5,7 +5,7 @@ from keras.models import load_model  # TensorFlow is required for Keras to work
 import cv2  # Install opencv-python
 import numpy as np
 from modele.DatenModele import KiData
-
+from shared.shareddata import LaufZeitConfig
 
 
 
@@ -70,7 +70,7 @@ class TrainiertesModel():
             keyboard_input = cv2.waitKey(1)
 
             # 27 is the ASCII for the esc key on your keyboard.
-            if keyboard_input == 27:
+            if keyboard_input == 27 or LaufZeitConfig.islaufzeit == False:
                 break
 
         camera.release()

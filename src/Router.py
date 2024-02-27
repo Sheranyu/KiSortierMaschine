@@ -37,7 +37,7 @@ class Router:
                 appbar=ft.AppBar(title=ft.Text("Modell erstellen"), bgcolor=ft.colors.SURFACE_VARIANT)),
             "/load-model": ft.View("/load-model", controls=[LoadModelPage(self.page)], 
                 appbar=ft.AppBar(title=ft.Text("Modell laden"), bgcolor=ft.colors.SURFACE_VARIANT)),
-            "/start-application": ft.View("/start-application", controls=[StartApplicationPage(self.page)], 
+            "/start-application": ft.View("/start-application", controls=[StartApplicationPage()], 
                 appbar=ft.AppBar(title=ft.Text("Anwendung starten"), bgcolor=ft.colors.SURFACE_VARIANT)),
             "/statistik": ft.View("/statistik", controls=[Statistik(self.page)],
                 appbar=ft.AppBar(title=ft.Text("Statisiken"), bgcolor=ft.colors.SURFACE_VARIANT)),
