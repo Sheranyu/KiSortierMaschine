@@ -3,22 +3,21 @@ from typing import List
 from sqlalchemy import select, insert
 from db.db_and_models.models import Statistik, DatumSpeicherung
 from sqlalchemy.orm.session import Session
-from db.db_and_models.session import newsession
+from db.db_and_models.session import sessiongen
 from modele.InterneDatenModele import KiData
 
 class StatistikCreater():
     def savestatistik(self,daten: KiData,aktulles_datum_id: int ,session: Session):
         modeldata = Statistik(class_name=daten.class_name,
                               confidence_score=daten.confidence_score,
-                              erkannte_farbe=daten.erkannte_farbe,
-                              erkannte_form=daten.erkannte_form, fremd_id=aktulles_datum_id)
+                              modus=daten.modus, fremd_id=aktulles_datum_id)
 
         session.add(modeldata)
         session.commit()
 
 class StatistikReader():
     def Readdata():
-        with newsession() as session:
+        with sessiongen() as session:
             statisiken: List[Statistik] = session.query(Statistik).all()
             for item in statisiken:
                 print(item.confidence_score , item.class_name)

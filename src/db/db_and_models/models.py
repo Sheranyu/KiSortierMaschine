@@ -26,18 +26,16 @@ class Statistik(Base):
     __tablename__ = 'Statistik'
 
     Statisik_id: Mapped[Optional[int]] = mapped_column(Integer, primary_key=True)
-    class_name: Mapped[Optional[str]] = mapped_column(Text)
+    label_name: Mapped[Optional[str]] = mapped_column(Text)
     confidence_score: Mapped[Optional[int]] = mapped_column(Integer)
-    erkannte_farbe: Mapped[Optional[str]] = mapped_column(Text)
-    erkannte_form: Mapped[Optional[str]] = mapped_column(Text)
+    modus: Mapped[Optional[str]] = mapped_column(Text)
     fremd_id: Mapped[Optional[decimal.Decimal]] = mapped_column(ForeignKey('DatumSpeicherung.Id'))
 
     fremd: Mapped['DatumSpeicherung'] = relationship('DatumSpeicherung', back_populates='Statistik')
 
-    def __init__(self, class_name, confidence_score, erkannte_farbe, erkannte_form, fremd_id= None):
-        self.class_name = class_name
+    def __init__(self, label_name, confidence_score, modus, fremd_id= None):
+        self.label_name = label_name
         self.confidence_score = confidence_score
-        self.erkannte_farbe = erkannte_farbe
-        self.erkannte_form = erkannte_form
+        self.modus = modus
         self.fremd_id = fremd_id
 

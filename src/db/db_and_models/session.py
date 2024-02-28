@@ -5,4 +5,4 @@ from db.db_and_models.engine import engine
 
 
 
-newsession = sessionmaker(engine)
+sessiongen = sessionmaker(engine)

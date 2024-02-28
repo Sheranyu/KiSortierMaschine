@@ -16,7 +16,7 @@ from datetime import datetime
 
 from db.CRUD.Statistik import  StatistikCreater
 from db.CRUD.DatumSpeicherung import CreateDatumSpeicherung
-from db.db_and_models.session import newsession
+from db.db_and_models.session import sessiongen
 
 
 class KiDatenVerarbeitung():
@@ -26,7 +26,7 @@ class KiDatenVerarbeitung():
     
     def start_application(self):
         datum = self._erstelle_speicherdateiname()
-        with newsession() as session:
+        with sessiongen() as session:
             datumid = self._createdatum(datum,session)
             for item in self.model.loadmodel():
                 print(item.class_name, item.confidence_score)
@@ -34,12 +34,11 @@ class KiDatenVerarbeitung():
 
         
 
-    def _erstelle_speicherdateiname(self) -> Tuple[str, datetime]:
+    def _erstelle_speicherdateiname(self) -> datetime:
         # Pfad zum Ordner "statistikdata" erstellen
         # Pfad zur gewünschten Datei im Ordner "statistikdata" erstellen
         datum = datetime.now()
         #datei_name = datum.strftime("output_%Y-%m-%d_%H-%M-%S.json")
-
         return datum
 
     def _verarbeitedaten(self,item: KiData,datumid:int, session: Session):

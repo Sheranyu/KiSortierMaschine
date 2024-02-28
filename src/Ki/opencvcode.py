@@ -57,7 +57,7 @@ class TrainiertesModel():
             # Predicts the model
             prediction = model.predict(image)
             index = np.argmax(prediction)
-            class_name = class_label_names[index]
+            label_name = class_label_names[index]
             confidence_score = prediction[0][index]
 
             # Print prediction and confidence score
@@ -65,7 +65,7 @@ class TrainiertesModel():
             
             
             #print("Confidence Score:", str(np.round(confidence_score * 100))[:-2], "%")
-            yield KiData(class_name[2:],str(np.round(confidence_score * 100))[:-2])
+            yield KiData(label_name[2:],str(np.round(confidence_score * 100))[:-2],"form")
             # Listen to the keyboard for presses.
             keyboard_input = cv2.waitKey(1)
 
