@@ -33,7 +33,7 @@ class TrainiertesModel():
         model = load_model(Kidatei, compile=False)
 
         # Load the labels
-        class_names = open(label, "r").readlines()
+        class_label_names = open(label, "r").readlines()
 
         # CAMERA can be 0 or 1 based on default camera of your computer
         camera = cv2.VideoCapture(0)
@@ -57,7 +57,7 @@ class TrainiertesModel():
             # Predicts the model
             prediction = model.predict(image)
             index = np.argmax(prediction)
-            class_name = class_names[index]
+            class_name = class_label_names[index]
             confidence_score = prediction[0][index]
 
             # Print prediction and confidence score
