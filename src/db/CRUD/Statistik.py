@@ -7,24 +7,11 @@ from db.db_and_models.session import newsession
 from modele.InterneDatenModele import KiData
 
 class StatistikCreater():
-    def savestatistik(self,daten: KiData,gesuchtes_datum: datetime ,session: Session):
+    def savestatistik(self,daten: KiData,aktulles_datum_id: int ,session: Session):
         modeldata = Statistik(class_name=daten.class_name,
                               confidence_score=daten.confidence_score,
                               erkannte_farbe=daten.erkannte_farbe,
-                              erkannte_form=daten.erkannte_form)
-        
-        aktuellesdatenobject = select(DatumSpeicherung).where(DatumSpeicherung.Datum == gesuchtes_datum)
-        result = session.execute(aktuellesdatenobject).scalar()
-        
-        
-        if result is None:
-            insertdata = insert(DatumSpeicherung).values(Datum=gesuchtes_datum).returning(DatumSpeicherung)
-            result = session.execute(insertdata).scalar()
-            
-            session.commit()
-            
-        
-        modeldata.fremd_id = result.Id
+                              erkannte_form=daten.erkannte_form, fremd_id=aktulles_datum_id)
 
         session.add(modeldata)
         session.commit()

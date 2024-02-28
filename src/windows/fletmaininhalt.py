@@ -180,7 +180,7 @@ class Statistiken(ft.UserControl):
         self.update()
     
     def getdata(self,e):
-        CreateDatumSpeicherung().loadstatistik()
+        pass
     
     
 

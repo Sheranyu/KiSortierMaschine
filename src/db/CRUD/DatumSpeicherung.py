@@ -1,15 +1,17 @@
 
 
+import datetime
 from typing import List
-from db.db_and_models.models import Statistik
-from db.db_and_models.session import newsession
+from db.db_and_models.models import DatumSpeicherung
+from sqlalchemy.orm.session import Session
+from sqlalchemy import insert
 
 class CreateDatumSpeicherung():
-
-        
-    def loadstatistik(self):
-        pass
-
+    def CreateDatum(self,session: Session, gesuchtes_datum: datetime) -> int:
+        insertdata = insert(DatumSpeicherung).values(Datum=gesuchtes_datum).returning(DatumSpeicherung)
+        result = session.execute(insertdata).scalar()
+        session.commit()
+        return result.Id
 
 class UpdatedatumSpeicherung():
     pass
