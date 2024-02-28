@@ -1,8 +1,8 @@
 
 import flet as ft
 from logic.kilauflogic import KiDatenVerarbeitung
-from db.CRUD.Readdata import DataReader
-from db.CRUD.CreateData import DataCreater
+from db.CRUD.DatumSpeicherung import CreateDatumSpeicherung
+from db.CRUD.Statistik import StatistikCreater
 
 from shared.shareddata import LaufZeitConfig
 from db.db_and_models.models import Statistik
@@ -180,7 +180,7 @@ class Statistiken(ft.UserControl):
         self.update()
     
     def getdata(self,e):
-        DataReader().loadstatistik()
+        CreateDatumSpeicherung().loadstatistik()
     
     
 

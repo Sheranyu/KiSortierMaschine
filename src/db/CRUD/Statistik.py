@@ -6,7 +6,7 @@ from sqlalchemy.orm.session import Session
 from db.db_and_models.session import newsession
 from modele.InterneDatenModele import KiData
 
-class DataCreater():
+class StatistikCreater():
     def savestatistik(self,daten: KiData,gesuchtes_datum: datetime ,session: Session):
         modeldata = Statistik(class_name=daten.class_name,
                               confidence_score=daten.confidence_score,
@@ -18,8 +18,9 @@ class DataCreater():
         
         
         if result is None:
-            insertdata = insert(DatumSpeicherung).values(Datum=gesuchtes_datum)
-            result = session.execute(insertdata)
+            insertdata = insert(DatumSpeicherung).values(Datum=gesuchtes_datum).returning(DatumSpeicherung)
+            result = session.execute(insertdata).scalar()
+            
             session.commit()
             
         
@@ -28,4 +29,14 @@ class DataCreater():
         session.add(modeldata)
         session.commit()
 
-    
+class StatistikReader():
+    def Readdata():
+        with newsession() as session:
+            statisiken: List[Statistik] = session.query(Statistik).all()
+            for item in statisiken:
+                print(item.confidence_score , item.class_name)
+
+
+class UpdateStatistik():
+    def UpdateData():
+        pass

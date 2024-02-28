@@ -13,7 +13,7 @@ from pathlib import Path
 from datetime import datetime
 
 
-from db.CRUD.CreateData import  DataCreater
+from db.CRUD.Statistik import  StatistikCreater
 from db.db_and_models.session import newsession
 
 
@@ -40,7 +40,8 @@ class KiDatenVerarbeitung():
         return (datei_name,datum)
 
     def _verarbeitedaten(self,item: KiData,datum, session: Session):
-        DataCreater().savestatistik(item,datum,session)
+        
+        StatistikCreater().savestatistik(item,datum,session)
        
         
         
