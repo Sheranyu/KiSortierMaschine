@@ -1,24 +1,47 @@
-import json
+import flet as ft
 
-def read_and_process_json(file_path):
-    try:
-        with open(file_path, 'r') as json_file:
-            data = json.load(json_file)
-            print(data["data"][1])
-            # Die "data"-Liste enthält die JSON-Strings
-            for json_str in data["data"]:
-                # JSON-String in ein Python-Objekt umwandeln
-                json_obj = json.loads(json_str)
-                # Auf einzelne Attribute zugreifen
-                #print(json_obj)
-                
-                # Die Daten ausgeben oder weiterverarbeiten
-                
-    except FileNotFoundError:
-        print(f"Datei '{file_path}' nicht gefunden.")
-    except json.JSONDecodeError as e:
-        print(f"Fehler beim Dekodieren der JSON-Datei: {e}")
+def main(page):
 
-# Beispielaufruf
-file_path = "output_2024-02-27_15-10-20.json"
-read_and_process_json(file_path)
+    def close_anchor(e):
+        text = f"Color {e.control.data}"
+        print(f"closing view from {text}")
+        anchor.close_view(text)
+
+    def handle_change(e):
+        print(f"handle_change e.data: {e.data}")
+
+    def handle_submit(e):
+        print(f"handle_submit e.data: {e.data}")
+
+    def handle_tap(e):
+        print(f"handle_tap")
+
+    anchor = ft.SearchBar(
+        view_elevation=4,
+        divider_color=ft.colors.AMBER,
+        bar_hint_text="Search colors...",
+        view_hint_text="Choose a color from the suggestions...",
+        on_change=handle_change,
+        on_submit=handle_submit,
+        on_tap=handle_tap,
+        controls=[
+            ft.ListTile(title=ft.Text(f"Color {i}"), on_click=close_anchor, data=i)
+            for i in range(10)
+        ],
+    )
+
+    page.add(
+        ft.Row(
+            alignment=ft.MainAxisAlignment.CENTER,
+            controls=[
+                ft.OutlinedButton(
+                    "Open Search View",
+                    on_click=lambda _: anchor.open_view(),
+                ),
+            ],
+        ),
+        anchor,
+    )
+
+
+ft.app(target=main)

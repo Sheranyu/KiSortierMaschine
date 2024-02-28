@@ -1,7 +1,9 @@
 
 import flet as ft
 from logic.kilauflogic import KiDatenVerarbeitung
-from db.CRUD.Readdata import Datenverteiler
+from db.CRUD.Readdata import DataReader
+from db.CRUD.CreateData import DataCreater
+
 from shared.shareddata import LaufZeitConfig
 from db.db_and_models.models import Statistik
 class BaseWindow:
@@ -70,7 +72,10 @@ class Mainwindow(BaseWindow):
 #         return cls.button
 #     def pagegeher(self):
 #         self.page.go("/start-application")
-    
+
+
+
+ 
 class CreateModelPage(ft.UserControl):
     def __init__(self, page: ft.Page):
         super().__init__()
@@ -120,28 +125,30 @@ class StartApplicationPage(ft.UserControl):
     def build(self):
         self.title = ft.Text("Start Application", theme_style="headlineMedium")
         self.startbutton = ft.ElevatedButton("Start",bgcolor=ft.colors.BLUE, on_click=self.start)
+        self.abbruchbutton = ft.ElevatedButton("Abbruch", bgcolor=ft.colors.RED, on_click=self.abbruch, visible=False)
         
        
-        self.columendcontainer = ft.Column([self.title,self.startbutton])
+        self.columendcontainer = ft.Column([self.title,self.startbutton, self.abbruchbutton])
         self.container = ft.Container(content=self.columendcontainer)
         return self.container
     
     def start(self,e):
-        daten = Statistik(class_name="testneu",  confidence_score=80)
-        Datenverteiler().savestatistik(daten)
-        # LaufZeitConfig.islaufzeit = True
-        # self.startbutton.visible = False
-        # self.update()
-        # self.ki_logic.start_application()
-        # self.startbutton.visible = True
-        # self.update()
+        # daten = Statistik(class_name="testneu",  confidence_score=80)
+        # DataCreater().savestatistik(daten)
+        LaufZeitConfig.islaufzeit = True
+        toggle_two_buttons(self,False, True)
+        self.ki_logic.start_application()
+        toggle_two_buttons(self,True, False)
+    
+    def abbruch(self,e):
+        toggle_two_buttons(self,True,False)
+        LaufZeitConfig.islaufzeit = False
+        self.update()
     
     def will_unmount(self):
         LaufZeitConfig.islaufzeit = False
         
 
-    def abbruch(self):
-        pass
 
 class Statistiken(ft.UserControl):
     def __init__(self, page: ft.Page):
@@ -155,18 +162,32 @@ class Statistiken(ft.UserControl):
         #Anzeige für wie viele dem entsprechenden Modus: Ob Farbe oder Form
         #Anzeige: Was wurde mehr sortiert Farbe oder Form
         #Anzeige: Laufzeit der Sortiermaschine
-        #Funktion: Laden der vergangenen Daten
+        #Funktion: Laden der vergangenen Daten reicht als Button
         #Bonus oder je nach Kontext: Speichern der statistik
         #Hinweiß: Speichern kann auch automatisch erfolgen
         #Bonus: wie weit sich der Motor drehen musste. 
         self.title = ft.Text("Alle Statisiken", theme_style="headlineMedium")
         self.button = ft.CupertinoButton("Bekomme Daten", on_click=self.getdata)
+        self.SearchStatistikdata = ft.SearchBar(on_submit=self.onEnterSearch,divider_color=ft.colors.AMBER)
 
-        self.rowcontainer = ft.Row([self.title,self.button])
+        self.rowcontainer = ft.Row([self.title,self.button, self.SearchStatistikdata])
         return self.rowcontainer
     
+    def close_anchor(self):
+        self.SearchStatistikdata.close_view()
+
+    def onEnterSearch(self,e): 
+        self.update()
+    
     def getdata(self,e):
-        Datenverteiler().loadstatistik()
+        DataReader().loadstatistik()
     
     
-   
+
+
+
+
+def toggle_two_buttons(self, start_visible, abbruch_visible):
+    self.startbutton.visible = start_visible
+    self.abbruchbutton.visible = abbruch_visible
+    self.update()
