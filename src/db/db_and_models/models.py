@@ -41,12 +41,3 @@ class Statistik(Base):
         self.erkannte_form = erkannte_form
         self.fremd_id = fremd_id
 
-
-
-
-
-t_sqlite_sequence = Table(
-    'sqlite_sequence', metadata,
-    Column('name', NullType),
-    Column('seq', NullType)
-)
