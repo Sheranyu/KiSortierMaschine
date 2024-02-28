@@ -4,7 +4,7 @@ from typing import Any, Generator
 from keras.models import load_model  # TensorFlow is required for Keras to work
 import cv2  # Install opencv-python
 import numpy as np
-from modele.DatenModele import KiData
+from modele.InterneDatenModele import KiData
 from shared.shareddata import LaufZeitConfig
 
 

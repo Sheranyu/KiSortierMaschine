@@ -11,5 +11,5 @@ class DataReader():
         with newsession() as session:
             statisiken: List[Statistik] = session.query(Statistik).all()
             for item in statisiken:
-                print(item.id, item.class_name)
+                print(item.confidence_score , item.class_name)
             
