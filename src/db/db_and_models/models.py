@@ -34,7 +34,7 @@ class Statistik(Base):
 
     fremd: Mapped['DatumSpeicherung'] = relationship('DatumSpeicherung', back_populates='Statistik')
 
-    def __init__(self, class_name, confidence_score, erkannte_farbe, erkannte_form, fremd_id):
+    def __init__(self, class_name, confidence_score, erkannte_farbe, erkannte_form, fremd_id= None):
         self.class_name = class_name
         self.confidence_score = confidence_score
         self.erkannte_farbe = erkannte_farbe
