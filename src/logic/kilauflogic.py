@@ -3,12 +3,13 @@ from io import TextIOWrapper
 import json
 import os
 import time
-
+import cv2
+import flet as ft
 from sqlalchemy.orm import Session
 from Ki.opencvcode import TrainiertesModel
 from db.db_and_models.models import DatumSpeicherung
 from modele.InterneDatenModele import KiData
-from typing import List, Tuple
+from typing import Any, Callable, List, Tuple, Type
 from jsonconverter.converter import converttoJson
 from pathlib import Path
 from datetime import datetime
@@ -23,13 +24,15 @@ class KiDatenVerarbeitung():
     def __init__(self) -> None:
         self.model = TrainiertesModel()
         self.data_to_save: List[KiData] = []
+
     
-    def start_application(self):
+    def start_application(self,callback):
         datum = self._erstelle_datum()
         with sessiongen() as session:
             datumid = self._createdatumindb(datum,session)
-            for item in self.model.loadmodel():
-                print(item.label_name, item.confidence_score)
+            for item, image in self.model.loadmodel():
+                callback(image)
+                #print(item.label_name, item.confidence_score)
                 self._verarbeitedaten(item,datumid,session)
 
         
@@ -40,6 +43,9 @@ class KiDatenVerarbeitung():
         datum = datetime.now()
         #datei_name = datum.strftime("output_%Y-%m-%d_%H-%M-%S.json")
         return datum
+    
+    def getvideodata():
+        pass
 
     def _verarbeitedaten(self,item: KiData,datumid:int, session: Session):
         StatistikCreater().savestatistik(item,datumid,session)

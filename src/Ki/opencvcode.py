@@ -1,6 +1,6 @@
 
 import os
-from typing import Any, Generator
+from typing import Any, Generator, Tuple
 from keras.models import load_model  # TensorFlow is required for Keras to work
 import cv2  # Install opencv-python
 import numpy as np
@@ -14,7 +14,7 @@ class TrainiertesModel():
     def __init__(self) -> None:
         modeldata = ModelDataClass()
 
-    def loadmodel(self) -> Generator[KiData, Any, Any]:
+    def loadmodel(self) -> Generator[Tuple[KiData,cv2.typing.MatLike], Any, Any]:
         aktueller_ordner = os.path.dirname(os.path.abspath(__file__))
       # Übergeordneter Ordner (A) erhalten
         #uebergeordneter_ordner = os.path.dirname(aktueller_ordner)
@@ -43,15 +43,17 @@ class TrainiertesModel():
 
             # Show the image in a window
             cv2.imshow("Webcam Image", image)
+            
 
             # Make the image a numpy array and reshape it to the models input shape.
-            image = np.asarray(image, dtype=np.float32).reshape(1, 224, 224, 3)
+            imageresharp = np.asarray(image, dtype=np.float32).reshape(1, 224, 224, 3)
 
             # Normalize the image array
-            image = (image / 127.5) - 1
+            imageresharp = (imageresharp / 127.5) - 1
+            
 
             # Predicts the model
-            prediction = model.predict(image)
+            prediction = model.predict(imageresharp)
             index = np.argmax(prediction)
             label_name = class_label_names[index]
             confidence_score = prediction[0][index]
@@ -61,7 +63,7 @@ class TrainiertesModel():
             
             
             #print("Confidence Score:", str(np.round(confidence_score * 100))[:-2], "%")
-            yield KiData(label_name[2:],str(np.round(confidence_score * 100))[:-2],"form")
+            yield (KiData(label_name[2:],str(np.round(confidence_score * 100))[:-2],"form"), image)
             # Listen to the keyboard for presses.
             keyboard_input = cv2.waitKey(1)
 
@@ -71,3 +73,7 @@ class TrainiertesModel():
 
         camera.release()
         cv2.destroyAllWindows()
+
+
+def bildtoImage(self,image: np.ndarray[np.floating[Any]]):
+    pass

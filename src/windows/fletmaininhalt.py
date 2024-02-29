@@ -1,4 +1,5 @@
 
+import cv2
 import flet as ft
 from logic.kilauflogic import KiDatenVerarbeitung
 from db.CRUD.DatumSpeicherung import CreateDatumSpeicherung
@@ -6,6 +7,7 @@ from db.CRUD.Statistik import StatistikCreater
 
 from configordner.settings import LaufZeitConfig
 from db.db_and_models.models import Statistik
+from db.db_and_models.session import sessiongen
 class BaseWindow:
     _page = None  # Klassenattribut für das page-Objekt
 
@@ -130,7 +132,7 @@ class StartApplicationPage(ft.UserControl):
         self.colum1 = ft.Row([self.title])
         self.startrow = ft.Row([self.startbutton, self.abbruchbutton])
         self.bildvideoRow= ft.Row([])
-        self.columendcontainer = ft.Column([self.colum1, self.startrow])
+        self.columendcontainer = ft.Column([self.colum1, self.startrow,self.bildvideoRow])
         self.container = ft.Container(content=self.columendcontainer)
         return self.container
     
@@ -140,11 +142,15 @@ class StartApplicationPage(ft.UserControl):
         # DataCreater().savestatistik(daten)
         LaufZeitConfig.islaufzeit = True
         toggle_two_buttons(self,False, True)
-        self.ki_logic.start_application()
+        
+        self.ki_logic.start_application(self.CamAnzeige)
+            
         toggle_two_buttons(self,True, False)
 
 
-    def CamAnzeige():
+    def CamAnzeige(self,image: cv2.typing.MatLike):
+        self.bildvideo.src = image
+        print("yuju")
         pass
     
     def abbruch(self,e):

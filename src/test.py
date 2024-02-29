@@ -2,6 +2,10 @@ import flet as ft
 
 def main(page):
 
+
+    #bild = ft.Ref[ft.Image]()
+    
+    
     def close_anchor(e):
         text = f"Color {e.control.data}"
         print(f"closing view from {text}")
@@ -45,3 +49,6 @@ def main(page):
 
 
 ft.app(target=main)
+
+
+
