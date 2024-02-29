@@ -48,3 +48,5 @@ class Router:
     #     self.body.content = self.routes[route.route]
     #     self.body.page.scroll = ft.ScrollMode.ALWAYS
     #     self.body.update()
+    
+    

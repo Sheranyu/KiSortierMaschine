@@ -10,6 +10,7 @@ from PIL import Image
 from configordner.settings import LaufZeitConfig
 from db.db_and_models.models import Statistik
 from db.db_and_models.session import sessiongen
+from modele.InterneDatenModele import KiData
 
 class BaseWindow:
     _page = None  # Klassenattribut für das page-Objekt
@@ -147,12 +148,13 @@ class StartApplicationPage(ft.UserControl):
         # DataCreater().savestatistik(daten)
         LaufZeitConfig.islaufzeit = True
         toggle_two_buttons(self,False, True)
-        self.ki_logic.start_application(self.CamAnzeige)
-            
+        for data in self.ki_logic.start_application(self.CamAnzeige):
+            self.DatenAnzeige(data)
+        
         toggle_two_buttons(self,True, False)
 
-    def DatenAnzeige(self):
-        pass
+    def DatenAnzeige(self, kidaten: KiData):
+        print(kidaten.label_name)
 
     def CamAnzeige(self,frame: cv2.typing.MatLike):
         _, buffer = cv2.imencode('.jpg', frame)

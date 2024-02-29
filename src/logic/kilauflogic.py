@@ -33,7 +33,7 @@ class KiDatenVerarbeitung():
             for item, image in self.model.loadmodel():
                 callback(image)
                 #print(item.label_name, item.confidence_score)
-                #yield item
+                yield item
                 self._verarbeitedaten(item,datumid,session)
         
 
