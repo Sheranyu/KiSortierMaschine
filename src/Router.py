@@ -28,7 +28,7 @@ class Router:
             for key, value in self.routes.items():
                 if route.startswith(key):
                     self.page.views.append(value)
-        print(self.view_list)
+        
         self.page.update()
 
     def register_route(self) -> None:

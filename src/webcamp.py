@@ -10,7 +10,7 @@ class WebcamApp:
 
         self.video_source = video_source
         self.vid = cv2.VideoCapture(self.video_source)
-
+        
         self.canvas = Canvas(window, width=self.vid.get(cv2.CAP_PROP_FRAME_WIDTH), height=self.vid.get(cv2.CAP_PROP_FRAME_HEIGHT))
         self.canvas.pack()
 

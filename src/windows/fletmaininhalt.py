@@ -1,10 +1,12 @@
 
+import base64
+from re import S
 import cv2
 import flet as ft
 from logic.kilauflogic import KiDatenVerarbeitung
 from db.CRUD.DatumSpeicherung import CreateDatumSpeicherung
 from db.CRUD.Statistik import StatistikCreater
-
+from PIL import Image
 from configordner.settings import LaufZeitConfig
 from db.db_and_models.models import Statistik
 from db.db_and_models.session import sessiongen
@@ -128,10 +130,10 @@ class StartApplicationPage(ft.UserControl):
         self.title = ft.Text("Start Application", theme_style="headlineMedium")
         self.startbutton = ft.ElevatedButton("Start",bgcolor=ft.colors.BLUE, on_click=self.start)
         self.abbruchbutton = ft.ElevatedButton("Abbruch", bgcolor=ft.colors.RED, on_click=self.abbruch, visible=False)
-        self.bildvideo = ft.Image()
+        self.bildvideo = ft.Image("")
         self.colum1 = ft.Row([self.title])
         self.startrow = ft.Row([self.startbutton, self.abbruchbutton])
-        self.bildvideoRow= ft.Row([])
+        self.bildvideoRow= ft.Row([self.bildvideo])
         self.columendcontainer = ft.Column([self.colum1, self.startrow,self.bildvideoRow])
         self.container = ft.Container(content=self.columendcontainer)
         return self.container
@@ -148,10 +150,11 @@ class StartApplicationPage(ft.UserControl):
         toggle_two_buttons(self,True, False)
 
 
-    def CamAnzeige(self,image: cv2.typing.MatLike):
-        self.bildvideo.src = image
-        print("yuju")
-        pass
+    def CamAnzeige(self,frame: cv2.typing.MatLike):
+        _, buffer = cv2.imencode('.jpg', frame)
+        frame_base64 = base64.b64encode(buffer).decode('utf-8')
+        self.bildvideo.src_base64 = frame_base64
+        self.update()
     
     def abbruch(self,e):
         toggle_two_buttons(self,True,False)
