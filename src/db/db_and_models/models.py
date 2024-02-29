@@ -28,12 +28,13 @@ class Statistik(Base):
     Statisik_id: Mapped[Optional[int]] = mapped_column(Integer, primary_key=True)
     label_name: Mapped[Optional[str]] = mapped_column(Text)
     confidence_score: Mapped[Optional[int]] = mapped_column(Integer)
+    confidence_score_max: Mapped[Optional[int]] = mapped_column(Integer)
     modus: Mapped[Optional[str]] = mapped_column(Text)
     fremd_id: Mapped[Optional[decimal.Decimal]] = mapped_column(ForeignKey('DatumSpeicherung.Id'))
 
     fremd: Mapped['DatumSpeicherung'] = relationship('DatumSpeicherung', back_populates='Statistik')
 
-    def __init__(self, label_name, confidence_score, modus, fremd_id= None):
+    def __init__(self, label_name, confidence_score, modus, confidence_score_max=None, fremd_id= None):
         self.label_name = label_name
         self.confidence_score = confidence_score
         self.modus = modus

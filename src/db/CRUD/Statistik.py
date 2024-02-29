@@ -10,7 +10,8 @@ class StatistikCreater():
     def savestatistik(self,daten: KiData,aktulles_datum_id: int ,session: Session):
         modeldata = Statistik(class_name=daten.class_name,
                               confidence_score=daten.confidence_score,
-                              modus=daten.modus, fremd_id=aktulles_datum_id)
+                              modus=daten.erkannter_modus, fremd_id=aktulles_datum_id,
+                              confidence_score_max=daten.confidence_score_max)
 
         session.add(modeldata)
         session.commit()

@@ -4,7 +4,7 @@ from logic.kilauflogic import KiDatenVerarbeitung
 from db.CRUD.DatumSpeicherung import CreateDatumSpeicherung
 from db.CRUD.Statistik import StatistikCreater
 
-from shared.shareddata import LaufZeitConfig
+from configordner.settings import LaufZeitConfig
 from db.db_and_models.models import Statistik
 class BaseWindow:
     _page = None  # Klassenattribut für das page-Objekt
@@ -126,13 +126,12 @@ class StartApplicationPage(ft.UserControl):
         self.title = ft.Text("Start Application", theme_style="headlineMedium")
         self.startbutton = ft.ElevatedButton("Start",bgcolor=ft.colors.BLUE, on_click=self.start)
         self.abbruchbutton = ft.ElevatedButton("Abbruch", bgcolor=ft.colors.RED, on_click=self.abbruch, visible=False)
-        
-       
         self.columendcontainer = ft.Column([self.title,self.startbutton, self.abbruchbutton])
         self.container = ft.Container(content=self.columendcontainer)
         return self.container
     
     def start(self,e):
+        # load configdata
         # daten = Statistik(class_name="testneu",  confidence_score=80)
         # DataCreater().savestatistik(daten)
         LaufZeitConfig.islaufzeit = True
@@ -148,6 +147,7 @@ class StartApplicationPage(ft.UserControl):
     def will_unmount(self):
         LaufZeitConfig.islaufzeit = False
         
+    
 
 
 class Statistiken(ft.UserControl):

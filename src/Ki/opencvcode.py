@@ -5,27 +5,23 @@ from keras.models import load_model  # TensorFlow is required for Keras to work
 import cv2  # Install opencv-python
 import numpy as np
 from modele.InterneDatenModele import KiData
-from shared.shareddata import LaufZeitConfig
-
+from configordner.settings import LaufZeitConfig
+from configordner.settings import ModelDataClass
 
 
 
 class TrainiertesModel():
     def __init__(self) -> None:
-        pass
+        modeldata = ModelDataClass()
 
     def loadmodel(self) -> Generator[KiData, Any, Any]:
         aktueller_ordner = os.path.dirname(os.path.abspath(__file__))
-
       # Übergeordneter Ordner (A) erhalten
-        uebergeordneter_ordner = os.path.dirname(aktueller_ordner)
-
+        #uebergeordneter_ordner = os.path.dirname(aktueller_ordner)
         # Pfad zum Ordner C erstellen
-        ordner_c_pfad = os.path.join(uebergeordneter_ordner, "kimodel")
-
+        Kidatei = os.path.join(aktueller_ordner, "kimodel", "keras_model.h5")
         # Pfad zur gewünschten Datei in Ordner C erstellen
-        Kidatei = os.path.join(ordner_c_pfad, "keras_model.h5")
-        label = os.path.join(ordner_c_pfad, "labels.txt")
+        label = os.path.join(aktueller_ordner,"kimodel","labels.txt")
         # Disable scientific notation for clarity
         np.set_printoptions(suppress=True)
 

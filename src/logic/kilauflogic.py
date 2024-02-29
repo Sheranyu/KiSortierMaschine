@@ -25,16 +25,16 @@ class KiDatenVerarbeitung():
         self.data_to_save: List[KiData] = []
     
     def start_application(self):
-        datum = self._erstelle_speicherdateiname()
+        datum = self._erstelle_datum()
         with sessiongen() as session:
-            datumid = self._createdatum(datum,session)
+            datumid = self._createdatumindb(datum,session)
             for item in self.model.loadmodel():
-                print(item.class_name, item.confidence_score)
+                print(item.label_name, item.confidence_score)
                 self._verarbeitedaten(item,datumid,session)
 
         
 
-    def _erstelle_speicherdateiname(self) -> datetime:
+    def _erstelle_datum(self) -> datetime:
         # Pfad zum Ordner "statistikdata" erstellen
         # Pfad zur gewünschten Datei im Ordner "statistikdata" erstellen
         datum = datetime.now()
@@ -44,7 +44,7 @@ class KiDatenVerarbeitung():
     def _verarbeitedaten(self,item: KiData,datumid:int, session: Session):
         StatistikCreater().savestatistik(item,datumid,session)
     
-    def _createdatum(self,datum, session: Session):
+    def _createdatumindb(self,datum, session: Session):
          return CreateDatumSpeicherung().CreateDatum(session, datum) 
         
         
