@@ -1,54 +1,39 @@
 import flet as ft
 
-def main(page):
 
-
-    #bild = ft.Ref[ft.Image]()
+def main(page: ft.Page):
     
+    first_name = ft.Ref[ft.TextField]()
+    last_name = ft.Ref[ft.TextField]()
+    greetings = ft.Ref[ft.Column]()
+    text = ft.Ref[ft.Text]()
+    ft.Text(ref=text)
     
-    def close_anchor(e):
-        text = f"Color {e.control.data}"
-        print(f"closing view from {text}")
-        anchor.close_view(text)
-
-    def handle_change(e):
-        print(f"handle_change e.data: {e.data}")
-
-    def handle_submit(e):
-        print(f"handle_submit e.data: {e.data}")
-
-    def handle_tap(e):
-        print(f"handle_tap")
-
-    anchor = ft.SearchBar(
-        view_elevation=4,
-        divider_color=ft.colors.AMBER,
-        bar_hint_text="Search colors...",
-        view_hint_text="Choose a color from the suggestions...",
-        on_change=handle_change,
-        on_submit=handle_submit,
-        on_tap=handle_tap,
-        controls=[
-            ft.ListTile(title=ft.Text(f"Color {i}"), on_click=close_anchor, data=i)
-            for i in range(10)
-        ],
-    )
+   
+    def btn_click(e):
+        
+        greetings.current.controls.append(
+            ft.Text(f"Hello, {first_name.current.value} {last_name.current.value}!")
+        )
+        first_name.current.value = ""
+        last_name.current.value = ""
+        page.update()
+        first_name.current.focus()
 
     page.add(
-        ft.Row(
-            alignment=ft.MainAxisAlignment.CENTER,
-            controls=[
-                ft.OutlinedButton(
-                    "Open Search View",
-                    on_click=lambda _: anchor.open_view(),
-                ),
-            ],
-        ),
-        anchor,
+        ft.TextField(ref=first_name, label="First name", autofocus=True),
+        ft.TextField(ref=last_name, label="Last name"),
+        ft.ElevatedButton("Say hello!", on_click=btn_click),
+        ft.Column(ref=greetings),
     )
-
 
 ft.app(target=main)
 
 
 
+class StartPageDesigner(ft.UserControl):
+    def __init__(self) -> None:
+        pass
+    def build(self):
+        self.text = ft.Ref[ft.Text]()
+        self.text2 = ft.Ref[ft.Text]()

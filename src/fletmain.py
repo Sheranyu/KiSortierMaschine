@@ -1,6 +1,7 @@
 import flet as ft
 from windows.fletmaininhalt import Mainwindow 
 from Router import Router
+#from Designer.designer import 
 
 def main(page: ft.Page):
     page.title = "Flet"
@@ -11,3 +12,7 @@ def main(page: ft.Page):
     page.go("/")
 
 ft.app(target=main, view=ft.AppView.FLET_APP_WEB)
+
+
+
+        

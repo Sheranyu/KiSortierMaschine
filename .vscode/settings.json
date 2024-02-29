@@ -5,6 +5,12 @@
             "driver": "SQLite",
             "name": "statisikdata",
             "database": "${workspaceFolder:kisortiermaschine}/daten.sql"
+        },
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "name": "Sqlite",
+            "database": "${workspaceFolder:kisortiermaschine}/daten.sqlite"
         }
     ]
 }

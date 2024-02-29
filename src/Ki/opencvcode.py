@@ -5,14 +5,13 @@ from keras.models import load_model  # TensorFlow is required for Keras to work
 import cv2  # Install opencv-python
 import numpy as np
 from modele.InterneDatenModele import KiData
-from configordner.settings import LaufZeitConfig
-from configordner.settings import ModelDataClass
+from configordner.settings import LaufZeitConfig, ModelDataClass
 
 
 
 class TrainiertesModel():
     def __init__(self) -> None:
-        modeldata = ModelDataClass()
+        pass
 
     def loadmodel(self) -> Generator[Tuple[KiData,cv2.typing.MatLike], Any, Any]:
         aktueller_ordner = os.path.dirname(os.path.abspath(__file__))
@@ -37,21 +36,12 @@ class TrainiertesModel():
         while True:
             # Grab the webcamera's image.
             ret, image = camera.read()
-
             # Resize the raw image into (224-height,224-width) pixels
             image = cv2.resize(image, (224, 224), interpolation=cv2.INTER_AREA)
-
-            # Show the image in a window
-            cv2.imshow("Webcam Image", image)
-            
-
             # Make the image a numpy array and reshape it to the models input shape.
             imageresharp = np.asarray(image, dtype=np.float32).reshape(1, 224, 224, 3)
-
             # Normalize the image array
             imageresharp = (imageresharp / 127.5) - 1
-            
-
             # Predicts the model
             prediction = model.predict(imageresharp)
             index = np.argmax(prediction)
@@ -60,7 +50,6 @@ class TrainiertesModel():
 
             # Print prediction and confidence score
             #print("Class:", class_name[2:], end="")
-            
             
             #print("Confidence Score:", str(np.round(confidence_score * 100))[:-2], "%")
             yield (KiData(label_name[2:],str(np.round(confidence_score * 100))[:-2],"form"), image)

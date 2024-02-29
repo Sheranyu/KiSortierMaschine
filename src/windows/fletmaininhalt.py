@@ -10,6 +10,7 @@ from PIL import Image
 from configordner.settings import LaufZeitConfig
 from db.db_and_models.models import Statistik
 from db.db_and_models.session import sessiongen
+
 class BaseWindow:
     _page = None  # Klassenattribut für das page-Objekt
 
@@ -123,14 +124,16 @@ class LoadModelPage(ft.UserControl):
 class StartApplicationPage(ft.UserControl):
     def __init__(self):
         super().__init__()
-        self.ki_logic = KiDatenVerarbeitung() 
-        
+        self.ki_logic = KiDatenVerarbeitung()
         
     def build(self):
         self.title = ft.Text("Start Application", theme_style="headlineMedium")
         self.startbutton = ft.ElevatedButton("Start",bgcolor=ft.colors.BLUE, on_click=self.start)
         self.abbruchbutton = ft.ElevatedButton("Abbruch", bgcolor=ft.colors.RED, on_click=self.abbruch, visible=False)
         self.bildvideo = ft.Image("")
+
+        
+        
         self.colum1 = ft.Row([self.title])
         self.startrow = ft.Row([self.startbutton, self.abbruchbutton])
         self.bildvideoRow= ft.Row([self.bildvideo])
@@ -144,11 +147,12 @@ class StartApplicationPage(ft.UserControl):
         # DataCreater().savestatistik(daten)
         LaufZeitConfig.islaufzeit = True
         toggle_two_buttons(self,False, True)
-        
         self.ki_logic.start_application(self.CamAnzeige)
             
         toggle_two_buttons(self,True, False)
 
+    def DatenAnzeige(self):
+        pass
 
     def CamAnzeige(self,frame: cv2.typing.MatLike):
         _, buffer = cv2.imencode('.jpg', frame)
