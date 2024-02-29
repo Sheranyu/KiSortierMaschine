@@ -8,7 +8,7 @@ from modele.InterneDatenModele import KiData
 
 class StatistikCreater():
     def savestatistik(self,daten: KiData,aktulles_datum_id: int ,session: Session):
-        modeldata = Statistik(class_name=daten.class_name,
+        modeldata = Statistik(label_name=daten.label_name,
                               confidence_score=daten.confidence_score,
                               modus=daten.erkannter_modus, fremd_id=aktulles_datum_id,
                               confidence_score_max=daten.confidence_score_max)
