@@ -126,7 +126,11 @@ class StartApplicationPage(ft.UserControl):
         self.title = ft.Text("Start Application", theme_style="headlineMedium")
         self.startbutton = ft.ElevatedButton("Start",bgcolor=ft.colors.BLUE, on_click=self.start)
         self.abbruchbutton = ft.ElevatedButton("Abbruch", bgcolor=ft.colors.RED, on_click=self.abbruch, visible=False)
-        self.columendcontainer = ft.Column([self.title,self.startbutton, self.abbruchbutton])
+        self.bildvideo = ft.Image()
+        self.colum1 = ft.Row([self.title])
+        self.startrow = ft.Row([self.startbutton, self.abbruchbutton])
+        self.bildvideoRow= ft.Row([])
+        self.columendcontainer = ft.Column([self.colum1, self.startrow])
         self.container = ft.Container(content=self.columendcontainer)
         return self.container
     
@@ -138,6 +142,10 @@ class StartApplicationPage(ft.UserControl):
         toggle_two_buttons(self,False, True)
         self.ki_logic.start_application()
         toggle_two_buttons(self,True, False)
+
+
+    def CamAnzeige():
+        pass
     
     def abbruch(self,e):
         toggle_two_buttons(self,True,False)
