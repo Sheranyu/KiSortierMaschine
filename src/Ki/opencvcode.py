@@ -6,14 +6,14 @@ import cv2  # Install opencv-python
 import numpy as np
 from modele.InterneDatenModele import KiData
 from configordner.settings import LaufZeitConfig, ModelDataClass
-
+import flet as ft
 
 
 class TrainiertesModel():
     def __init__(self) -> None:
         pass
 
-    def loadmodel(self) -> Generator[Tuple[KiData,cv2.typing.MatLike], Any, Any]:
+    def loadmodel(self, progressring: ft.ProgressRing) -> Generator[Tuple[KiData,cv2.typing.MatLike], Any, Any]:
         aktueller_ordner = os.path.dirname(os.path.abspath(__file__))
       # Übergeordneter Ordner (A) erhalten
         #uebergeordneter_ordner = os.path.dirname(aktueller_ordner)
@@ -32,7 +32,10 @@ class TrainiertesModel():
 
         # CAMERA can be 0 or 1 based on default camera of your computer
         camera = cv2.VideoCapture(0)
-
+        
+        progressring.visible = False
+        progressring.update()
+        
         while True:
             # Grab the webcamera's image.
             ret, image = camera.read()

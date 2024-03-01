@@ -26,11 +26,11 @@ class KiDatenVerarbeitung():
         self.data_to_save: List[KiData] = []
 
     
-    def start_application(self,callback) -> Generator[KiData,Any, Any]:
+    def start_application(self,callback,progressring :ft.ProgressRing) -> Generator[KiData,Any, Any]:
         datum = self._erstelle_datum()
         with sessiongen() as session:
             datumid = self._createdatumindb(datum,session)
-            for item, image in self.model.loadmodel():
+            for item, image in self.model.loadmodel(progressring):
                 callback(image)
                 #print(item.label_name, item.confidence_score)
                 yield item

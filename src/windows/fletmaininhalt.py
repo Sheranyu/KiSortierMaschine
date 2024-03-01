@@ -11,7 +11,7 @@ from configordner.settings import LaufZeitConfig
 from db.db_and_models.models import Statistik
 from db.db_and_models.session import sessiongen
 from modele.InterneDatenModele import KiData
-
+from Designer.design import StartSeitePageDesign
 class BaseWindow:
     _page = None  # Klassenattribut für das page-Objekt
 
@@ -51,7 +51,7 @@ class Mainwindow(BaseWindow):
             height=self.breite,
         )
         self.button5 = ft.Container(
-            content=ft.CupertinoButton(text="Exit!", on_click=lambda e: self.exit_application(page), bgcolor=ft.colors.BLUE),
+            content=ft.CupertinoButton(text="Exit!", on_click=self.exit_application), bgcolor=ft.colors.BLUE,
             width=self.weite,
             height=self.breite,
         )
@@ -64,7 +64,7 @@ class Mainwindow(BaseWindow):
         self.container.alignment = ft.alignment.top_center
         return self.container
     
-    def exit_application(cls):
+    def exit_application(self,e):
         pass
 
     def mainwindow(self):
@@ -122,33 +122,28 @@ class LoadModelPage(ft.UserControl):
     def load_model(self, e):
         pass
 
-class StartApplicationPage(ft.UserControl):
+class StartApplicationPage(StartSeitePageDesign):
     def __init__(self):
         super().__init__()
         self.ki_logic = KiDatenVerarbeitung()
         
-    def build(self):
-        self.title = ft.Text("Start Application", theme_style="headlineMedium")
-        self.startbutton = ft.ElevatedButton("Start",bgcolor=ft.colors.BLUE, on_click=self.start)
-        self.abbruchbutton = ft.ElevatedButton("Abbruch", bgcolor=ft.colors.RED, on_click=self.abbruch, visible=False)
-        self.bildvideo = ft.Image("")
 
-        
-        
+    def build(self):
         self.colum1 = ft.Row([self.title])
         self.startrow = ft.Row([self.startbutton, self.abbruchbutton])
         self.bildvideoRow= ft.Row([self.bildvideo])
-        self.columendcontainer = ft.Column([self.colum1, self.startrow,self.bildvideoRow])
+        self.columendcontainer = ft.Column([self.colum1,self.pr,self.startrow,self.bildvideoRow])
         self.container = ft.Container(content=self.columendcontainer)
         return self.container
     
     def start(self,e):
+        self.pr.visible = True
         # load configdata
         # daten = Statistik(class_name="testneu",  confidence_score=80)
         # DataCreater().savestatistik(daten)
         LaufZeitConfig.islaufzeit = True
         toggle_two_buttons(self,False, True)
-        for data in self.ki_logic.start_application(self.CamAnzeige):
+        for data in self.ki_logic.start_application(self.CamAnzeige,self.pr):
             self.DatenAnzeige(data)
         
         toggle_two_buttons(self,True, False)
@@ -166,6 +161,7 @@ class StartApplicationPage(ft.UserControl):
         toggle_two_buttons(self,True,False)
         LaufZeitConfig.islaufzeit = False
         self.update()
+        
     
     def will_unmount(self):
         LaufZeitConfig.islaufzeit = False
