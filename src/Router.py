@@ -39,8 +39,6 @@ class Router:
                 appbar=ft.AppBar(title=ft.Text("Modell erstellen"), bgcolor=ft.colors.SURFACE_VARIANT), 
                 adaptive=True)
         
-        
-        
         self.load_model_view = ft.View("/load-model", controls=[LoadModelPage()], 
                 appbar=ft.AppBar(title=ft.Text("Modell laden"), bgcolor=ft.colors.SURFACE_VARIANT),
                 adaptive=True)

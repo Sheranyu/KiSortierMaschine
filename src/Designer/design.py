@@ -24,8 +24,44 @@ class StartSeitePageDesign(ft.UserControl,ABC):
     
 class CreateModelPageDesign(ABC,ft.UserControl):
     def __init__(self) -> None:
+        super().__init__()
+        self.title = ft.Text("Modell erstellen", theme_style=ft.TextThemeStyle.HEADLINE_LARGE)
+        self.instructions = ft.Text("Neues Modell erstellen")
+        self.model_name = ft.TextField(label="Modell Name")
+        self.warnhinweis_title_text = ft.Text("Warnhinweis")
+        self.save_file_pfad = ft.Text()
+        
+        
+        self.pick_files_dialog = ft.FilePicker(on_result=self.save_file_result)
+        self.loadmodelbutton = ft.ElevatedButton("Wähle Speicherort",icon=ft.icons.FILE_UPLOAD, 
+                                                 on_click=lambda _: self.pick_files_dialog.save_file())
+
+    
+        self.warhinweistext = ft.Text("Trainieren eines Models funktioniert nur mit einer Nvidea GPU")
+        self.alertWarnhinweis = ft.AlertDialog(modal=False,title=self.warnhinweis_title_text, content=self.warhinweistext)
+        
+        self.bannerfailtextcontent = ft.Text("Model Name und SpeicherOrt muss angeben werden", color=ft.colors.BLACK)
+        self.warningbanner = ft.Banner(bgcolor=ft.colors.YELLOW, leading=ft.Icon(ft.icons.WARNING_AMBER_ROUNDED, size=40),
+                                    content=self.bannerfailtextcontent, actions=[ft.TextButton("Ok", on_click=self.close_banner)])
+        
+ 
+        self.submit_button = ft.ElevatedButton("Starte Training",bgcolor=ft.colors.GREEN_900,on_click=self.create_model,elevation=0)
+    
+    
+    @abstractmethod
+    def save_file_result():
         pass
     
+    @abstractmethod
+    def close_banner(self):
+        pass
+    
+    @abstractmethod
+    def create_model(self):
+        pass
+    
+    
+
     
 class LoadModelPageDesign(ABC,ft.UserControl):
     def __init__(self) -> None:

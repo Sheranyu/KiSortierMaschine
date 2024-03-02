@@ -12,7 +12,7 @@ from configordner.settings import LaufZeitConfig
 from db.db_and_models.models import Statistik
 from db.db_and_models.session import sessiongen
 from modele.InterneDatenModele import KIModel, KiData
-from Designer.design import LoadModelPageDesign, StartSeitePageDesign
+from Designer.design import CreateModelPageDesign, LoadModelPageDesign, StartSeitePageDesign
 class BaseWindow:
     _page = None  # Klassenattribut für das page-Objekt
 
@@ -83,35 +83,11 @@ class Mainwindow(BaseWindow):
 
 
  
-class CreateModelPage(ft.UserControl):
+class CreateModelPage(CreateModelPageDesign):
     def __init__(self):
         super().__init__()
 
-    
-    def build(self):
-        self.title = ft.Text("Modell erstellen", theme_style=ft.TextThemeStyle.HEADLINE_LARGE)
-        self.instructions = ft.Text("Neues Modell erstellen")
-        self.model_name = ft.TextField(label="Modell Name")
-        self.warnhinweis_title_text = ft.Text("Warnhinweis")
-        self.save_file_pfad = ft.Text()
-        
-        
-        self.pick_files_dialog = ft.FilePicker(on_result=self.save_file_result)
-        self.loadmodelbutton = ft.ElevatedButton("Wähle Speicherort",icon=ft.icons.FILE_UPLOAD, 
-                                                 on_click=lambda _: self.pick_files_dialog.save_file())
-
-    
-        self.submit_button = ft.FloatingActionButton(text="erstellen", on_click=self.create_model)
-        self.warhinweistext = ft.Text("Trainieren eines Models funktioniert nur mit einer Nvidea GPU")
-        self.alertWarnhinweis = ft.AlertDialog(modal=False,title=self.warnhinweis_title_text, content=self.warhinweistext)
-        
-        self.bannerfailtextcontent = ft.Text("Model Name und SpeicherOrt muss angeben werden", color=ft.colors.BLACK)
-        self.page.banner = ft.Banner(bgcolor=ft.colors.YELLOW, leading=ft.Icon(ft.icons.WARNING_AMBER_ROUNDED, size=40),
-                                    content=self.bannerfailtextcontent, actions=[ft.TextButton("Ok", on_click=self.close_banner)])
-        
- 
-        self.submit_button = ft.ElevatedButton("Starte Training",bgcolor=ft.colors.GREEN_900,on_click=self.create_model,elevation=0)
-        
+    def build(self):    
         self.containercolum = ft.Column( controls=[self.title ,
                                                    self.instructions, 
                                                    self.model_name,self.loadmodelbutton,
@@ -147,6 +123,7 @@ class CreateModelPage(ft.UserControl):
         self.page.client_storage.set("kimodelsaver",self.kimodelsaver.__dict__)
 
     def did_mount(self):
+        self.page.banner = self.warningbanner
         self.page.overlay.append(self.pick_files_dialog)
         self.page.dialog = self.alertWarnhinweis
         self.alertWarnhinweis.open = True

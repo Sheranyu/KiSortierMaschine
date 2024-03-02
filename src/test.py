@@ -1,20 +1,10 @@
-from enum import Enum
+# Bestehende Variable mit einem bestimmten Namen
+meine_variable = 42
 
-class ModelTyp(Enum):
-    KERAS = "kera"
-    ONNX = "onnx"
-    TORCH = "torch"
+# Name der Variable als Zeichenkette
+variablen_name = "meine_variable"
 
-# Zugriff auf Enum-Werte
-print(ModelTyp(0))      # Gibt ModelTyp.KERAS aus
-print(ModelTyp.ONNX.value)  # Gibt "onnx" aus
+# Zugriff auf die Variable mithilfe des Namens als Zeichenkette
+wert_der_variable = globals()[variablen_name]
 
-# Iteration über Enum-Werte
-for model_typ in ModelTyp:
-    print(model_typ)
-
-# Vergleich von Enum-Werten
-if ModelTyp.TORCH.value == "torch":  # Gibt False aus, da die Typen unterschiedlich sind
-    print("Gleich")
-else:
-    print("Ungleich")
+print(wert_der_variable)  # Ausgabe: 42
