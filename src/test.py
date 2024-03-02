@@ -1,39 +1,20 @@
-import flet as ft
+from enum import Enum
 
+class ModelTyp(Enum):
+    KERAS = "kera"
+    ONNX = "onnx"
+    TORCH = "torch"
 
-def main(page: ft.Page):
-    
-    first_name = ft.Ref[ft.TextField]()
-    last_name = ft.Ref[ft.TextField]()
-    greetings = ft.Ref[ft.Column]()
-    text = ft.Ref[ft.Text]()
-    ft.Text(ref=text)
-    
-   
-    def btn_click(e):
-        
-        greetings.current.controls.append(
-            ft.Text(f"Hello, {first_name.current.value} {last_name.current.value}!")
-        )
-        first_name.current.value = ""
-        last_name.current.value = ""
-        page.update()
-        first_name.current.focus()
+# Zugriff auf Enum-Werte
+print(ModelTyp(0))      # Gibt ModelTyp.KERAS aus
+print(ModelTyp.ONNX.value)  # Gibt "onnx" aus
 
-    page.add(
-        ft.TextField(ref=first_name, label="First name", autofocus=True),
-        ft.TextField(ref=last_name, label="Last name"),
-        ft.ElevatedButton("Say hello!", on_click=btn_click),
-        ft.Column(ref=greetings),
-    )
+# Iteration über Enum-Werte
+for model_typ in ModelTyp:
+    print(model_typ)
 
-ft.app(target=main)
-
-
-
-class StartPageDesigner(ft.UserControl):
-    def __init__(self) -> None:
-        pass
-    def build(self):
-        self.text = ft.Ref[ft.Text]()
-        self.text2 = ft.Ref[ft.Text]()
+# Vergleich von Enum-Werten
+if ModelTyp.TORCH.value == "torch":  # Gibt False aus, da die Typen unterschiedlich sind
+    print("Gleich")
+else:
+    print("Ungleich")

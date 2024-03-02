@@ -1,6 +1,7 @@
 
 import base64
-from re import S
+import os
+import sys
 import cv2
 import flet as ft
 from logic.kilauflogic import KiDatenVerarbeitung
@@ -10,8 +11,8 @@ from PIL import Image
 from configordner.settings import LaufZeitConfig
 from db.db_and_models.models import Statistik
 from db.db_and_models.session import sessiongen
-from modele.InterneDatenModele import KiData
-from Designer.design import StartSeitePageDesign
+from modele.InterneDatenModele import KIModel, KiData
+from Designer.design import LoadModelPageDesign, StartSeitePageDesign
 class BaseWindow:
     _page = None  # Klassenattribut für das page-Objekt
 
@@ -64,8 +65,8 @@ class Mainwindow(BaseWindow):
         self.container.alignment = ft.alignment.top_center
         return self.container
     
-    def exit_application(self,e):
-        pass
+    def exit_application(self):
+        self.page.window_close()
 
     def mainwindow(self):
         pass
@@ -99,30 +100,51 @@ class CreateModelPage(ft.UserControl):
         self.loadmodelbutton = ft.ElevatedButton("Wähle Speicherort",icon=ft.icons.FILE_UPLOAD, 
                                                  on_click=lambda _: self.pick_files_dialog.save_file())
 
-        
-        
+    
         self.submit_button = ft.FloatingActionButton(text="erstellen", on_click=self.create_model)
         self.warhinweistext = ft.Text("Trainieren eines Models funktioniert nur mit einer Nvidea GPU")
-        self.alertWarnhinweis = ft.AlertDialog(modal=False,title=self.warnhinweis_title_text, content=self.warhinweistext, open=True)
+        self.alertWarnhinweis = ft.AlertDialog(modal=False,title=self.warnhinweis_title_text, content=self.warhinweistext)
+        
+        self.bannerfailtextcontent = ft.Text("Model Name und SpeicherOrt muss angeben werden", color=ft.colors.BLACK)
+        self.page.banner = ft.Banner(bgcolor=ft.colors.YELLOW, leading=ft.Icon(ft.icons.WARNING_AMBER_ROUNDED, size=40),
+                                    content=self.bannerfailtextcontent, actions=[ft.TextButton("Ok", on_click=self.close_banner)])
         
  
-        self.submit_button = ft.FloatingActionButton(on_click=self.create_model,content=ft.Row(
-            [ft.Icon(ft.icons.ADD)], alignment="center", spacing=5
-        ))
+        self.submit_button = ft.ElevatedButton("Starte Training",bgcolor=ft.colors.GREEN_900,on_click=self.create_model,elevation=0)
         
-        return ft.Column(
-            controls=[self.title ,self.instructions, self.model_name,self.loadmodelbutton,self.save_file_pfad, self.submit_button],
-            spacing=10
-        )
+        self.containercolum = ft.Column( controls=[self.title ,
+                                                   self.instructions, 
+                                                   self.model_name,self.loadmodelbutton,
+                                                   self.save_file_pfad, self.submit_button],spacing=10)
+        
+        self.container = ft.Container(content=self.containercolum)
+        return self.container
+    
+    def close_banner(self,e):
+        self.page.banner.open = False
+        self.page.update()  
+    
+    def openbanner(self):
+        self.page.banner.open = True
+        self.page.update()
+    
+    
     def save_file_result(self,e: ft.FilePickerResultEvent):
         self.save_file_pfad.value = e.path if e.path else "Cancelled!"
+        if e.path is None:
+            return
+        
         self.save_file_pfad.update()
-
-
-    
-
+        
+        
     def create_model(self, e):
-        pass
+        if self.model_name.value is None or self.model_name.value.strip() == "":
+            self.openbanner()
+            return
+        
+        print("hier")
+        self.kimodelsaver = KIModel(self.model_name.value,self.save_file_pfad.value)
+        self.page.client_storage.set("kimodelsaver",self.kimodelsaver.__dict__)
 
     def did_mount(self):
         self.page.overlay.append(self.pick_files_dialog)
@@ -134,35 +156,42 @@ class CreateModelPage(ft.UserControl):
         
         
         
-class LoadModelPage(ft.UserControl):
+class LoadModelPage(LoadModelPageDesign):
     def __init__(self):
         super().__init__()
-        
     
     def build(self):
-        self.title = ft.Text("Modell Laden", theme_style=ft.TextThemeStyle.HEADLINE_LARGE)
-        self.instructions = ft.Text("Wähle ein Modell zum laden aus.")
-        self.pick_files_dialog = ft.FilePicker(on_result=self.pick_files_result)
-        self.selected_files = ft.Text()
         
-        self.loadmodelbutton = ft.ElevatedButton("Lade KIModel",icon=ft.icons.UPLOAD_FILE, 
-                                                 on_click=lambda _: self.pick_files_dialog.pick_files(allow_multiple=False))
+        self.cardcolum = ft.Column([self.instructions,self.loadmodelbutton,self.selected_files,self.cardseperator,self.modelhinweistextue, self.modelhinweistext], horizontal_alignment=ft.CrossAxisAlignment.CENTER)
+        self.cardcontainer = ft.Container(self.cardcolum, margin=ft.margin.all(5),padding=ft.padding.all(5))
+        self.card = ft.Card(content=self.cardcontainer,width=300)
+        self.columcontainer =  ft.Column(controls=[self.title, self.card], spacing=10) 
+        self.container = ft.Container(content=self.columcontainer)
+        
+        return self.container
 
-
-        return ft.Column(
-            controls=[self.title, self.instructions, self.loadmodelbutton,self.selected_files],
-            spacing=10
-        )
-    
-    def did_mount(self):
-        self.page.overlay.append(self.pick_files_dialog)
     
     def pick_files_result(self,e: ft.FilePickerResultEvent):
         self.selected_files.value = (
                 ", ".join(map(lambda f: f.name, e.files)) if e.files else "Cancelled!"
             )
+        if self.selected_files.value == "Cancelled!":
+            self.selected_files.visible = True
+            self.selected_files.color = ft.colors.RED
+            self.update()
+            return
+
+        self.kimodel = KIModel(e.files[0].name,e.files[0].path)
+        self.page.session.set("kimodel",self.kimodel.__dict__)
+        self.selected_files.value = "erfolgreich geladen"
+        self.selected_files.visible = True
+        self.selected_files.color = ft.colors.GREEN
+        self.update()
+    
+    
         
-        self.selected_files.update()
+    def did_mount(self):
+        self.page.overlay.append(self.pick_files_dialog)
     
     def load_model(self, e):
         pass
@@ -187,9 +216,12 @@ class StartApplicationPage(StartSeitePageDesign):
         # DataCreater().savestatistik(daten)
         LaufZeitConfig.islaufzeit = True
         toggle_two_buttons(self,False, True)
-        for data in self.ki_logic.start_application(self.CamAnzeige,self.pr):
-            self.DatenAnzeige(data)
-        
+        try:
+            for data in self.ki_logic.start_application(self.CamAnzeige,self.pr):
+                self.DatenAnzeige(data)
+        except:
+            self.openwarndialog()
+            
         toggle_two_buttons(self,True, False)
 
     def DatenAnzeige(self, kidaten: KiData):
@@ -210,6 +242,11 @@ class StartApplicationPage(StartSeitePageDesign):
     def will_unmount(self):
         LaufZeitConfig.islaufzeit = False
         
+    def openwarndialog(self):
+        self.page.dialog = self.alertwarn
+        self.alertwarn.open = True
+        self.page.update()   
+    
     
 
 
