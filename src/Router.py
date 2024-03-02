@@ -30,14 +30,18 @@ class Router:
                 if route.startswith(key):
                     self.page.views.append(value)
         
+        
+        
         self.page.update()
 
     def register_route(self) -> None:
-        self.create_model_view = ft.View("/create-model", controls=[CreateModelPage(self.page)],
+        self.create_model_view = ft.View("/create-model", controls=[CreateModelPage()],
                 appbar=ft.AppBar(title=ft.Text("Modell erstellen"), bgcolor=ft.colors.SURFACE_VARIANT), 
                 adaptive=True)
         
-        self.load_model_view = ft.View("/load-model", controls=[LoadModelPage(self.page)], 
+        
+        
+        self.load_model_view = ft.View("/load-model", controls=[LoadModelPage()], 
                 appbar=ft.AppBar(title=ft.Text("Modell laden"), bgcolor=ft.colors.SURFACE_VARIANT),
                 adaptive=True)
         

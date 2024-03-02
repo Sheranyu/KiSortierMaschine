@@ -1,44 +1,74 @@
+from typing import Dict
+
+import flet
+from flet import (
+    Column,
+    ElevatedButton,
+    FilePicker,
+    FilePickerResultEvent,
+    FilePickerUploadEvent,
+    FilePickerUploadFile,
+    Page,
+    ProgressRing,
+    Ref,
+    Row,
+    Text,
+    icons,
+)
 
 
-#datei ist nur zum testen von paar sachen#
+def main(page: Page):
+    prog_bars: Dict[str, ProgressRing] = {}
+    files = Ref[Column]()
+    upload_button = Ref[ElevatedButton]()
 
-class ModelDataSingelton():
-    KiModelpfad = None
-    Modelname = None
-    @classmethod
-    def __init__(cls, KiModelpfad=None,Modelname=None) -> None:
-        cls.KiModelpfad = KiModelpfad
-        cls.Modelname = Modelname
+    def file_picker_result(e: FilePickerResultEvent):
+        upload_button.current.disabled = True if e.files is None else False
+        prog_bars.clear()
+        files.current.controls.clear()
+        if e.files is not None:
+            for f in e.files:
+                prog = ProgressRing(value=0, bgcolor="#eeeeee", width=20, height=20)
+                prog_bars[f.name] = prog
+                files.current.controls.append(Row([prog, Text(f.name)]))
+        page.update()
 
-class SingletonMeta(type):
-    _instances = {}
+    def on_upload_progress(e: FilePickerUploadEvent):
+        prog_bars[e.file_name].value = e.progress
+        prog_bars[e.file_name].update()
 
-    def __call__(cls, *args, **kwargs):
-        if cls not in cls._instances:
-            instance = super().__call__(*args, **kwargs)
-            cls._instances[cls] = instance
-        return cls._instances[cls]
+    file_picker = FilePicker(on_result=file_picker_result, on_upload=on_upload_progress)
 
-class ModelData(metaclass=SingletonMeta):
-    def __init__(self, KiModelpfad, Modelname):
-        self.KiModelpfad = KiModelpfad
-        self.Modelname = Modelname
+    def upload_files(e):
+        uf = []
+        if file_picker.result is not None and file_picker.result.files is not None:
+            for f in file_picker.result.files:
+                uf.append(
+                    FilePickerUploadFile(
+                        f.name,
+                        upload_url=page.get_upload_url(f.name, 600),
+                    )
+                )
+            file_picker.upload(uf)
 
-# Beispiel der Verwendung des Singleton
-singleton_instance_1 = ModelData("Pfad1", "Modell1")
-singleton_instance_2 = ModelData("Pfad2", "Modell2")
+    # hide dialog in a overlay
+    page.overlay.append(file_picker)
 
-print(singleton_instance_1 is singleton_instance_2)  # Ausgabe: True
+    page.add(
+        ElevatedButton(
+            "Select files...",
+            icon=icons.FOLDER_OPEN,
+            on_click=lambda _: file_picker.pick_files(allow_multiple=True),
+        ),
+        Column(ref=files),
+        ElevatedButton(
+            "Upload",
+            ref=upload_button,
+            icon=icons.UPLOAD,
+            on_click=upload_files,
+            disabled=True,
+        ),
+    )
 
 
-
-
-
-
-# Erstellen von Instanzen der Klasse
-objekt1 = ModelDataSingelton(KiModelpfad="Pfad1", Modelname="Modell1")
-objekt2 = ModelDataSingelton(KiModelpfad="Pfad2", Modelname="Modell2")
-
-# Zugriff auf Klassenattribute
-print(objekt1.KiModelpfad)  # Ausgabe: Pfad2
-print(objekt2.Modelname)    # Ausgabe: Modell2
+flet.app(target=main, upload_dir="uploads", view=flet.WEB_BROWSER)

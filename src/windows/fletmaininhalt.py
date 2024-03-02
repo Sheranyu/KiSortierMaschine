@@ -83,41 +83,86 @@ class Mainwindow(BaseWindow):
 
  
 class CreateModelPage(ft.UserControl):
-    def __init__(self, page: ft.Page):
+    def __init__(self):
         super().__init__()
-        self.page = page
+
     
     def build(self):
         self.title = ft.Text("Modell erstellen", theme_style=ft.TextThemeStyle.HEADLINE_LARGE)
         self.instructions = ft.Text("Neues Modell erstellen")
         self.model_name = ft.TextField(label="Modell Name")
+        self.warnhinweis_title_text = ft.Text("Warnhinweis")
+        self.save_file_pfad = ft.Text()
+        
+        
+        self.pick_files_dialog = ft.FilePicker(on_result=self.save_file_result)
+        self.loadmodelbutton = ft.ElevatedButton("Wähle Speicherort",icon=ft.icons.FILE_UPLOAD, 
+                                                 on_click=lambda _: self.pick_files_dialog.save_file())
+
+        
+        
         self.submit_button = ft.FloatingActionButton(text="erstellen", on_click=self.create_model)
+        self.warhinweistext = ft.Text("Trainieren eines Models funktioniert nur mit einer Nvidea GPU")
+        self.alertWarnhinweis = ft.AlertDialog(modal=False,title=self.warnhinweis_title_text, content=self.warhinweistext, open=True)
+        
  
         self.submit_button = ft.FloatingActionButton(on_click=self.create_model,content=ft.Row(
             [ft.Icon(ft.icons.ADD)], alignment="center", spacing=5
         ))
-
+        
         return ft.Column(
-            controls=[self.title, self.instructions, self.model_name, self.submit_button],
+            controls=[self.title ,self.instructions, self.model_name,self.loadmodelbutton,self.save_file_pfad, self.submit_button],
             spacing=10
         )
+    def save_file_result(self,e: ft.FilePickerResultEvent):
+        self.save_file_pfad.value = e.path if e.path else "Cancelled!"
+        self.save_file_pfad.update()
+
+
+    
 
     def create_model(self, e):
         pass
 
+    def did_mount(self):
+        self.page.overlay.append(self.pick_files_dialog)
+        self.page.dialog = self.alertWarnhinweis
+        self.alertWarnhinweis.open = True
+        self.page.update()
+        
+        
+        
+        
+        
 class LoadModelPage(ft.UserControl):
-    def __init__(self, page: ft.Page):
+    def __init__(self):
         super().__init__()
-        self.page = page
+        
     
     def build(self):
         self.title = ft.Text("Modell Laden", theme_style=ft.TextThemeStyle.HEADLINE_LARGE)
         self.instructions = ft.Text("Wähle ein Modell zum laden aus.")
+        self.pick_files_dialog = ft.FilePicker(on_result=self.pick_files_result)
+        self.selected_files = ft.Text()
+        
+        self.loadmodelbutton = ft.ElevatedButton("Lade KIModel",icon=ft.icons.UPLOAD_FILE, 
+                                                 on_click=lambda _: self.pick_files_dialog.pick_files(allow_multiple=False))
+
 
         return ft.Column(
-            controls=[self.title, self.instructions],
+            controls=[self.title, self.instructions, self.loadmodelbutton,self.selected_files],
             spacing=10
         )
+    
+    def did_mount(self):
+        self.page.overlay.append(self.pick_files_dialog)
+    
+    def pick_files_result(self,e: ft.FilePickerResultEvent):
+        self.selected_files.value = (
+                ", ".join(map(lambda f: f.name, e.files)) if e.files else "Cancelled!"
+            )
+        
+        self.selected_files.update()
     
     def load_model(self, e):
         pass
@@ -127,7 +172,6 @@ class StartApplicationPage(StartSeitePageDesign):
         super().__init__()
         self.ki_logic = KiDatenVerarbeitung()
         
-
     def build(self):
         self.colum1 = ft.Row([self.title])
         self.startrow = ft.Row([self.startbutton, self.abbruchbutton])

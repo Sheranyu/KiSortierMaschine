@@ -1,0 +1,5 @@
+0 Blau_Quader
+1 Rot
+2 Blau_Quadrat
+3 Blau_Flach
+4 sonstig
