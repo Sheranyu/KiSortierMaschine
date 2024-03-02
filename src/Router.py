@@ -47,7 +47,7 @@ class Router:
                 appbar=ft.AppBar(title=ft.Text("Anwendung starten"), bgcolor=ft.colors.SURFACE_VARIANT),
                 adaptive=True)
         
-        self.statistik_view = ft.View("/statistik", controls=[Statistiken(self.page)],
+        self.statistik_view = ft.View("/statistik", controls=[Statistiken()],
                 appbar=ft.AppBar(title=ft.Text("Statisiken"), bgcolor=ft.colors.SURFACE_VARIANT),
                 adaptive=True)
         
