@@ -19,7 +19,9 @@ class KiData():
         self.confidence_score_max = confidence_score_max
         
 class KIModel():
-    def __init__(self,ModelName, pfad, modeltyp = ModelTyp.KERAS.value) -> None:
+    def __init__(self,ModelName=None, pfad_model=None,label_name=None,pfad_label=None, modeltyp = ModelTyp.KERAS.value) -> None:
         self.ModelName = ModelName
-        self.pfad = pfad
+        self.label_name = label_name
+        self.pfad_model = pfad_model
+        self.pfad_label = pfad_label
         self.modeltyp = modeltyp

@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod
 import flet as ft
 
+from modele.InterneDatenModele import ModelTyp
+
 class StartSeitePageDesign(ft.UserControl,ABC):
     def __init__(self) -> None:
         super().__init__()
@@ -30,7 +32,10 @@ class CreateModelPageDesign(ABC,ft.UserControl):
         self.model_name = ft.TextField(label="Modell Name")
         self.warnhinweis_title_text = ft.Text("Warnhinweis")
         self.save_file_pfad = ft.Text()
-        
+        self.modeltyplist = ft.Dropdown(width=200,options=[
+            ft.dropdown.Option(ModelTyp.KERAS.value,"Kera Model"),
+            
+        ])
         
         self.pick_files_dialog = ft.FilePicker(on_result=self.save_file_result)
         self.loadmodelbutton = ft.ElevatedButton("Wähle Speicherort",icon=ft.icons.FILE_UPLOAD, 
@@ -41,6 +46,7 @@ class CreateModelPageDesign(ABC,ft.UserControl):
         self.alertWarnhinweis = ft.AlertDialog(modal=False,title=self.warnhinweis_title_text, content=self.warhinweistext)
         
         self.bannerfailtextcontent = ft.Text("Model Name und SpeicherOrt muss angeben werden", color=ft.colors.BLACK)
+        
         self.warningbanner = ft.Banner(bgcolor=ft.colors.YELLOW, leading=ft.Icon(ft.icons.WARNING_AMBER_ROUNDED, size=40),
                                     content=self.bannerfailtextcontent, actions=[ft.TextButton("Ok", on_click=self.close_banner)])
         
@@ -49,7 +55,7 @@ class CreateModelPageDesign(ABC,ft.UserControl):
     
     
     @abstractmethod
-    def save_file_result():
+    def save_file_result(self):
         pass
     
     @abstractmethod
@@ -67,9 +73,16 @@ class LoadModelPageDesign(ABC,ft.UserControl):
     def __init__(self) -> None:
         super().__init__()
         self.title = ft.Text("Modell Laden", theme_style=ft.TextThemeStyle.HEADLINE_LARGE)
-        self.instructions = ft.Text("Wähle ein Modell zum laden aus.", text_align=ft.TextAlign.CENTER)
+        self.text_model_laden = ft.Text("Wähle ein Modell zum laden aus.", text_align=ft.TextAlign.CENTER)
+        self.text_lade_label = ft.Text("Wähle das label dazu aus", text_align=ft.TextAlign.CENTER)
+        
+        self.bannertext = ft.Text("Label oder Model wurde nicht gewählt",color=ft.colors.BLACK)
+        self.warnbanner = ft.Banner(content=self.bannertext,bgcolor=ft.colors.YELLOW,
+                                    actions=[ft.TextButton("ok", on_click=self.close_banner)])
         
         self.pick_files_dialog = ft.FilePicker(on_result=self.pick_files_result)
+        self.pick_file_label = ft.FilePicker(on_result=self.pick_file_label_result)
+        
         self.modelhinweistext = ft.Text("aktuell können nur Kera Modelle geladen werden", color=ft.colors.YELLOW, text_align=ft.TextAlign.CENTER)
         self.modelhinweistextue = ft.Text("Hinweis", color=ft.colors.YELLOW, text_align=ft.TextAlign.CENTER)
         self.cardseperator = ft.Divider(thickness=2)
@@ -77,7 +90,24 @@ class LoadModelPageDesign(ABC,ft.UserControl):
         
         self.loadmodelbutton = ft.FilledTonalButton("Lade KIModel",icon=ft.icons.UPLOAD_FILE, 
                                                 on_click=lambda _: self.pick_files_dialog.pick_files(allow_multiple=False))
-    @abstractmethod   
-    def pick_files_result():
+        self.loadlabelbutton = ft.FilledTonalButton("Lade Label" ,icon=ft.icons.UPLOAD_FILE,
+                                                    on_click=lambda _:self.pick_file_label.pick_files(allow_multiple=False))
+        
+        self.loaddatabutton = ft.FilledButton("Load Data", on_click=self.loaddata)
+    
+    
+    def close_banner(self):
+        pass
+    
+    
+    def loaddata(self):
+        pass
+    
+    
+    def pick_file_label_result(self):
+        pass    
+    
+       
+    def pick_files_result(self):
         pass
     

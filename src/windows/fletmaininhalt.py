@@ -3,6 +3,7 @@ import os
 import sys
 import cv2
 import flet as ft
+from StatusMeldungen.status import WarnStatus
 from logic.kilauflogic import KiDatenVerarbeitung
 from db.CRUD.DatumSpeicherung import CreateDatumSpeicherung
 from db.CRUD.Statistik import StatistikCreater
@@ -122,6 +123,7 @@ class CreateModelPage(CreateModelPageDesign):
                 self.instructions,
                 self.model_name,
                 self.loadmodelbutton,
+                self.modeltyplist, 
                 self.save_file_pfad,
                 self.submit_button,
             ],
@@ -135,7 +137,10 @@ class CreateModelPage(CreateModelPageDesign):
         self.page.banner.open = False
         self.page.update()
 
-    def openbanner(self):
+    def openbanner(self,textinfo: str = None):
+        if textinfo != None:
+            self.bannerfailtextcontent.value = textinfo
+            
         self.page.banner.open = True
         self.page.update()
 
@@ -148,11 +153,14 @@ class CreateModelPage(CreateModelPageDesign):
 
     def create_model(self, e):
         if self.model_name.value is None or self.model_name.value.strip() == "":
-            self.openbanner()
+            self.openbanner(WarnStatus.PFAD_OR_MODELNAME_NICHT_GEWAHLT)
             return
 
-        print("hier")
-        self.kimodelsaver = KIModel(self.model_name.value, self.save_file_pfad.value)
+        if self.modeltyplist.value == None:
+            self.openbanner(WarnStatus.MODEL_NICHT_GEWAEHLT)
+            return
+        
+        self.kimodelsaver = KIModel(self.model_name.value, self.save_file_pfad.value, self.modeltyplist.value)
         self.page.client_storage.set("kimodelsaver", self.kimodelsaver.__dict__)
 
     def did_mount(self):
@@ -166,14 +174,18 @@ class CreateModelPage(CreateModelPageDesign):
 class LoadModelPage(LoadModelPageDesign):
     def __init__(self):
         super().__init__()
-
+        self.kimodeldata: KIModel = KIModel()
+        
     def build(self):
-
+        
         self.cardcolum = ft.Column(
             [
-                self.instructions,
+                self.text_model_laden,
                 self.loadmodelbutton,
+                self.text_lade_label,
+                self.loadlabelbutton,
                 self.selected_files,
+                self.loaddatabutton,
                 self.cardseperator,
                 self.modelhinweistextue,
                 self.modelhinweistext,
@@ -189,7 +201,48 @@ class LoadModelPage(LoadModelPageDesign):
 
         return self.container
 
+    def loaddata(self,e):
+        if self.sind_alle_nicht_none() == False:  
+            self.warnbanner.open = True
+            self.page.update()  
+            return
+        
+        self.page.session.set("kimodel", self.kimodeldata.__dict__)
+    
+    def close_banner(self,e):
+        self.warnbanner.open = False
+        self.page.update()
+    
     def pick_files_result(self, e: ft.FilePickerResultEvent):
+        if self.check_data_in_filepicker(e) is False:
+            self.warnbanner.open = True
+            return
+
+        self.kimodeldata.ModelName = e.files[0].name
+        self.kimodeldata.pfad_model = e.files[0].path
+        self.selected_files.value = "erfolgreich geladen"
+        self.selected_files.visible = True
+        self.selected_files.color = ft.colors.GREEN
+        self.update()
+
+    def pick_file_label_result(self, e: ft.FilePickerResultEvent):
+        if self.check_data_in_filepicker(e) == False:
+            return
+        
+        self.kimodeldata.label_name = e.files[0].name
+        self.kimodeldata.pfad_label = e.files[0].path
+        self.selected_files.value = "erfolgreich geladen"
+        self.selected_files.visible = True
+        self.selected_files.color = ft.colors.GREEN
+        self.update()
+    
+    def did_mount(self):
+        self.page.overlay.append(self.pick_files_dialog)
+        self.page.overlay.append(self.pick_file_label)
+        self.page.banner = self.warnbanner
+       
+    
+    def check_data_in_filepicker(self,e):
         self.selected_files.value = (
             ", ".join(map(lambda f: f.name, e.files)) if e.files else "Cancelled!"
         )
@@ -197,22 +250,13 @@ class LoadModelPage(LoadModelPageDesign):
             self.selected_files.visible = True
             self.selected_files.color = ft.colors.RED
             self.update()
-            return
-
-        self.kimodel = KIModel(e.files[0].name, e.files[0].path)
-        self.page.session.set("kimodel", self.kimodel.__dict__)
-        self.selected_files.value = "erfolgreich geladen"
-        self.selected_files.visible = True
-        self.selected_files.color = ft.colors.GREEN
-        self.update()
-
-    def did_mount(self):
-        self.page.overlay.append(self.pick_files_dialog)
-
-    def load_model(self, e):
-        pass
-
-
+            return False
+        return True
+    def sind_alle_nicht_none(self):
+        return all(
+            getattr(self.kimodeldata, attr) is not None
+            for attr in ["ModelName", "label_name", "pfad_model", "pfad_label", "modeltyp"]
+        )
 class StartApplicationPage(StartSeitePageDesign):
     def __init__(self):
         super().__init__()
