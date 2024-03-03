@@ -1,10 +1,31 @@
-# Bestehende Variable mit einem bestimmten Namen
-meine_variable = 42
+import flet as ft
 
-# Name der Variable als Zeichenkette
-variablen_name = "meine_variable"
+def main(page: ft.Page):
+    page.title = "GridView Example"
+    page.theme_mode = ft.ThemeMode.DARK
+    page.padding = 50
+    page.update()
 
-# Zugriff auf die Variable mithilfe des Namens als Zeichenkette
-wert_der_variable = globals()[variablen_name]
+    images = ft.GridView(
+        expand=True,
+        runs_count=2,
+        max_extent=200,
+        child_aspect_ratio=1,
+        spacing=5,
+        run_spacing=5,
+    )
 
-print(wert_der_variable)  # Ausgabe: 42
+    page.add(images)
+
+    for i in range(0, 60):
+        images.controls.append(
+            ft.Image(
+                src=f"https://picsum.photos/150/150?{i}",
+                fit=ft.ImageFit.NONE,
+                repeat=ft.ImageRepeat.NO_REPEAT,
+                border_radius=ft.border_radius.all(10),
+            )
+        )
+    page.update()
+
+ft.app(target=main)

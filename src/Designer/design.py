@@ -76,6 +76,10 @@ class LoadModelPageDesign(ABC,ft.UserControl):
         self.text_model_laden = ft.Text("Wähle ein Modell zum laden aus.", text_align=ft.TextAlign.CENTER)
         self.text_lade_label = ft.Text("Wähle das label dazu aus", text_align=ft.TextAlign.CENTER)
         
+        
+        self.isloadedcheckbox = ft.Icon(visible=True, color=ft.colors.GREEN)
+        self.isloadedcheckboxlabel = ft.Icon(visible=True, color=ft.colors.GREEN)
+        
         self.bannertext = ft.Text("Label oder Model wurde nicht gewählt",color=ft.colors.BLACK)
         self.warnbanner = ft.Banner(content=self.bannertext,bgcolor=ft.colors.YELLOW,
                                     actions=[ft.TextButton("ok", on_click=self.close_banner)])

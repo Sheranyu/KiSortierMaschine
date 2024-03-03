@@ -177,27 +177,43 @@ class LoadModelPage(LoadModelPageDesign):
         self.kimodeldata: KIModel = KIModel()
         
     def build(self):
+        self.ismodelloadedrow = ft.Container(ft.Row([ft.Container(self.isloadedcheckbox,padding=ft.padding.only(right=10)), self.loadmodelbutton]),
+                                             padding=ft.padding.only(left=20)) 
         
-        self.cardcolum = ft.Column(
-            [
+        self.islabelloaderrow = ft.Container(ft.Row([ft.Container(self.isloadedcheckboxlabel,padding=ft.padding.only(right=20)),self.loadlabelbutton])
+                                             ,padding=ft.padding.only(left=20))
+        
+    
+       
+        self.columncardoben = ft.Column([
                 self.text_model_laden,
-                self.loadmodelbutton,
+                self.ismodelloadedrow,
                 self.text_lade_label,
-                self.loadlabelbutton,
-                self.selected_files,
+                self.islabelloaderrow,
+                self.selected_files],horizontal_alignment=ft.CrossAxisAlignment.CENTER)
+
+        self.containeroben = ft.Container(self.columncardoben)
+        
+        self.columncardunten = ft.Column([ 
                 self.loaddatabutton,
                 self.cardseperator,
                 self.modelhinweistextue,
-                self.modelhinweistext,
+                self.modelhinweistext,],horizontal_alignment=ft.CrossAxisAlignment.CENTER)
+        self.containerunten = ft.Container(self.columncardunten)
+        
+        self.cardcolum = ft.Column(
+            [
+                self.containeroben,
+                self.containerunten
             ],
-            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+            horizontal_alignment=ft.CrossAxisAlignment.CENTER
         )
         self.cardcontainer = ft.Container(
-            self.cardcolum, margin=ft.margin.all(5), padding=ft.padding.all(5)
+            self.cardcolum, margin=ft.margin.all(5), padding=ft.padding.all(5),width=300
         )
-        self.card = ft.Card(content=self.cardcontainer, width=300)
-        self.columcontainer = ft.Column(controls=[self.title, self.card], spacing=10)
-        self.container = ft.Container(content=self.columcontainer)
+        self.card = ft.Card(content=self.cardcontainer)
+        self.columcontainer = ft.Column(controls=[self.title, self.card], spacing=10,expand=True)
+        self.container = ft.SafeArea(content=self.columcontainer)
 
         return self.container
 
@@ -220,6 +236,7 @@ class LoadModelPage(LoadModelPageDesign):
 
         self.kimodeldata.ModelName = e.files[0].name
         self.kimodeldata.pfad_model = e.files[0].path
+        self.isloadedcheckbox.name = ft.icons.CHECK_BOX_ROUNDED
         self.selected_files.value = "erfolgreich geladen"
         self.selected_files.visible = True
         self.selected_files.color = ft.colors.GREEN
@@ -232,6 +249,7 @@ class LoadModelPage(LoadModelPageDesign):
         self.kimodeldata.label_name = e.files[0].name
         self.kimodeldata.pfad_label = e.files[0].path
         self.selected_files.value = "erfolgreich geladen"
+        self.isloadedcheckboxlabel.name = ft.icons.CHECK_BOX_ROUNDED
         self.selected_files.visible = True
         self.selected_files.color = ft.colors.GREEN
         self.update()
