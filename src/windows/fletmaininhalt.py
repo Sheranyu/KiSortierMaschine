@@ -136,6 +136,12 @@ class CreateModelPage(CreateModelPageDesign):
         self.container = ft.Container(content=self.containercolum)
         return self.container
 
+    def StartCamera(self):
+        return super().StartCamera()
+
+    def CreateNewTrainingClass(self):
+        return super().CreateNewTrainingClass()
+
     def close_banner(self, e):
         self.page.banner.open = False
         self.page.update()
