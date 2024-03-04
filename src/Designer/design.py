@@ -40,19 +40,23 @@ class CreateModelPageDesign(ABC, ft.UserControl):
 
         ##listanfang
         self.classnameTemplist: list[ft.TextField] = []
+        self.classbutton: list[ft.FilledButton] = []
 
         ##listend
+
         ##listaddeinstieg
+        self.cameraaufnahmebutton = ft.FilledButton("Start Aufnahme", on_click=self.StartCamera)
+        self.classbutton.append(self.cameraaufnahmebutton)
         self.firstclasstexteingabe = ft.TextField()
         self.classnameTemplist.append(self.firstclasstexteingabe)
 
         ##listaddend
 
-        self.cameraaufnahmebutton = ft.FilledButton("Start Aufnahme")
+        self.floatedbutton = ft.FloatingActionButton(content=ft.Icon(ft.icons.ADD))
 
-        self.title = ft.Text(
-            "Modell erstellen", theme_style=ft.TextThemeStyle.HEADLINE_LARGE
-        )
+        
+
+        self.title = ft.Text("Modell erstellen", theme_style=ft.TextThemeStyle.HEADLINE_LARGE)
         self.instructions = ft.Text("Neues Modell erstellen")
         self.model_name = ft.TextField(label="Modell Name")
         self.warnhinweis_title_text = ft.Text("Warnhinweis")
@@ -96,7 +100,13 @@ class CreateModelPageDesign(ABC, ft.UserControl):
             elevation=0,
         )
 
-    def CreateNewTrainingClass():
+
+    @abstractmethod
+    def StartCamera(self):
+        pass
+
+    @abstractmethod
+    def CreateNewTrainingClass(self):
         pass
 
     @abstractmethod
