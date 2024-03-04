@@ -4,3 +4,6 @@ myvenv
 ./src/build
 src/build
 src/statistikdata/output*
+
+*.pyc
+*311.pyc
