@@ -81,7 +81,7 @@ class Mainwindow(BaseWindow):
             width=self.weite,
             height=self.breite,
         )
- 
+
         self.row = ft.Column(
             controls=[
                 self.button1,
@@ -89,7 +89,6 @@ class Mainwindow(BaseWindow):
                 self.button3,
                 self.button4,
                 self.button5,
-             
             ],
             alignment=ft.MainAxisAlignment.CENTER,
             spacing=20,
@@ -118,46 +117,120 @@ class Mainwindow(BaseWindow):
 class CreateModelPage(CreateModelPageDesign):
     def __init__(self):
         super().__init__()
+        
 
     def build(self):
-        self.listview = ft.ListView(spacing=8, padding=15, auto_scroll=True, height=300)
-        self.classcolumntemplate = ft.Column([self.firstclasstexteingabe,self.cameraaufnahmebutton])
-        self.classcontainertempalte = ft.Container(content=self.classcolumntemplate,bgcolor=ft.colors.BLACK12, padding=ft.padding.all(10))
-        self.cardtemp = ft.Card(content=self.classcontainertempalte)
+        self.listview = ft.ListView(spacing=8, padding=15, auto_scroll=True, height=350)
+     
 
-        self.listview.controls.append(self.cardtemp)
         
+
+        self.panel = ft.ExpansionPanelList(
+            expand_icon_color=ft.colors.AMBER,
+            width=300,
+            divider_color=ft.colors.AMBER,
+            controls=[
+                ft.ExpansionPanel(
+                    header=ft.Container(self.submit_button, padding=ft.padding.all(5)),
+                    content=ft.Container(
+                        ft.Column([self.modeltyplist]), padding=ft.padding.all(5)
+                    ),
+                )
+            ],
+        )
+
+        self.boxshadow = ft.BoxShadow(
+            spread_radius=1,
+            blur_radius=0.4,
+            color=ft.colors.BLACK,
+            blur_style=ft.ShadowBlurStyle.OUTER,
+        )
+        
+        self.listcontainer = ft.Container(
+            content=self.listview,
+            bgcolor=ft.colors.BLACK87,
+            border_radius=ft.border_radius.all(7),
+            shadow=self.boxshadow,
+        )
+
         self.containercolum = ft.Column(
             controls=[
                 self.title,
                 self.instructions,
-                self.model_name,
-                self.modeltext,
-                self.modeltyplist, 
+                self.loadmodelbuttonpicker,
                 self.save_file_pfad,
-                self.listview   
+                self.listcontainer,
             ],
             spacing=10,
-            width=350
+            width=350,
         )
-        self.rowleft = ft.Row([self.containercolum,self.floatedbutton])
-        self.rowright = ft.Row([self.submit_button])
-        self.rowcontainer = ft.Row([self.rowleft,ft.VerticalDivider(thickness=2,color="white",width=1),self.rowright])
+        self.floatingactionstack = ft.Stack(controls=[self.floatedbutton], height=400, width=65)
+        self.rowleft = ft.Row([self.containercolum, self.floatingactionstack])
+
+        self.rowright = ft.Row([self.panel])
+
+        self.rowcontainer = ft.Row([self.rowleft, self.rowright])
         
         return self.rowcontainer
+    
+    
 
-    def StartCamera(self,e):
+    def DeleteClass(self,e,classitem):
+        print(classitem)
+        daten = self.page.session.get("listederaufgabenlocalspeicher")
+        daten = [item for item in daten if item["classindex"] != classitem["classindex"] ]
+        self.page.session.set("listederaufgabenlocalspeicher", daten)
+        self.ladeliste()
+
+    def ZeigeaktuelelBilder(self, e):
+        #print("zeige aktuelel bilder")
+        pass
+
+    def StartCamera(self, e, index):
+        print("aktueller Button:", index)
         return super().StartCamera()
+    
+    def ladeliste(self):
+        listederaufgabenlocalspeicher = self.page.session.get("listederaufgabenlocalspeicher")
+        self.listview.controls.clear()
+        for item in listederaufgabenlocalspeicher:
 
-    def CreateNewTrainingClass(self,e):
-        self.newtextfiel = ft.TextField(label="class name")
-        self.newcameraaufnahmebutton = ft.FilledButton("Start Aufnahme", on_click=self.StartCamera)
-
-        self.newclasscolumntemplate = ft.Column([self.newtextfiel,self.newcameraaufnahmebutton])
-        self.newclasscontainertempalte = ft.Container(content=self.newclasscolumntemplate, padding=ft.padding.all(10))
-        self.newcardtemp = ft.Card(content=self.newclasscontainertempalte)
-        self.listview.controls.append(self.newcardtemp)
+            self.newtextfiel = ft.TextField(label="class name")
+            self.newcameraaufnahmebutton = ft.FilledButton(
+                "Start Aufnahme", on_click=lambda e,anzahl=item: self.StartCamera(e,anzahl)
+            )
+            self.deleteclassbuttonnew = ft.IconButton(icon=ft.icons.DELETE,bgcolor=ft.colors.RED,
+                                                    on_click=lambda e,classobject= item :self.DeleteClass(e,classobject))
+            self.newdeleandcamerarow = ft.Row([self.newcameraaufnahmebutton ,self.deleteclassbuttonnew], alignment=ft.MainAxisAlignment.SPACE_BETWEEN)
+            self.newclasscolumntemplate = ft.Column(
+                [self.newtextfiel, self.newdeleandcamerarow]
+            )
+            self.newclasscontainertempalte = ft.Container(
+                content=self.newclasscolumntemplate,
+                padding=ft.padding.all(10),
+                on_click=self.ZeigeaktuelelBilder,
+            )
+            self.newcardtemp = ft.Card(content=self.newclasscontainertempalte)
+            self.listview.controls.append(self.newcardtemp)
+            
         self.update()
+        
+
+    def CreateNewTrainingClass(self):
+        
+        listederaufgabenlocalspeicher = self.page.session.get("listederaufgabenlocalspeicher")
+        neue_class = {
+            "classindex": self.classzeahler,
+        }
+        if listederaufgabenlocalspeicher is None:
+            listederaufgabenlocalspeicher = []
+        
+        listederaufgabenlocalspeicher.append(neue_class)
+        self.page.session.set("listederaufgabenlocalspeicher", listederaufgabenlocalspeicher)
+        self.classzeahler += 1
+        self.ladeliste()
+        
+
 
     def close_banner(self, e):
         self.page.banner.open = False
@@ -178,6 +251,8 @@ class CreateModelPage(CreateModelPageDesign):
         self.save_file_pfad.update()
 
     def create_model(self, e):
+        
+        
         if self.model_name.value is None or self.model_name.value.strip() == "":
             self.openbanner(WarnStatus.PFAD_OR_MODELNAME_NICHT_GEWAHLT)
             return
@@ -191,12 +266,11 @@ class CreateModelPage(CreateModelPageDesign):
         )
         self.page.client_storage.set("kimodelsaver", self.kimodelsaver.__dict__)
 
-
     def will_unmount(self):
-        self.page.floating_action_button = None
         self.page.update()
 
     def did_mount(self):
+        self.CreateNewTrainingClass()
         self.page.banner = self.warningbanner
         self.page.overlay.append(self.pick_files_dialog)
         self.page.dialog = self.alertWarnhinweis
@@ -204,7 +278,7 @@ class CreateModelPage(CreateModelPageDesign):
         self.page.views[0].floating_action_button = self.floatedbutton
         self.update()
         self.page.views[0].update()
-        
+
         self.page.update()
 
 
@@ -345,6 +419,7 @@ class LoadModelPage(LoadModelPageDesign):
             ]
         )
 
+
 class StartApplicationPage(StartSeitePageDesign):
     def __init__(self):
         super().__init__()
@@ -398,6 +473,7 @@ class StartApplicationPage(StartSeitePageDesign):
         self.alertwarn.open = True
         self.page.update()
 
+
 class Statistiken(ft.UserControl):
     def __init__(self):
         super().__init__()
@@ -431,10 +507,8 @@ class Statistiken(ft.UserControl):
     def getdata(self, e):
         pass
 
+
 def toggle_two_buttons(self, start_visible, abbruch_visible):
     self.startbutton.visible = start_visible
     self.abbruchbutton.visible = abbruch_visible
     self.update()
-
-
-

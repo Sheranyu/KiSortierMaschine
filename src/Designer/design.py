@@ -37,13 +37,17 @@ class StartSeitePageDesign(ft.UserControl, ABC):
 class CreateModelPageDesign(ABC, ft.UserControl):
     def __init__(self) -> None:
         super().__init__()
-
+        self.classzeahler = 1
         
 
-        self.cameraaufnahmebutton = ft.FilledButton("Start Aufnahme", on_click=self.StartCamera)
+      
+
+        self.cameraaufnahmebutton = ft.FilledButton("Start Aufnahme", on_click=lambda e,anzahl=self.classzeahler :self.StartCamera(e,anzahl))
         self.firstclasstexteingabe = ft.TextField(label="class name")
+        self.deleteclassbutton = ft.IconButton(icon=ft.icons.DELETE,bgcolor=ft.colors.RED, on_click=lambda e,index=self.classzeahler: self.DeleteClass(e,index) )
         
-        self.floatedbutton = ft.FloatingActionButton(content=ft.Icon(ft.icons.ADD),on_click=self.CreateNewTrainingClass)
+        self.floatedbutton = ft.FloatingActionButton(content=ft.Icon(ft.icons.ADD),on_click=lambda _: self.CreateNewTrainingClass(), bottom=0)
+        
 
         self.title = ft.Text("Modell erstellen", theme_style=ft.TextThemeStyle.HEADLINE_LARGE)
         self.instructions = ft.Text("Neues Modell erstellen")
@@ -88,7 +92,10 @@ class CreateModelPageDesign(ABC, ft.UserControl):
             on_click=self.create_model,
             elevation=0,
         )
-
+        
+    @abstractmethod
+    def DeleteClass(self):
+        pass
 
     @abstractmethod
     def StartCamera(self):
