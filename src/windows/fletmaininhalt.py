@@ -117,12 +117,15 @@ class CreateModelPage(CreateModelPageDesign):
         super().__init__()
 
     def build(self):
+
+        self.classcolumntemplate = ft.Column()
+        self.classcontainertempalte = ft.Container(content=self.classcolumntemplate)
+
         self.containercolum = ft.Column(
             controls=[
                 self.title,
                 self.instructions,
                 self.model_name,
-                self.loadmodelbutton,
                 self.modeltyplist, 
                 self.save_file_pfad,
                 self.submit_button,

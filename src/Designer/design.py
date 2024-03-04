@@ -27,6 +27,24 @@ class StartSeitePageDesign(ft.UserControl,ABC):
 class CreateModelPageDesign(ABC,ft.UserControl):
     def __init__(self) -> None:
         super().__init__()
+
+        ##listanfang
+        self.classnameTemplist: list[ft.TextField] = []
+        
+
+
+        ##listend
+        ##listaddeinstieg
+        self.firstclasstexteingabe = ft.TextField()
+        self.classnameTemplist.append(self.firstclasstexteingabe)
+
+
+
+
+        ##listaddend
+
+        self.cameraaufnahmebutton = ft.FilledButton("Start Aufnahme")
+
         self.title = ft.Text("Modell erstellen", theme_style=ft.TextThemeStyle.HEADLINE_LARGE)
         self.instructions = ft.Text("Neues Modell erstellen")
         self.model_name = ft.TextField(label="Modell Name")
@@ -36,9 +54,12 @@ class CreateModelPageDesign(ABC,ft.UserControl):
             ft.dropdown.Option(ModelTyp.KERAS.value,"Kera Model"),
             
         ])
+
+   
+
         
         self.pick_files_dialog = ft.FilePicker(on_result=self.save_file_result)
-        self.loadmodelbutton = ft.ElevatedButton("Wähle Speicherort",icon=ft.icons.FILE_UPLOAD, 
+        self.loadmodelbuttonpicker = ft.ElevatedButton("Wähle Speicherort",icon=ft.icons.FILE_UPLOAD, 
                                                  on_click=lambda _: self.pick_files_dialog.save_file())
 
     
@@ -52,7 +73,9 @@ class CreateModelPageDesign(ABC,ft.UserControl):
         
  
         self.submit_button = ft.ElevatedButton("Starte Training",bgcolor=ft.colors.GREEN_900,on_click=self.create_model,elevation=0)
-    
+
+    def CreateNewTrainingClass():
+        pass
     
     @abstractmethod
     def save_file_result(self):
