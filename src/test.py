@@ -1,31 +1,25 @@
 import flet as ft
 
-def main(page: ft.Page):
-    page.title = "GridView Example"
-    page.theme_mode = ft.ThemeMode.DARK
-    page.padding = 50
-    page.update()
+class Counter():
+    def __new__(cls) -> None:
+        cls.fttext = ft.Text("neu")
+        cls.fttext1 = ft.Text("neu")
+        cls.fttext2 = ft.Text("neu")
 
-    images = ft.GridView(
-        expand=True,
-        runs_count=2,
-        max_extent=200,
-        child_aspect_ratio=1,
-        spacing=5,
-        run_spacing=5,
-    )
 
-    page.add(images)
+        cls.button = ft.FilledButton("testbutton",expand=True)
 
-    for i in range(0, 60):
-        images.controls.append(
-            ft.Image(
-                src=f"https://picsum.photos/150/150?{i}",
-                fit=ft.ImageFit.NONE,
-                repeat=ft.ImageRepeat.NO_REPEAT,
-                border_radius=ft.border_radius.all(10),
-            )
-        )
-    page.update()
+        cls.row = ft.Row([cls.fttext,cls.button],expand=True)
+        
+
+        cls.columtest = ft.Column([cls.row,cls.row,cls.row,cls.row])
+
+
+        cls.container = ft.Row(controls=[cls.columtest],expand=True)
+        return cls.container
+        
+
+def main(page):
+    page.add(Counter())
 
 ft.app(target=main)

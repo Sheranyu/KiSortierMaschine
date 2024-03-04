@@ -1,6 +1,7 @@
 import base64
 import os
 import sys
+from typing import List
 import cv2
 import flet as ft
 from StatusMeldungen.status import WarnStatus
@@ -80,6 +81,7 @@ class Mainwindow(BaseWindow):
             width=self.weite,
             height=self.breite,
         )
+ 
         self.row = ft.Column(
             controls=[
                 self.button1,
@@ -87,6 +89,7 @@ class Mainwindow(BaseWindow):
                 self.button3,
                 self.button4,
                 self.button5,
+             
             ],
             alignment=ft.MainAxisAlignment.CENTER,
             spacing=20,
@@ -117,30 +120,44 @@ class CreateModelPage(CreateModelPageDesign):
         super().__init__()
 
     def build(self):
+        self.listview = ft.ListView(spacing=8, padding=15, auto_scroll=True, height=300)
+        self.classcolumntemplate = ft.Column([self.firstclasstexteingabe,self.cameraaufnahmebutton])
+        self.classcontainertempalte = ft.Container(content=self.classcolumntemplate,bgcolor=ft.colors.BLACK12, padding=ft.padding.all(10))
+        self.cardtemp = ft.Card(content=self.classcontainertempalte)
 
-        self.classcolumntemplate = ft.Column()
-        self.classcontainertempalte = ft.Container(content=self.classcolumntemplate)
-
+        self.listview.controls.append(self.cardtemp)
+        
         self.containercolum = ft.Column(
             controls=[
                 self.title,
                 self.instructions,
                 self.model_name,
+                self.modeltext,
                 self.modeltyplist, 
                 self.save_file_pfad,
-                self.submit_button,
+                self.listview   
             ],
             spacing=10,
+            width=350
         )
+        self.rowleft = ft.Row([self.containercolum,self.floatedbutton])
+        self.rowright = ft.Row([self.submit_button])
+        self.rowcontainer = ft.Row([self.rowleft,ft.VerticalDivider(thickness=2,color="white",width=1),self.rowright])
+        
+        return self.rowcontainer
 
-        self.container = ft.Container(content=self.containercolum)
-        return self.container
-
-    def StartCamera(self):
+    def StartCamera(self,e):
         return super().StartCamera()
 
-    def CreateNewTrainingClass(self):
-        return super().CreateNewTrainingClass()
+    def CreateNewTrainingClass(self,e):
+        self.newtextfiel = ft.TextField(label="class name")
+        self.newcameraaufnahmebutton = ft.FilledButton("Start Aufnahme", on_click=self.StartCamera)
+
+        self.newclasscolumntemplate = ft.Column([self.newtextfiel,self.newcameraaufnahmebutton])
+        self.newclasscontainertempalte = ft.Container(content=self.newclasscolumntemplate, padding=ft.padding.all(10))
+        self.newcardtemp = ft.Card(content=self.newclasscontainertempalte)
+        self.listview.controls.append(self.newcardtemp)
+        self.update()
 
     def close_banner(self, e):
         self.page.banner.open = False
@@ -172,11 +189,20 @@ class CreateModelPage(CreateModelPageDesign):
         self.kimodelsaver = KIModel(self.model_name.value, self.save_file_pfad.value, self.modeltyplist.value)
         self.page.client_storage.set("kimodelsaver", self.kimodelsaver.__dict__)
 
+
+    def will_unmount(self):
+        self.page.floating_action_button = None
+        self.page.update()
+
     def did_mount(self):
         self.page.banner = self.warningbanner
         self.page.overlay.append(self.pick_files_dialog)
         self.page.dialog = self.alertWarnhinweis
         self.alertWarnhinweis.open = True
+        self.page.views[0].floating_action_button = self.floatedbutton
+        self.update()
+        self.page.views[0].update()
+        
         self.page.update()
 
 
@@ -377,3 +403,6 @@ def toggle_two_buttons(self, start_visible, abbruch_visible):
     self.startbutton.visible = start_visible
     self.abbruchbutton.visible = abbruch_visible
     self.update()
+
+
+

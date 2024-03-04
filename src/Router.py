@@ -17,10 +17,11 @@ class Router:
         
     def routechange(self,route):
         
+      
+        
+
         if self.vorherigelement != self.page.route:
             self.view_list.append(self.page.route)
-            
-        self.page.views.clear()
         
         self.page.views.append(
             ft.View("/",controls=[Mainwindow(self.page)], appbar=ft.AppBar(title=ft.Text("Sortiermaschine"), bgcolor=ft.colors.BLUE))
@@ -37,7 +38,7 @@ class Router:
     def register_route(self) -> None:
         self.create_model_view = ft.View("/create-model", controls=[CreateModelPage()],
                 appbar=ft.AppBar(title=ft.Text("Modell erstellen"), bgcolor=ft.colors.SURFACE_VARIANT), 
-                adaptive=True)
+                )
         
         self.load_model_view = ft.View("/load-model", controls=[LoadModelPage()], 
                 appbar=ft.AppBar(title=ft.Text("Modell laden"), bgcolor=ft.colors.SURFACE_VARIANT),
@@ -50,6 +51,7 @@ class Router:
         self.statistik_view = ft.View("/statistik", controls=[Statistiken()],
                 appbar=ft.AppBar(title=ft.Text("Statisiken"), bgcolor=ft.colors.SURFACE_VARIANT),
                 adaptive=True)
+        
         
         self.routes = {
             "/create-model": self.create_model_view,

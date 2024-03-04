@@ -28,29 +28,20 @@ class CreateModelPageDesign(ABC,ft.UserControl):
     def __init__(self) -> None:
         super().__init__()
 
-        ##listanfang
-        self.classnameTemplist: list[ft.TextField] = []
-        self.classbutton: list[ft.FilledButton] = []
-
-        ##listend
-
-        ##listaddeinstieg
-        self.cameraaufnahmebutton = ft.FilledButton("Start Aufnahme", on_click=self.StartCamera)
-        self.classbutton.append(self.cameraaufnahmebutton)
-        self.firstclasstexteingabe = ft.TextField()
-        self.classnameTemplist.append(self.firstclasstexteingabe)
-
-        ##listaddend
-
-        self.floatedbutton = ft.FloatingActionButton(content=ft.Icon(ft.icons.ADD))
-
         
+
+        self.cameraaufnahmebutton = ft.FilledButton("Start Aufnahme", on_click=self.StartCamera)
+        self.firstclasstexteingabe = ft.TextField(label="class name")
+        
+        self.floatedbutton = ft.FloatingActionButton(content=ft.Icon(ft.icons.ADD),on_click=self.CreateNewTrainingClass)
 
         self.title = ft.Text("Modell erstellen", theme_style=ft.TextThemeStyle.HEADLINE_LARGE)
         self.instructions = ft.Text("Neues Modell erstellen")
         self.model_name = ft.TextField(label="Modell Name")
         self.warnhinweis_title_text = ft.Text("Warnhinweis")
         self.save_file_pfad = ft.Text()
+
+        self.modeltext = ft.Text("Model typ Wählen")
         self.modeltyplist = ft.Dropdown(width=200,options=[
             ft.dropdown.Option(ModelTyp.KERAS.value,"Kera Model"),
             

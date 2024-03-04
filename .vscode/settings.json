@@ -12,5 +12,6 @@
             "name": "Sqlite",
             "database": "${workspaceFolder:kisortiermaschine}/daten.sqlite"
         }
-    ]
+    ],
+    "python.analysis.typeCheckingMode": "off"
 }
