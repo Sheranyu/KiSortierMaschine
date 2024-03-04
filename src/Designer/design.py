@@ -38,7 +38,12 @@ class CreateModelPageDesign(ABC, ft.UserControl):
     def __init__(self) -> None:
         super().__init__()
         self.classzeahler = 1
-        
+        self.boxshadow = ft.BoxShadow(
+            spread_radius=1,
+            blur_radius=0.4,
+            color=ft.colors.BLACK,
+            blur_style=ft.ShadowBlurStyle.OUTER,
+        )
 
       
 
@@ -46,7 +51,7 @@ class CreateModelPageDesign(ABC, ft.UserControl):
         self.firstclasstexteingabe = ft.TextField(label="class name")
         self.deleteclassbutton = ft.IconButton(icon=ft.icons.DELETE,bgcolor=ft.colors.RED, on_click=lambda e,index=self.classzeahler: self.DeleteClass(e,index) )
         
-        self.floatedbutton = ft.FloatingActionButton(content=ft.Icon(ft.icons.ADD),on_click=lambda _: self.CreateNewTrainingClass(), bottom=0)
+        self.floatedbutton = ft.FloatingActionButton(content=ft.Icon(ft.icons.ADD),on_click=lambda _: self.CreateNewTrainingClass())
         
 
         self.title = ft.Text("Modell erstellen", theme_style=ft.TextThemeStyle.HEADLINE_LARGE)

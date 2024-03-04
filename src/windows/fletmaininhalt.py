@@ -120,10 +120,7 @@ class CreateModelPage(CreateModelPageDesign):
         
 
     def build(self):
-        self.listview = ft.ListView(spacing=8, padding=15, auto_scroll=True, height=350)
-     
-
-        
+        self.listview = ft.ListView(spacing=8, padding=15, auto_scroll=True)
 
         self.panel = ft.ExpansionPanelList(
             expand_icon_color=ft.colors.AMBER,
@@ -139,37 +136,37 @@ class CreateModelPage(CreateModelPageDesign):
             ],
         )
 
-        self.boxshadow = ft.BoxShadow(
-            spread_radius=1,
-            blur_radius=0.4,
-            color=ft.colors.BLACK,
-            blur_style=ft.ShadowBlurStyle.OUTER,
-        )
+       
         
         self.listcontainer = ft.Container(
             content=self.listview,
             bgcolor=ft.colors.BLACK87,
             border_radius=ft.border_radius.all(7),
             shadow=self.boxshadow,
+            width=340,
+            height=600,
+            
         )
-
+        
         self.containercolum = ft.Column(
             controls=[
-                self.title,
-                self.instructions,
-                self.loadmodelbuttonpicker,
-                self.save_file_pfad,
-                self.listcontainer,
+               ft.Container(ft.Column([
+                    self.title,
+                    self.instructions,
+                    self.loadmodelbuttonpicker,
+                    self.save_file_pfad,
+                    self.panel
+               ]))
             ],
-            spacing=10,
-            width=350,
+           
         )
-        self.floatingactionstack = ft.Stack(controls=[self.floatedbutton], height=400, width=65)
-        self.rowleft = ft.Row([self.containercolum, self.floatingactionstack])
+        
+        #self.floatingactionstack = ft.Stack(controls=[self.floatedbutton],height=200,width=200)
+        self.rowleft = ft.Row([self.listcontainer,self.floatedbutton])
+        self.columleft = ft.Column([self.rowleft])
+       
 
-        self.rowright = ft.Row([self.panel])
-
-        self.rowcontainer = ft.Row([self.rowleft, self.rowright])
+        self.rowcontainer = ft.Row([self.columleft,ft.VerticalDivider(visible=True,thickness=20),self.containercolum])
         
         return self.rowcontainer
     
