@@ -1,38 +1,24 @@
+import math
+
 import flet as ft
+import flet.canvas as cv
 
 def main(page: ft.Page):
+    cp = cv.Canvas(
+        [
+           
+            cv.Line(x1=100,x2=100,y1=100,y2=25, 
+                    paint=ft.Paint(
+                        style=ft.PaintingStyle.STROKE,
+                        color=ft.colors.RED,
+                        stroke_width=4
+                ))
+          
+        ],
+        width=float("inf"),
+        expand=True,
+    )
 
-    page.add(
-        ft.Container(ft.Row(
-            [
-                ft.Container(
-                    bgcolor=ft.colors.ORANGE_300,
-                    alignment=ft.alignment.center,
-                    expand=True,
-                ),
-                 ft.VerticalDivider(),
-                ft.Container(
-                    bgcolor=ft.colors.BROWN_400,
-                    alignment=ft.alignment.center,
-                    expand=True,
-                ),
-                 ft.VerticalDivider(width=1, color="white"),
-                ft.Container(
-                    bgcolor=ft.colors.BLUE_300,
-                    alignment=ft.alignment.center,
-                    expand=True,
-                ),
-                 ft.VerticalDivider(width=9, thickness=3),
-                ft.Container(
-                    bgcolor=ft.colors.GREEN_300,
-                    alignment=ft.alignment.center,
-                    expand=True,
-                ),
-            ],
-            spacing=0,
-            expand=True,
-        ),expand=True
-        )
-        )
+    page.add(cp)
 
-ft.app(target=main)
+ft.app(main)

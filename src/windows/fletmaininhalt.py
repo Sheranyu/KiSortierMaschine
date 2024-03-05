@@ -12,12 +12,13 @@ from PIL import Image
 from configordner.settings import LaufZeitConfig
 from db.db_and_models.models import Statistik
 from db.db_and_models.session import sessiongen
-from modele.InterneDatenModele import KIModel, KiData
+from modele.InterneDatenModele import KIModel, KiData, KiClassList
 from Designer.design import (
     CreateModelPageDesign,
     LoadModelPageDesign,
     StartSeitePageDesign,
 )
+from logic.aufnahme import  WebcamAufnahme, ZeigeBildan
 
 
 class BaseWindow:
@@ -117,10 +118,11 @@ class Mainwindow(BaseWindow):
 class CreateModelPage(CreateModelPageDesign):
     def __init__(self):
         super().__init__()
-        
+        self.dynabstandadder = 700/5
+        self.aufnahme = WebcamAufnahme()
 
     def build(self):
-        self.listview = ft.ListView(spacing=8, padding=15, auto_scroll=False)
+        self.listview = ft.ListView(spacing=8, padding=15, auto_scroll=False,height=40)
 
         self.panel = ft.ExpansionPanelList(
             expand_icon_color=ft.colors.AMBER,
@@ -136,21 +138,16 @@ class CreateModelPage(CreateModelPageDesign):
             ],
         )
 
-       
-        
         self.listcontainer = ft.Container(
             content=self.listview,
             bgcolor=ft.colors.BLACK87,
             border_radius=ft.border_radius.all(7),
             shadow=self.boxshadow,
             col=4,
-            height=40
+            
             
         )
 
-
-
-        print(self.page)
         self.containercolum = ft.Column(
             controls=[
                ft.Container(ft.Column([
@@ -158,7 +155,8 @@ class CreateModelPage(CreateModelPageDesign):
                     self.instructions,
                     self.loadmodelbuttonpicker,
                     self.save_file_pfad,
-                    self.panel
+                    self.panel,
+                    
                ]))
             ],
            col=3,
@@ -171,8 +169,8 @@ class CreateModelPage(CreateModelPageDesign):
        
         
         self.rowcontainer = ft.ResponsiveRow([self.columleft ,self.containercolum])
-        self.safearea = ft.SafeArea(content=self.rowcontainer)
-        return self.safearea 
+        self.endcontainer = ft.Container(content=self.rowcontainer,expand=True)
+        return self.endcontainer
     
     
 
@@ -181,7 +179,8 @@ class CreateModelPage(CreateModelPageDesign):
         daten = self.page.session.get("listederaufgabenlocalspeicher")
         daten = [item for item in daten if item["classindex"] != classitem["classindex"] ]
         self.page.session.set("listederaufgabenlocalspeicher", daten)
-        self.listcontainer.height -= 700/5
+        if len(self.listview.controls) <=5:
+            self.listview.height -= self.dynabstandadder
 
         self.ladeliste()
 
@@ -189,9 +188,14 @@ class CreateModelPage(CreateModelPageDesign):
         #print("zeige aktuelel bilder")
         pass
 
-    def StartCamera(self, e, index):
-        print("aktueller Button:", index)
-        return super().StartCamera()
+    def StartCamera(self, classitem):
+        
+        newdata = KiClassList(classitem["classindex"], classitem["classname"])
+        #starte aufnahme
+        for frame in self.aufnahme.StarteAufnahme(newdata):
+            ZeigeBildan(frame,self.CameraContainer)
+
+        
     
     def ladeliste(self):
         listederaufgabenlocalspeicher = self.page.session.get("listederaufgabenlocalspeicher")
@@ -200,7 +204,7 @@ class CreateModelPage(CreateModelPageDesign):
 
             self.newtextfiel = ft.TextField(label="class name")
             self.newcameraaufnahmebutton = ft.FilledButton(
-                "Start Aufnahme", on_click=lambda e,anzahl=item: self.StartCamera(e,anzahl)
+                "Start Aufnahme", on_click=lambda e,anzahl=item: self.StartCamera(anzahl)
             )
             self.deleteclassbuttonnew = ft.IconButton(icon=ft.icons.DELETE,bgcolor=ft.colors.RED,
                                                     on_click=lambda e,classobject= item :self.DeleteClass(e,classobject))
@@ -226,6 +230,7 @@ class CreateModelPage(CreateModelPageDesign):
         listederaufgabenlocalspeicher = self.page.session.get("listederaufgabenlocalspeicher")
         neue_class = {
             "classindex": self.classzeahler,
+            "classname": None,
         }
         if listederaufgabenlocalspeicher is None:
             listederaufgabenlocalspeicher = []
@@ -233,9 +238,9 @@ class CreateModelPage(CreateModelPageDesign):
         listederaufgabenlocalspeicher.append(neue_class)
         self.page.session.set("listederaufgabenlocalspeicher", listederaufgabenlocalspeicher)
         self.classzeahler += 1
-        if self.listcontainer.height < 700:
-            self.listcontainer.height += 700/5
-            print(self.listcontainer.height)
+        if self.listview.height < 700:
+            self.listview.height += self.dynabstandadder
+            print(self.listview.height)
         self.ladeliste()
         
 
@@ -275,7 +280,8 @@ class CreateModelPage(CreateModelPageDesign):
         self.page.client_storage.set("kimodelsaver", self.kimodelsaver.__dict__)
 
     def will_unmount(self):
-        self.page.update()
+        self.page.session.remove("listederaufgabenlocalspeicher")
+        
 
     def did_mount(self):
         self.CreateNewTrainingClass()
@@ -498,7 +504,7 @@ class Statistiken(ft.UserControl):
         # Hinweiß: Speichern kann auch automatisch erfolgen
         # Bonus: wie weit sich der Motor drehen musste.
         self.title = ft.Text("Alle Statisiken", theme_style="headlineMedium")
-        self.button = ft.ElevatedButtonv("Bekomme Daten", on_click=self.getdata)
+        self.button = ft.ElevatedButton("Bekomme Daten", on_click=self.getdata)
         self.SearchStatistikdata = ft.SearchBar(
             on_submit=self.onEnterSearch, divider_color=ft.colors.AMBER
         )

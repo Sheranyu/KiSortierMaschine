@@ -2,6 +2,7 @@
 
 
 from enum import Enum
+from typing import Any
 
 
 class ModelTyp(Enum):
@@ -25,3 +26,10 @@ class KIModel():
         self.pfad_model = pfad_model
         self.pfad_label = pfad_label
         self.modeltyp = modeltyp
+
+class KiClassList():
+    def __init__(self,index:int,classname:str) -> None:
+        self.index = index
+        self.classname = classname
+
+    

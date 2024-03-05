@@ -9,14 +9,17 @@ class Router:
         self.vorherigelement = ""
        
     def view_pop(self,view):
+        print(self.page.views)
         self.page.views.pop()
         self.view_list.pop()    
+        print("nach pop")
         top_view = self.page.views[-1]
         self.vorherigelement = top_view.route
+        print("vor page.go")
         self.page.go(top_view.route)
         
     def routechange(self,route):
-        
+        print("route")
       
         
 

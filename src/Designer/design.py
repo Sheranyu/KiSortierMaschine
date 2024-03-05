@@ -37,6 +37,8 @@ class StartSeitePageDesign(ft.UserControl, ABC):
 class CreateModelPageDesign(ABC, ft.UserControl):
     def __init__(self) -> None:
         super().__init__()
+        self.CameraContainer = ft.Image()
+
         self.classzeahler = 1
         self.boxshadow = ft.BoxShadow(
             spread_radius=1,

@@ -1,2 +1,1 @@
-
-        cls.row = ft.Row([cls.button,cls.fttext])
+ cv.Path.LineTo(105, 25),
