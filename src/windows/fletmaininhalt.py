@@ -1,4 +1,5 @@
 import base64
+from datetime import date
 import os
 import sys
 from typing import List
@@ -121,7 +122,7 @@ class CreateModelPage(CreateModelPageDesign):
         super().__init__()
         self.dynabstandadder = 700/5
         self.aufnahme = WebcamAufnahme()
-        
+        self.listederaufgabenlocalspeicher: List = []
         
     def build(self):
         self.listview = ft.ListView(spacing=8, padding=15, auto_scroll=False,height=40)
@@ -209,16 +210,28 @@ class CreateModelPage(CreateModelPageDesign):
         for frame in self.aufnahme.StarteAufnahme(newdata):
             ZeigeBildan(frame,self.CameraContainer)
 
-    def beendevideoaufnahme():
+    def beendevideoaufnahme(self):
         LaufZeitConfig.islaufzeit = False   
     
+    def saveclassnameeingabe(self,e:ft.ControlEvent, item):
+        daten = self.page.session.get("listederaufgabenlocalspeicher")
+        
+        
+        for oneitem in daten:
+            if oneitem["classindex"] == item["classindex"]:
+                oneitem["classname"] = e.data
+                
+        print(daten)
+        self.page.session.set("listederaufgabenlocalspeicher",daten)
+        self.page.update()
+
     def ladeliste(self):
-        listederaufgabenlocalspeicher = self.page.session.get("listederaufgabenlocalspeicher")
+        self.listederaufgabenlocalspeicher = self.page.session.get("listederaufgabenlocalspeicher")
         self.listview.controls.clear()
         self.listdict = {}
-        for item in listederaufgabenlocalspeicher:
-
-            self.newtextfiel = ft.TextField(label="class name")
+        for item in self.listederaufgabenlocalspeicher:
+            
+            self.newtextfiel = ft.TextField(label="class name",value=item["classname"], on_change=lambda e,item=item: self.saveclassnameeingabe(e,item))
             self.newcameraaufnahmebutton = ft.FilledButton(
                 "Start Aufnahme", on_click=lambda e,anzahl=item,text=self.newtextfiel: self.StartCamera(anzahl,text)
             )
@@ -244,16 +257,14 @@ class CreateModelPage(CreateModelPageDesign):
 
     def CreateNewTrainingClass(self):
         
-        listederaufgabenlocalspeicher = self.page.session.get("listederaufgabenlocalspeicher")
+        self.listederaufgabenlocalspeicher
         neue_class = {
             "classindex": self.classzeahler,
             "classname": None,
         }
-        if listederaufgabenlocalspeicher is None:
-            listederaufgabenlocalspeicher = []
-        
-        listederaufgabenlocalspeicher.append(neue_class)
-        self.page.session.set("listederaufgabenlocalspeicher", listederaufgabenlocalspeicher)
+
+        self.listederaufgabenlocalspeicher.append(neue_class)
+        self.page.session.set("listederaufgabenlocalspeicher", self.listederaufgabenlocalspeicher)
         self.classzeahler += 1
         if self.listview.height < 700:
             self.listview.height += self.dynabstandadder
