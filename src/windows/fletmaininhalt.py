@@ -219,10 +219,8 @@ class CreateModelPage(CreateModelPageDesign):
             )
             self.newcardtemp = ft.Card(content=self.newclasscontainertempalte)
             self.listview.controls.append(self.newcardtemp)
-
-     
-            
-        self.update()
+        self.listview.update()  
+        
         
 
     def CreateNewTrainingClass(self):
@@ -279,19 +277,14 @@ class CreateModelPage(CreateModelPageDesign):
         )
         self.page.client_storage.set("kimodelsaver", self.kimodelsaver.__dict__)
 
-    def will_unmount(self):
-        self.page.session.remove("listederaufgabenlocalspeicher")
-        
 
     def did_mount(self):
+        self.page.session.clear()
         self.CreateNewTrainingClass()
         self.page.banner = self.warningbanner
         self.page.overlay.append(self.pick_files_dialog)
         self.page.dialog = self.alertWarnhinweis
         self.alertWarnhinweis.open = True
-        self.page.views[0].floating_action_button = self.floatedbutton
-        self.update()
-        self.page.views[0].update()
 
         self.page.update()
 

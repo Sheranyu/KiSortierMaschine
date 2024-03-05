@@ -15,5 +15,5 @@ def main(page: ft.Page):
     page.on_view_pop = router.view_pop
     page.go("/")
 
-ft.app(target=main)
+ft.app(target=main, view=ft.AppView.FLET_APP_WEB)
 
