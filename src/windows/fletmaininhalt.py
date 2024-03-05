@@ -4,6 +4,7 @@ import sys
 from typing import List
 import cv2
 import flet as ft
+from sympy import false
 from StatusMeldungen.status import WarnStatus
 from logic.kilauflogic import KiDatenVerarbeitung
 from db.CRUD.DatumSpeicherung import CreateDatumSpeicherung
@@ -120,7 +121,8 @@ class CreateModelPage(CreateModelPageDesign):
         super().__init__()
         self.dynabstandadder = 700/5
         self.aufnahme = WebcamAufnahme()
-
+        
+        
     def build(self):
         self.listview = ft.ListView(spacing=8, padding=15, auto_scroll=False,height=40)
 
@@ -153,9 +155,12 @@ class CreateModelPage(CreateModelPageDesign):
                ft.Container(ft.Column([
                     self.title,
                     self.instructions,
+                    self.model_name,
+                
                     self.loadmodelbuttonpicker,
                     self.save_file_pfad,
                     self.panel,
+                    self.CameraContainer
                     
                ]))
             ],
@@ -188,24 +193,36 @@ class CreateModelPage(CreateModelPageDesign):
         #print("zeige aktuelel bilder")
         pass
 
-    def StartCamera(self, classitem):
+    def StartCamera(self, classitem,textfield:ft.TextField):
+        if self.save_file_pfad.value == "Cancelled!" or self.save_file_pfad.value == None:
+            self.openbanner(WarnStatus.PFAD_IS_EMPTY)
+            return
+        if textfield.value == None or textfield.value == "":
+            self.openbanner(WarnStatus.CLASS_NAME_EMPTY)
+            return
         
-        newdata = KiClassList(classitem["classindex"], classitem["classname"])
+        rowdata = self.listdict[classitem["classindex"]]
+        print(rowdata)
+        LaufZeitConfig.islaufzeit = True
+        newdata = KiClassList(classitem["classindex"], textfield.value)
         #starte aufnahme
         for frame in self.aufnahme.StarteAufnahme(newdata):
             ZeigeBildan(frame,self.CameraContainer)
 
-        
+    def beendevideoaufnahme():
+        LaufZeitConfig.islaufzeit = False   
     
     def ladeliste(self):
         listederaufgabenlocalspeicher = self.page.session.get("listederaufgabenlocalspeicher")
         self.listview.controls.clear()
+        self.listdict = {}
         for item in listederaufgabenlocalspeicher:
 
             self.newtextfiel = ft.TextField(label="class name")
             self.newcameraaufnahmebutton = ft.FilledButton(
-                "Start Aufnahme", on_click=lambda e,anzahl=item: self.StartCamera(anzahl)
+                "Start Aufnahme", on_click=lambda e,anzahl=item,text=self.newtextfiel: self.StartCamera(anzahl,text)
             )
+            self.breakvideocapture = ft.FilledButton("beenden", on_click=self.beendevideoaufnahme, visible=False)
             self.deleteclassbuttonnew = ft.IconButton(icon=ft.icons.DELETE,bgcolor=ft.colors.RED,
                                                     on_click=lambda e,classobject= item :self.DeleteClass(e,classobject))
             self.newdeleandcamerarow = ft.Row([self.newcameraaufnahmebutton ,self.deleteclassbuttonnew], alignment=ft.MainAxisAlignment.SPACE_BETWEEN)
@@ -219,6 +236,8 @@ class CreateModelPage(CreateModelPageDesign):
             )
             self.newcardtemp = ft.Card(content=self.newclasscontainertempalte)
             self.listview.controls.append(self.newcardtemp)
+            self.listdict[item["classindex"]] = self.newdeleandcamerarow
+            
         self.listview.update()  
         
         
@@ -277,6 +296,8 @@ class CreateModelPage(CreateModelPageDesign):
         )
         self.page.client_storage.set("kimodelsaver", self.kimodelsaver.__dict__)
 
+    def will_unmount(self):
+        LaufZeitConfig.islaufzeit = False
 
     def did_mount(self):
         self.page.session.clear()

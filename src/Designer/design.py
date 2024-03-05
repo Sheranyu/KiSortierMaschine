@@ -50,6 +50,7 @@ class CreateModelPageDesign(ABC, ft.UserControl):
       
 
         self.cameraaufnahmebutton = ft.FilledButton("Start Aufnahme", on_click=lambda e,anzahl=self.classzeahler :self.StartCamera(e,anzahl))
+        #self.breakvideocapture = ft.FilledButton("beenden") findet man in der funktion: LadeListe()
         self.firstclasstexteingabe = ft.TextField(label="class name")
         self.deleteclassbutton = ft.IconButton(icon=ft.icons.DELETE,bgcolor=ft.colors.RED, on_click=lambda e,index=self.classzeahler: self.DeleteClass(e,index) )
         
@@ -72,7 +73,7 @@ class CreateModelPageDesign(ABC, ft.UserControl):
         self.loadmodelbuttonpicker = ft.ElevatedButton(
             "Wähle Speicherort",
             icon=ft.icons.FILE_UPLOAD,
-            on_click=lambda _: self.pick_files_dialog.save_file(),
+            on_click=lambda _: self.pick_files_dialog.get_directory_path(),
         )
 
         self.warhinweistext = ft.Text(

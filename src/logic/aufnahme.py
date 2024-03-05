@@ -4,7 +4,7 @@ import time
 from typing import Any, Generator
 import cv2
 from flet import Image
-
+from configordner.settings import LaufZeitConfig
 from modele.InterneDatenModele import KiClassList
 
 class WebcamAufnahme():
@@ -45,13 +45,13 @@ class WebcamAufnahme():
             if not os.path.exists(f'./{cur_class}'):
                 os.system(f'mkdir {cur_class}')
             img_path = path + cur_class
-            i = 0  # Reset Bild zähler
+            
             
 
             # Lies ein Bild
             ret, frame = cap.read()
             if not ret:
-                frame.release()  # Freigabe der Kamera-Ressourcen, falls erforderlich
+                cap.release()  # Freigabe der Kamera-Ressourcen, falls erforderlich
                 raise cv2.error("Fehler beim Öffnen der Kamera")
             l, w, _ = frame.shape
 
@@ -60,17 +60,17 @@ class WebcamAufnahme():
 
             # Taste "s" -> Bildaufnahme
             
-            cv2.imwrite(img_path + f'/{str(i).zfill(4)}.png', img_part)
+            cv2.imwrite(img_path + f'/{str(i).zfill(5)}.png', img_part)
             i += 1
-            
+            print(i)
             #f"{str(i).zfill(4)} Bild, Klasse: {cur_class} Aufloesung: {l}x{w}, x-Richtung: {self.cx}...{self.cx + self.rw}, y-Richtung: {self.cy}...{self.cy + self.rh} {img_path + f'/{str(i).zfill(4)}.png'}"
 
             # Bild anzeigen, Leertaste beendet
             yield frame
-            if cv2.waitKey(1) % 0xFF == ord(' '):
+            if cv2.waitKey(1) % 0xFF == ord(' ') or LaufZeitConfig.islaufzeit == False:
                 break
 
-        frame.release()
+        cap.release()
         cv2.destroyAllWindows()
     
     def BeendeAufnahme(self):
