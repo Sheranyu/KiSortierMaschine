@@ -40,7 +40,7 @@ class Mainwindow(BaseWindow):
         # cls.text1 = ft.Text("Neues Modell erstellen", theme_style=ft.TextTheme.label_large)
 
         self.button1 = ft.Container(
-            content=ft.CupertinoButton(
+            content=ft.ElevatedButton(
                 text="Neues Modell erstellen",
                 on_click=lambda e: self.page.go("/create-model"),
                 bgcolor=ft.colors.BLUE,
@@ -49,7 +49,7 @@ class Mainwindow(BaseWindow):
             height=self.breite,
         )
         self.button2 = ft.Container(
-            content=ft.CupertinoButton(
+            content=ft.ElevatedButton(
                 text="Modell laden",
                 on_click=lambda e: self.page.go("/load-model"),
                 bgcolor=ft.colors.BLUE,
@@ -58,7 +58,7 @@ class Mainwindow(BaseWindow):
             height=self.breite,
         )
         self.button3 = ft.Container(
-            content=ft.CupertinoButton(
+            content=ft.ElevatedButton(
                 text="Starte Anwendung",
                 on_click=lambda e: self.page.go("/start-application"),
                 bgcolor=ft.colors.BLUE,
@@ -67,7 +67,7 @@ class Mainwindow(BaseWindow):
             height=self.breite,
         )
         self.button4 = ft.Container(
-            content=ft.CupertinoButton(
+            content=ft.ElevatedButton(
                 text="Statistiken",
                 on_click=lambda e: self.page.go("/statistik"),
                 bgcolor=ft.colors.BLUE,
@@ -76,8 +76,8 @@ class Mainwindow(BaseWindow):
             height=self.breite,
         )
         self.button5 = ft.Container(
-            content=ft.CupertinoButton(text="Exit!", on_click=self.exit_application),
-            bgcolor=ft.colors.BLUE,
+            content=ft.ElevatedButton(text="Exit!", on_click=self.exit_application,bgcolor=ft.colors.BLUE,),
+            
             width=self.weite,
             height=self.breite,
         )
@@ -120,7 +120,7 @@ class CreateModelPage(CreateModelPageDesign):
         
 
     def build(self):
-        self.listview = ft.ListView(spacing=8, padding=15, auto_scroll=True)
+        self.listview = ft.ListView(spacing=8, padding=15, auto_scroll=False)
 
         self.panel = ft.ExpansionPanelList(
             expand_icon_color=ft.colors.AMBER,
@@ -143,11 +143,14 @@ class CreateModelPage(CreateModelPageDesign):
             bgcolor=ft.colors.BLACK87,
             border_radius=ft.border_radius.all(7),
             shadow=self.boxshadow,
-            width=340,
-            height=600,
+            col=4,
+            height=40
             
         )
-        
+
+
+
+        print(self.page)
         self.containercolum = ft.Column(
             controls=[
                ft.Container(ft.Column([
@@ -158,17 +161,18 @@ class CreateModelPage(CreateModelPageDesign):
                     self.panel
                ]))
             ],
-           
+           col=3,
         )
+    
         
         #self.floatingactionstack = ft.Stack(controls=[self.floatedbutton],height=200,width=200)
-        self.rowleft = ft.Row([self.listcontainer,self.floatedbutton])
-        self.columleft = ft.Column([self.rowleft])
+        self.listwithbutton = ft.ResponsiveRow([self.listcontainer,self.floatedbutton],columns=5)
+        self.columleft = ft.Column([self.listwithbutton],col=3)
        
-
-        self.rowcontainer = ft.Row([self.columleft,ft.VerticalDivider(visible=True,thickness=20),self.containercolum])
         
-        return self.rowcontainer
+        self.rowcontainer = ft.ResponsiveRow([self.columleft ,self.containercolum])
+        self.safearea = ft.SafeArea(content=self.rowcontainer)
+        return self.safearea 
     
     
 
@@ -177,6 +181,8 @@ class CreateModelPage(CreateModelPageDesign):
         daten = self.page.session.get("listederaufgabenlocalspeicher")
         daten = [item for item in daten if item["classindex"] != classitem["classindex"] ]
         self.page.session.set("listederaufgabenlocalspeicher", daten)
+        self.listcontainer.height -= 700/5
+
         self.ladeliste()
 
     def ZeigeaktuelelBilder(self, e):
@@ -209,6 +215,8 @@ class CreateModelPage(CreateModelPageDesign):
             )
             self.newcardtemp = ft.Card(content=self.newclasscontainertempalte)
             self.listview.controls.append(self.newcardtemp)
+
+     
             
         self.update()
         
@@ -225,6 +233,9 @@ class CreateModelPage(CreateModelPageDesign):
         listederaufgabenlocalspeicher.append(neue_class)
         self.page.session.set("listederaufgabenlocalspeicher", listederaufgabenlocalspeicher)
         self.classzeahler += 1
+        if self.listcontainer.height < 700:
+            self.listcontainer.height += 700/5
+            print(self.listcontainer.height)
         self.ladeliste()
         
 
@@ -487,7 +498,7 @@ class Statistiken(ft.UserControl):
         # Hinweiß: Speichern kann auch automatisch erfolgen
         # Bonus: wie weit sich der Motor drehen musste.
         self.title = ft.Text("Alle Statisiken", theme_style="headlineMedium")
-        self.button = ft.CupertinoButton("Bekomme Daten", on_click=self.getdata)
+        self.button = ft.ElevatedButtonv("Bekomme Daten", on_click=self.getdata)
         self.SearchStatistikdata = ft.SearchBar(
             on_submit=self.onEnterSearch, divider_color=ft.colors.AMBER
         )

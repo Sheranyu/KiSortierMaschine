@@ -1,31 +1,38 @@
 import flet as ft
 
-
 def main(page: ft.Page):
-    def handle_change(e: ft.ControlEvent):
-        print(f"change on panel with index {e.data}")
 
-    def handle_delete(e: ft.ControlEvent):
-        panel.controls.remove(e.control.data)
-        page.update()
-
-    panel = ft.ExpansionPanelList(
-        expand_icon_color=ft.colors.AMBER,
-        elevation=8,
-        divider_color=ft.colors.AMBER,
-        on_change=handle_change,
-        controls=[
-            ft.ExpansionPanel(
-                # has no header and content - placeholders will be used
-                bgcolor=ft.colors.BLUE_400,
-                expanded=True,
-            )
-        ]
-    )
-
-    
-
-    page.add(panel)
-
+    page.add(
+        ft.Container(ft.Row(
+            [
+                ft.Container(
+                    bgcolor=ft.colors.ORANGE_300,
+                    alignment=ft.alignment.center,
+                    expand=True,
+                ),
+                 ft.VerticalDivider(),
+                ft.Container(
+                    bgcolor=ft.colors.BROWN_400,
+                    alignment=ft.alignment.center,
+                    expand=True,
+                ),
+                 ft.VerticalDivider(width=1, color="white"),
+                ft.Container(
+                    bgcolor=ft.colors.BLUE_300,
+                    alignment=ft.alignment.center,
+                    expand=True,
+                ),
+                 ft.VerticalDivider(width=9, thickness=3),
+                ft.Container(
+                    bgcolor=ft.colors.GREEN_300,
+                    alignment=ft.alignment.center,
+                    expand=True,
+                ),
+            ],
+            spacing=0,
+            expand=True,
+        ),expand=True
+        )
+        )
 
 ft.app(target=main)

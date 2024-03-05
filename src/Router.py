@@ -39,20 +39,20 @@ class Router:
 
     def register_route(self) -> None:
         self.create_model_view = ft.View("/create-model", controls=[CreateModelPage()],
-                appbar=ft.AppBar(title=ft.Text("Modell erstellen"), bgcolor=ft.colors.SURFACE_VARIANT), 
+                appbar=ft.AppBar(automatically_imply_leading=True,title=ft.Text("Modell erstellen"), bgcolor=ft.colors.SURFACE_VARIANT), 
                 )
         
         self.load_model_view = ft.View("/load-model", controls=[LoadModelPage()], 
                 appbar=ft.AppBar(title=ft.Text("Modell laden"), bgcolor=ft.colors.SURFACE_VARIANT),
-                adaptive=True)
+                )
         
         self.start_application_view = ft.View("/start-application", controls=[StartApplicationPage() ], 
                 appbar=ft.AppBar(title=ft.Text("Anwendung starten"), bgcolor=ft.colors.SURFACE_VARIANT),
-                adaptive=True)
+                )
         
         self.statistik_view = ft.View("/statistik", controls=[Statistiken()],
                 appbar=ft.AppBar(title=ft.Text("Statisiken"), bgcolor=ft.colors.SURFACE_VARIANT),
-                adaptive=True)
+                )
         
         
         self.routes = {
