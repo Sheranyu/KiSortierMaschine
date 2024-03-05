@@ -34,7 +34,7 @@ class WebcamAufnahme():
         cap.set(cv2.CAP_PROP_FRAME_HEIGHT, self.height)
 
         
-        path = './'
+        path = classdata.speicherpfad
         img_path = path
         i = 0
         while True:

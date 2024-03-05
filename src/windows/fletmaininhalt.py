@@ -204,7 +204,7 @@ class CreateModelPage(CreateModelPageDesign):
         rowdata = self.listdict[classitem["classindex"]]
         print(rowdata)
         LaufZeitConfig.islaufzeit = True
-        newdata = KiClassList(classitem["classindex"], textfield.value)
+        newdata = KiClassList(classitem["classindex"], textfield.value,self.save_file_pfad.value)
         #starte aufnahme
         for frame in self.aufnahme.StarteAufnahme(newdata):
             ZeigeBildan(frame,self.CameraContainer)

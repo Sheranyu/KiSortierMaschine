@@ -28,8 +28,9 @@ class KIModel():
         self.modeltyp = modeltyp
 
 class KiClassList():
-    def __init__(self,index:int,classname:str) -> None:
+    def __init__(self,index:int,classname:str,speicherpfad:str) -> None:
         self.index = index
         self.classname = classname
+        self.speicherpfad = speicherpfad
 
     
