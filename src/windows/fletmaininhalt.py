@@ -202,15 +202,16 @@ class CreateModelPage(CreateModelPageDesign):
             self.openbanner(WarnStatus.CLASS_NAME_EMPTY)
             return
         
+        textfield.disabled = True
         self.changebutton(classitem,False,True)
-        
         LaufZeitConfig.islaufzeit = True
         newdata = KiClassList(classitem["classindex"], textfield.value,self.save_file_pfad.value)
+        self.update()
         #starte aufnahme
         for frame in self.aufnahme.StarteAufnahme(newdata):
             ZeigeBildan(frame,self.CameraContainer)
 
-        self.beendevideoaufnahme()
+        #self.beendevideoaufnahme(classitem)
 
     def beendevideoaufnahme(self,classitem):
         self.changebutton(classitem,True,False)
@@ -243,6 +244,7 @@ class CreateModelPage(CreateModelPageDesign):
         for item in self.listederaufgabenlocalspeicher:
             
             self.newtextfiel = ft.TextField(label="class name",value=item["classname"], on_change=lambda e,item=item: self.saveclassnameeingabe(e,item))
+            
             self.newcameraaufnahmebutton = ft.FilledButton(
                 "Start Aufnahme", on_click=lambda e,anzahl=item,text=self.newtextfiel: self.StartCamera(anzahl,text)
             )
