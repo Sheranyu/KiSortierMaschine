@@ -81,3 +81,4 @@ def ZeigeBildan(frame: cv2.typing.MatLike, fletImage: Image):
         frame_base64 = base64.b64encode(buffer).decode("utf-8")
         fletImage.src_base64 = frame_base64
         fletImage.update()
+    

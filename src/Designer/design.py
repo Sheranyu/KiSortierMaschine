@@ -65,7 +65,8 @@ class CreateModelPageDesign(ABC, ft.UserControl):
         self.modeltyplist = ft.Dropdown(
             width=200,
             options=[
-                ft.dropdown.Option(ModelTyp.KERAS.value, "Kera Model"),
+                ft.dropdown.Option(ModelTyp.KERAS, "Kera Model"),
+                ft.dropdown.Option(ModelTyp.TORCH, "PyTorch Model"),
             ],
         )
 
