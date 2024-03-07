@@ -29,23 +29,28 @@ class WebcamAufnahme():
         pass
 
     def StarteAufnahme(self,classdata: KiClassList) -> Generator[cv2.typing.MatLike, Any, None]:
-        cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+        cap = cv2.VideoCapture(0)
         cap.set(cv2.CAP_PROP_FRAME_WIDTH, self.width)
         cap.set(cv2.CAP_PROP_FRAME_HEIGHT, self.height)
 
         
-        path = classdata.speicherpfad
+        path = f"{classdata.speicherpfad}"
         img_path = path
         i = 0
+
+        cur_class = classdata.classname
+        
+        img_path = f"{path}\{cur_class}"
+        print(img_path)
+
+        print(f"Label: {cur_class}")
+        if not os.path.exists(f'{img_path}'):
+            os.system(f'mkdir {img_path}')
+        print(os.path.exists(f'{img_path}'))
+        if LaufZeitConfig.islaufzeit ==  False:
+            return
         while True:
             time.sleep(self.framegap)
-
-            cur_class = classdata.classname
-            print(f"Label: {cur_class}")
-            if not os.path.exists(f'./{cur_class}'):
-                os.system(f'mkdir {cur_class}')
-            img_path = path + cur_class
-            
             
 
             # Lies ein Bild
