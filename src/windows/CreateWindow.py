@@ -85,6 +85,7 @@ class CreateModelPage(CreateModelPageDesign):
         pass
 
     def StartCamera(self, classitem,textfield:ft.TextField):
+        print("instartcamera")
         if self.save_file_pfad.value == "Cancelled!" or self.save_file_pfad.value == None:
             self.openbanner(WarnStatus.PFAD_IS_EMPTY)
             return
@@ -92,15 +93,25 @@ class CreateModelPage(CreateModelPageDesign):
             self.openbanner(WarnStatus.CLASS_NAME_EMPTY)
             return
         
-        rowdata = self.listdict[classitem["classindex"]]
-        print(rowdata)
+        textfield.disabled = True
+        self.changebutton(classitem,False,True)
         LaufZeitConfig.islaufzeit = True
         newdata = KiClassList(classitem["classindex"], textfield.value,self.save_file_pfad.value)
+        self.update()
         #starte aufnahme
         for frame in self.aufnahme.StarteAufnahme(newdata):
             ZeigeBildan(frame,self.CameraContainer)
 
-    def beendevideoaufnahme(self):
+        #self.beendevideoaufnahme(classitem)
+    def changebutton(self,classitem, startbutton: bool, beendenbutton: bool):
+        rowdata: ft.Row = self.listdict[classitem["classindex"]]
+        
+        rowdata.controls[0].visible = startbutton
+        rowdata.controls[1].visible = beendenbutton
+        rowdata.update()
+        
+    def beendevideoaufnahme(self,classitem):
+        self.changebutton(classitem,True,False)
         LaufZeitConfig.islaufzeit = False   
     
     def saveclassnameeingabe(self,e:ft.ControlEvent, item):
@@ -125,10 +136,10 @@ class CreateModelPage(CreateModelPageDesign):
             self.newcameraaufnahmebutton = ft.FilledButton(
                 "Start Aufnahme", on_click=lambda e,anzahl=item,text=self.newtextfiel: self.StartCamera(anzahl,text)
             )
-            self.breakvideocapture = ft.FilledButton("beenden", on_click=self.beendevideoaufnahme, visible=False)
+            self.breakvideocapture = ft.ElevatedButton("beenden",bgcolor=ft.colors.RED, on_click=lambda e,item=item: self.beendevideoaufnahme(item), visible=False)
             self.deleteclassbuttonnew = ft.IconButton(icon=ft.icons.DELETE,bgcolor=ft.colors.RED,
                                                     on_click=lambda e,classobject= item :self.DeleteClass(e,classobject))
-            self.newdeleandcamerarow = ft.Row([self.newcameraaufnahmebutton ,self.deleteclassbuttonnew], alignment=ft.MainAxisAlignment.SPACE_BETWEEN)
+            self.newdeleandcamerarow = ft.Row([self.newcameraaufnahmebutton,self.breakvideocapture ,self.deleteclassbuttonnew], alignment=ft.MainAxisAlignment.SPACE_BETWEEN)
             self.newclasscolumntemplate = ft.Column(
                 [self.newtextfiel, self.newdeleandcamerarow]
             )
@@ -141,7 +152,7 @@ class CreateModelPage(CreateModelPageDesign):
             self.listview.controls.append(self.newcardtemp)
             self.listdict[item["classindex"]] = self.newdeleandcamerarow
             
-        self.listview.update()  
+        self.listview.update()   
         
         
 
