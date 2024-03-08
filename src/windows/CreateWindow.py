@@ -5,7 +5,7 @@ import flet as ft
 from configordner.settings import LaufZeitConfig
 
 from logic.aufnahme import WebcamAufnahme, ZeigeBildan
-from modele.InterneDatenModele import KIModel, KiClassList
+from modele.InterneDatenModele import KIModelLoader, KiClassList
 
 class CreateModelPage(CreateModelPageDesign):
     def __init__(self):
@@ -128,6 +128,7 @@ class CreateModelPage(CreateModelPageDesign):
 
     def ladeliste(self):
         self.listederaufgabenlocalspeicher = self.page.session.get("listederaufgabenlocalspeicher")
+        print(self.listederaufgabenlocalspeicher)
         self.listview.controls.clear()
         self.listdict = {}
         for item in self.listederaufgabenlocalspeicher:
@@ -157,8 +158,6 @@ class CreateModelPage(CreateModelPageDesign):
         
 
     def CreateNewTrainingClass(self):
-        
-        self.listederaufgabenlocalspeicher
         neue_class = {
             "classindex": self.classzeahler,
             "classname": None,
@@ -203,16 +202,19 @@ class CreateModelPage(CreateModelPageDesign):
             self.openbanner(WarnStatus.MODEL_NICHT_GEWAEHLT)
             return
 
-        self.kimodelsaver = KIModel(
+        self.kimodelsaver = KIModelLoader(
             self.model_name.value, self.save_file_pfad.value, self.modeltyplist.value
         )
-        self.page.client_storage.set("kimodelsaver", self.kimodelsaver.__dict__)
+        self.page.session.set("kimodelsaver", self.kimodelsaver.__dict__)
 
     def will_unmount(self):
+        self.page.session.remove("listederaufgabenlocalspeicher")
+        print(self.page.session.get("listederaufgabenlocalspeicher"))
         LaufZeitConfig.islaufzeit = False
+        self.page.update()
 
     def did_mount(self):
-        self.page.session.clear()
+        self.listederaufgabenlocalspeicher = []
         self.CreateNewTrainingClass()
         self.page.banner = self.warningbanner
         self.page.overlay.append(self.pick_files_dialog)

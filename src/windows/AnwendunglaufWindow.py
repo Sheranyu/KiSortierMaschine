@@ -5,7 +5,7 @@ from Designer.design import StartSeitePageDesign
 from configordner.settings import LaufZeitConfig
 from logic.kilauflogic import KiDatenVerarbeitung
 
-from modele.InterneDatenModele import KiData
+from modele.InterneDatenModele import KIModelLoader, KiData
 
 
 class StartApplicationPage(StartSeitePageDesign):
@@ -24,6 +24,7 @@ class StartApplicationPage(StartSeitePageDesign):
         return self.container
 
     def start(self, e):
+        self.kimodeldata: KIModelLoader = self.page.session.get("kimodel")
         self.pr.visible = True
         # load configdata
         # daten = Statistik(class_name="testneu",  confidence_score=80)

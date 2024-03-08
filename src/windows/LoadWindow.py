@@ -4,12 +4,12 @@ from StatusMeldungen.status import WarnStatus
 import flet as ft
 
 from logic.aufnahme import WebcamAufnahme, ZeigeBildan
-from modele.InterneDatenModele import KIModel, KiClassList
+from modele.InterneDatenModele import KIModelLoader, KiClassList
 
 class LoadModelPage(LoadModelPageDesign):
     def __init__(self):
         super().__init__()
-        self.kimodeldata: KIModel = KIModel()
+        self.kimodeldata: KIModelLoader = KIModelLoader()
 
     def build(self):
         self.ismodelloadedrow = ft.Container(
@@ -107,7 +107,7 @@ class LoadModelPage(LoadModelPageDesign):
         if self.check_data_in_filepicker(e) == False:
             return
 
-        self.kimodeldata.label_name = e.files[0].name
+        self.kimodeldata.label_datei_name = e.files[0].name
         self.kimodeldata.pfad_label = e.files[0].path
         self.selected_files.value = "erfolgreich geladen"
         self.isloadedcheckboxlabel.name = ft.icons.CHECK_BOX_ROUNDED
