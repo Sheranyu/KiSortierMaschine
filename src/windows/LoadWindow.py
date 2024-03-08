@@ -1,16 +1,17 @@
+import json
 from typing import List
 from Designer.design import CreateModelPageDesign, LoadModelPageDesign
 from StatusMeldungen.status import WarnStatus
 import flet as ft
 
 from logic.aufnahme import WebcamAufnahme, ZeigeBildan
-from modele.InterneDatenModele import KIModelLoader, KiClassList
+from modele.InterneDatenModele import KIModelsaverData, KiClassList
 
 class LoadModelPage(LoadModelPageDesign):
     def __init__(self):
         super().__init__()
-        self.kimodeldata: KIModelLoader = KIModelLoader()
-
+        self.kimodeldata: KIModelsaverData = KIModelsaverData()
+        
     def build(self):
         self.ismodelloadedrow = ft.Container(
             ft.Row(
@@ -84,6 +85,9 @@ class LoadModelPage(LoadModelPageDesign):
             self.page.update()
             return
 
+        with open("./modeldata.json","w") as json_file:
+            json.dump(self.kimodeldata.__dict__, json_file,indent=4)
+            
         self.page.session.set("kimodel", self.kimodeldata.__dict__)
 
     def close_banner(self, e):
@@ -136,7 +140,7 @@ class LoadModelPage(LoadModelPageDesign):
             getattr(self.kimodeldata, attr) is not None
             for attr in [
                 "ModelName",
-                "label_name",
+                "label_datei_name",
                 "pfad_model",
                 "pfad_label",
                 "modeltyp",

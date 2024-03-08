@@ -19,13 +19,23 @@ class KiData():
         self.erkannter_modus = erkannter_modus
         self.confidence_score_max = confidence_score_max
         
-class KIModelLoader():
-    def __init__(self,ModelName=None, pfad_model=None,label_name=None,pfad_label=None, modeltyp = ModelTyp.KERAS.value) -> None:
+class KIModelsaverData():
+    def __init__(self,ModelName=None, pfad_model=None,label_datei_name=None,pfad_label=None, modeltyp = ModelTyp.KERAS.value) -> None:
+      
         self.ModelName = ModelName
-        self.label_datei_name = label_name
+        self.label_datei_name = label_datei_name
         self.pfad_model = pfad_model
         self.pfad_label = pfad_label
         self.modeltyp = modeltyp
+        
+class KIModelloaderData():
+    def __init__(self, data = None) -> None:
+        if data is not None:
+            self.ModelName = data["ModelName"]
+            self.label_datei_name = data["label_datei_name"]
+            self.pfad_model = data["pfad_model"]
+            self.pfad_label = data["pfad_label"]
+            self.modeltyp = data["modeltyp"]
 
 class KiClassList():
     def __init__(self,index:int,classname:str,speicherpfad:str) -> None:

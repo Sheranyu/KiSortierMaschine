@@ -1,6 +1,7 @@
 import flet as ft
 from windows.fletmaininhalt import Mainwindow 
 from Router import Router
+from logic.KiDatenManager import KiDataManager
 #from Designer.designer import 
 
 def main(page: ft.Page):
@@ -11,6 +12,7 @@ def main(page: ft.Page):
     
     page.window_center()
     router = Router(page)
+    KiDataManager.classinit(page)
     page.on_route_change = router.routechange
     page.on_view_pop = router.view_pop
     page.go("/")

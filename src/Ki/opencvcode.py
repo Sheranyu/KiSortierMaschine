@@ -5,31 +5,33 @@ from keras.models import load_model  # TensorFlow is required for Keras to work
 import cv2  # Install opencv-python
 
 import numpy as np
-from modele.InterneDatenModele import KiData
-from configordner.settings import LaufZeitConfig, ModelDataClass
+from logic.KiDatenManager import KiDataManager
+from modele.InterneDatenModele import KIModelsaverData, KiData
+from configordner.settings import LaufZeitConfig
 import flet as ft
 
 
 class TrainiertesModel():
+
+    
     def __init__(self) -> None:
-        pass
+        self.kidata: KIModelsaverData = None
+        
 
     def loadmodel(self, progressring: ft.ProgressRing) -> Generator[Tuple[KiData,cv2.typing.MatLike], Any, Any]:
-        aktueller_ordner = os.path.dirname(os.path.abspath(__file__))
-      # Übergeordneter Ordner (A) erhalten
-        #uebergeordneter_ordner = os.path.dirname(aktueller_ordner)
-        # Pfad zum Ordner C erstellen
-        Kidatei = os.path.join(aktueller_ordner, "kimodel", "keras_model.h5")
-        # Pfad zur gewünschten Datei in Ordner C erstellen
-        label = os.path.join(aktueller_ordner,"kimodel","labels.txt")
+        self.kidata = KiDataManager.ladeKIDaten()
+        print(self.kidata)
+        if self.kidata is None:
+            print("error")
+            return
         # Disable scientific notation for clarity
         np.set_printoptions(suppress=True)
 
         # Load the model
-        model = load_model(Kidatei, compile=False)
+        model = load_model(self.kidata.pfad_model, compile=False)
 
         # Load the labels
-        class_label_names = open(label, "r").readlines()
+        class_label_names = open(self.kidata.pfad_label, "r").readlines()
 
         # CAMERA can be 0 or 1 based on default camera of your computer
         camera = cv2.VideoCapture(0)
@@ -67,6 +69,10 @@ class TrainiertesModel():
         camera.release()
         cv2.destroyAllWindows()
 
+    
+  
+        
+  
 
 def bildtoImage(self,image: np.ndarray[np.floating[Any]]):
     pass

@@ -1,0 +1,7 @@
+{
+    "ModelName": "keras_model.h5",
+    "label_datei_name": "labels.txt",
+    "pfad_model": "C:\\Users\\Anwender\\Documents\\GitHub\\Schule\\kisortiermaschine\\src\\Ki\\kimodel\\keras_model.h5",
+    "pfad_label": "C:\\Users\\Anwender\\Documents\\GitHub\\Schule\\kisortiermaschine\\src\\Ki\\kimodel\\labels.txt",
+    "modeltyp": "keras"
+}

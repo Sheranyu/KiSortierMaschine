@@ -13,7 +13,7 @@ from PIL import Image
 from configordner.settings import LaufZeitConfig
 from db.db_and_models.models import Statistik
 from db.db_and_models.session import sessiongen
-from modele.InterneDatenModele import KIModelLoader, KiData, KiClassList
+from modele.InterneDatenModele import KIModelsaverData, KiData, KiClassList
 from Designer.design import (
     CreateModelPageDesign,
     LoadModelPageDesign,

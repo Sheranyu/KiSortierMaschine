@@ -5,7 +5,7 @@ import flet as ft
 from configordner.settings import LaufZeitConfig
 
 from logic.aufnahme import WebcamAufnahme, ZeigeBildan
-from modele.InterneDatenModele import KIModelLoader, KiClassList
+from modele.InterneDatenModele import KIModelsaverData, KiClassList
 
 class CreateModelPage(CreateModelPageDesign):
     def __init__(self):
@@ -202,7 +202,7 @@ class CreateModelPage(CreateModelPageDesign):
             self.openbanner(WarnStatus.MODEL_NICHT_GEWAEHLT)
             return
 
-        self.kimodelsaver = KIModelLoader(
+        self.kimodelsaver = KIModelsaverData(
             self.model_name.value, self.save_file_pfad.value, self.modeltyplist.value
         )
         self.page.session.set("kimodelsaver", self.kimodelsaver.__dict__)

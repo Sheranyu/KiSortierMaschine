@@ -5,7 +5,7 @@ from Designer.design import StartSeitePageDesign
 from configordner.settings import LaufZeitConfig
 from logic.kilauflogic import KiDatenVerarbeitung
 
-from modele.InterneDatenModele import KIModelLoader, KiData
+from modele.InterneDatenModele import KIModelsaverData, KiData
 
 
 class StartApplicationPage(StartSeitePageDesign):
@@ -24,7 +24,6 @@ class StartApplicationPage(StartSeitePageDesign):
         return self.container
 
     def start(self, e):
-        self.kimodeldata: KIModelLoader = self.page.session.get("kimodel")
         self.pr.visible = True
         # load configdata
         # daten = Statistik(class_name="testneu",  confidence_score=80)
@@ -34,8 +33,10 @@ class StartApplicationPage(StartSeitePageDesign):
         try:
             for data in self.ki_logic.start_application(self.CamAnzeige, self.pr):
                 self.DatenAnzeige(data)
-        except:
+        except Exception as err:
+            print(f"Fehler: {err}")
             self.openwarndialog()
+
 
         toggle_two_buttons(self, True, False)
 
