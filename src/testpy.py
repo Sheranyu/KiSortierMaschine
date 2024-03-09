@@ -1,24 +1,37 @@
-import math
+from injector import inject, Module, Binder, Injector
 
-import flet as ft
-import flet.canvas as cv
+# Service-Klassen
+class UserRepository:
+    def get_user(self, user_id):
+        return f"User {user_id}"
 
-def main(page: ft.Page):
-    cp = cv.Canvas(
-        [
-           
-            cv.Line(x1=100,x2=100,y1=100,y2=25, 
-                    paint=ft.Paint(
-                        style=ft.PaintingStyle.STROKE,
-                        color=ft.colors.RED,
-                        stroke_width=4
-                ))
-          
-        ],
-        width=float("inf"),
-        expand=True,
-    )
+class UserService:
+    @inject
+    def __init__(self, user_repository: UserRepository):
+        self.user_repository = user_repository
 
-    page.add(cp)
+    def get_user_info(self, user_id):
+        return self.user_repository.get_user(user_id)
 
-ft.app(main)
+# Ein einfaches Modul für die Konfiguration der Dependency Injection
+class MyModule(Module):
+    def configure(self, binder: Binder):
+        binder.bind(UserRepository)
+
+# Hauptklasse, die die Abhängigkeiten verwendet
+@inject
+class SomeController:
+    def __init__(self, user_service: UserService):
+        self.user_service = user_service
+
+    def print_user_info(self, user_id):
+        user_info = self.user_service.get_user_info(user_id)
+        print(f"User Info: {user_info}")
+
+# Konfiguration und Erstellung der Dependency Injection
+if __name__ == "__main__":
+    injector = Injector([MyModule()])
+    controller = injector.get(SomeController)
+
+    # Verwendung der erstellten Instanz von SomeController
+    controller.print_user_info(123)
