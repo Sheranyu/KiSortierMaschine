@@ -1,36 +1,55 @@
 import flet as ft
 
-
 class Statistiken(ft.UserControl):
     def __init__(self):
         super().__init__()
+        # Initialize UI elements
+        self.teile_sortiert = ft.TextField(label="Sortierte Teile", value="0", read_only=True)
+        self.modus_anzeige = ft.TextField(label="Modus", value="N/A", read_only=True)
+        self.mehr_sortiert = ft.TextField(label="Mehr sortiert (Farbe/Form)", value="N/A", read_only=True)
+        self.laufzeit_anzeige = ft.TextField(label="Laufzeit", value="0", read_only=True)
+        self.motor_drehung = ft.TextField(label="Motor Drehung", value="0", read_only=True)
+        self.laden_button = ft.ElevatedButton(text="Daten laden", on_click=self.getdata)
+        self.speichern_button = ft.ElevatedButton(text="Daten speichern", on_click=self.savedata)
+        self.bekomme_daten_button = ft.ElevatedButton(text="Bekomme Daten", on_click=self.getdata)
+        self.search_statistikdata = ft.SearchBar(on_submit=self.on_enter_search, divider_color=ft.colors.AMBER)
 
     def build(self):
-        
-        # oberflächeninhalt was ich brauche:
-        #
-        # Anzeige für wie viele teile Sortiert worden sind
-        # Anzeige für wie viele dem entsprechenden Modus: Ob Farbe oder Form
-        # Anzeige: Was wurde mehr sortiert Farbe oder Form
-        # Anzeige: Laufzeit der Sortiermaschine
-        # Funktion: Laden der vergangenen Daten reicht als Button   
-        # Bonus oder je nach Kontext: Speichern der statistik
-        # Hinweiß: Speichern kann auch automatisch erfolgen
-        # Bonus: wie weit sich der Motor drehen musste.
-        self.title = ft.Text("Alle Statisiken", theme_style="headlineMedium")
-        self.button = ft.ElevatedButton("Bekomme Daten", on_click=self.getdata)
-        self.SearchStatistikdata = ft.SearchBar(
-            on_submit=self.onEnterSearch, divider_color=ft.colors.AMBER
-        )
+        # Create the title element
+        title = ft.Text("Alle Statistiken", size=20, text_align="center")
 
-        self.rowcontainer = ft.Row([self.title, self.button, self.SearchStatistikdata])
-        return self.rowcontainer
+        # Create buttons column
+        buttons_column = ft.Column(controls=[
+            self.bekomme_daten_button,
+            self.laden_button,
+            self.speichern_button
+        ])
 
-    def close_anchor(self):
-        self.SearchStatistikdata.close_view()
+        # Central column for all elements
+        main_layout = ft.Column(controls=[
+            title,
+            self.search_statistikdata,
+            self.teile_sortiert,
+            self.modus_anzeige,
+            self.mehr_sortiert,
+            self.laufzeit_anzeige,
+            self.motor_drehung,
+            buttons_column
+        ], expand=True)
 
-    def onEnterSearch(self, e):
-        self.update()
+        # Container for the main layout
+        center_container = ft.Container(content=main_layout, expand=True)
+
+        return center_container
 
     def getdata(self, e):
+        # Implementation for loading data
+        pass
+
+    def savedata(self, e):
+        # Implementation for saving data
+        pass
+
+    def on_enter_search(self, e):
+        # Implementation for the search function
         pass
