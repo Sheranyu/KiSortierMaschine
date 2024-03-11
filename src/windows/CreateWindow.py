@@ -11,7 +11,7 @@ from modele.InterneDatenModele import KIModelsaverData, KiClassList
 class CreateModelPage(CreateModelPageDesign):
     def __init__(self):
         super().__init__()
-        DependencyInjector.get_instance("")
+        
         self.dynabstandadder = 700/5
         self.aufnahme = WebcamAufnahme()
         self.listederaufgabenlocalspeicher: List = []
