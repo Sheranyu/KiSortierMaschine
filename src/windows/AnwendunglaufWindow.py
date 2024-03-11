@@ -22,9 +22,11 @@ class StartApplicationPage(StartSeitePageDesign):
             [self.colum1, self.pr, self.startrow, self.bildvideoRow],horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                
         )
+        self.columcontainerechts = ft.Container(ft.Column([self.erkanntesobjectbeschreibung,self.erkanntesobject]), padding=ft.padding.all(5))
+        self.anzeigekarte = ft.Card(content=self.columcontainerechts)
 
         #self.container = ft.Container(content=self.columendcontainer, alignment=ft.alignment.center)
-        return ft.Row([self.columendcontainer],alignment=ft.MainAxisAlignment.CENTER)
+        return ft.Row([self.columendcontainer,self.anzeigekarte],alignment=ft.MainAxisAlignment.CENTER)
 
     def start(self, e):
         self.pr.visible = True
@@ -45,6 +47,7 @@ class StartApplicationPage(StartSeitePageDesign):
 
     def DatenAnzeige(self, kidaten: KiData):
         print(kidaten.label_name)
+        self.erkanntesobject.value = kidaten.label_name
 
     def CamAnzeige(self, frame: cv2.typing.MatLike):
         _, buffer = cv2.imencode(".jpg", frame)

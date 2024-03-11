@@ -1,5 +1,5 @@
 import flet as ft
-from DIManager import DependencyInjector
+
 from Ki.opencvcode import TrainiertesModel
 from logic.aufnahme import WebcamAufnahme
 from windows.fletmaininhalt import Mainwindow 

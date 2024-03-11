@@ -7,6 +7,10 @@ from modele.InterneDatenModele import ModelTyp
 class StartSeitePageDesign(ft.UserControl, ABC):
     def __init__(self) -> None:
         super().__init__()
+        self.erkanntesobjectbeschreibung = ft.Text("Erkanntes Objekt: ")
+        self.erkanntesobject = ft.Text()
+        self.erkanntermodus = ft.Text()
+
         self.title = ft.Text("Start Application", theme_style="headlineMedium")
         self.startbutton = ft.ElevatedButton(
             "Start", bgcolor=ft.colors.BLUE, on_click=self.start
@@ -14,7 +18,7 @@ class StartSeitePageDesign(ft.UserControl, ABC):
         self.abbruchbutton = ft.ElevatedButton(
             "Abbruch", bgcolor=ft.colors.RED, on_click=self.abbruch, visible=False
         )
-        self.FarbeoderFormtext = ft.Text()
+        
         self.bildvideo = ft.Image("")
         self.alertwarn = ft.AlertDialog(
             modal=False,
