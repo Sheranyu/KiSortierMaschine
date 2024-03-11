@@ -190,3 +190,22 @@ class LoadModelPageDesign(ABC, ft.UserControl):
 
     def pick_files_result(self):
         pass
+
+
+class StatistikPageDesign(ft.UserControl,ABC):
+    def __init__(self) -> None:
+        self.teile_sortiert = ft.TextField(label="Sortierte Teile", value="0", read_only=True)
+        self.modus_anzeige = ft.TextField(label="Modus", value="N/A", read_only=True)
+        self.mehr_sortiert = ft.TextField(label="Mehr sortiert (Farbe/Form)", value="N/A", read_only=True)
+        self.laufzeit_anzeige = ft.TextField(label="Laufzeit", value="0", read_only=True)
+        self.motor_drehung = ft.TextField(label="Motor Drehung", value="0", read_only=True)
+        self.laden_button = ft.ElevatedButton(text="Daten laden", on_click=self.getdata)
+        self.bekomme_daten_button = ft.ElevatedButton(text="Bekomme Daten", on_click=self.getdata)
+        self.search_statistikdata = ft.SearchBar(on_submit=self.on_enter_search, divider_color=ft.colors.AMBER)
+
+    @abstractmethod
+    def getdata(self):
+        raise NotImplementedError()
+    @abstractmethod
+    def on_enter_search(self):
+        raise NotImplementedError()
