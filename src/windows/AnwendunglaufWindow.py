@@ -14,14 +14,17 @@ class StartApplicationPage(StartSeitePageDesign):
         self.ki_logic = KiDatenVerarbeitung()
 
     def build(self):
+        
         self.colum1 = ft.Row([self.title])
         self.startrow = ft.Row([self.startbutton, self.abbruchbutton])
         self.bildvideoRow = ft.Row([self.bildvideo])
         self.columendcontainer = ft.Column(
-            [self.colum1, self.pr, self.startrow, self.bildvideoRow]
+            [self.colum1, self.pr, self.startrow, self.bildvideoRow],horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+               
         )
-        self.container = ft.Container(content=self.columendcontainer)
-        return self.container
+
+        #self.container = ft.Container(content=self.columendcontainer, alignment=ft.alignment.center)
+        return ft.Row([self.columendcontainer],alignment=ft.MainAxisAlignment.CENTER)
 
     def start(self, e):
         self.pr.visible = True

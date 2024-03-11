@@ -6,13 +6,14 @@ class Statistiken(ft.UserControl):
         super().__init__()
 
     def build(self):
+        
         # oberflächeninhalt was ich brauche:
         #
         # Anzeige für wie viele teile Sortiert worden sind
         # Anzeige für wie viele dem entsprechenden Modus: Ob Farbe oder Form
         # Anzeige: Was wurde mehr sortiert Farbe oder Form
         # Anzeige: Laufzeit der Sortiermaschine
-        # Funktion: Laden der vergangenen Daten reicht als Button
+        # Funktion: Laden der vergangenen Daten reicht als Button   
         # Bonus oder je nach Kontext: Speichern der statistik
         # Hinweiß: Speichern kann auch automatisch erfolgen
         # Bonus: wie weit sich der Motor drehen musste.

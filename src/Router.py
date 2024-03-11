@@ -56,6 +56,7 @@ class Router:
         
         self.start_application_view = ft.View("/start-application", controls=[StartApplicationPage() ], 
                 appbar=ft.AppBar(title=ft.Text("Anwendung starten"), bgcolor=ft.colors.SURFACE_VARIANT),
+                
                 )
         
         self.statistik_view = ft.View("/statistik", controls=[Statistiken()],

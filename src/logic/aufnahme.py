@@ -7,6 +7,7 @@ from flet import Image
 from configordner.settings import LaufZeitConfig
 from modele.InterneDatenModele import KiClassList
 
+
 class WebcamAufnahme():
     def __init__(self) -> None:
         self.width = 640  # Mögliche Kameraauflösungen (bei mir): 640x380, 640x380, 640x640, 1280x720
