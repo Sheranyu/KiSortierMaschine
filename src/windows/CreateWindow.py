@@ -1,4 +1,5 @@
 from typing import List
+from DIManager import DependencyInjector
 from Designer.design import CreateModelPageDesign
 from StatusMeldungen.status import WarnStatus
 import flet as ft
@@ -10,6 +11,7 @@ from modele.InterneDatenModele import KIModelsaverData, KiClassList
 class CreateModelPage(CreateModelPageDesign):
     def __init__(self):
         super().__init__()
+        DependencyInjector.get_instance("")
         self.dynabstandadder = 700/5
         self.aufnahme = WebcamAufnahme()
         self.listederaufgabenlocalspeicher: List = []
@@ -99,7 +101,7 @@ class CreateModelPage(CreateModelPageDesign):
         newdata = KiClassList(classitem["classindex"], textfield.value,self.save_file_pfad.value)
         self.update()
         #starte aufnahme
-        for frame in self.aufnahme.StarteAufnahme(newdata):
+        for frame in self.aufnahme.StarteAufnahme(newdata,self.page):
             ZeigeBildan(frame,self.CameraContainer)
 
         #self.beendevideoaufnahme(classitem)

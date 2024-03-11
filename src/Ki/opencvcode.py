@@ -5,6 +5,7 @@ from keras.models import load_model  # TensorFlow is required for Keras to work
 import cv2  # Install opencv-python
 
 import numpy as np
+from DIManager import DependencyInjector
 from logic.KiDatenManager import KiDataManager
 from modele.InterneDatenModele import KIModelsaverData, KiData
 from configordner.settings import LaufZeitConfig
@@ -15,7 +16,8 @@ class TrainiertesModel():
 
     
     def __init__(self) -> None:
-        self.kidata: KIModelsaverData = None
+        self.kidata = None
+        
         
 
     def loadmodel(self, progressring: ft.ProgressRing) -> Generator[Tuple[KiData,cv2.typing.MatLike], Any, Any]:

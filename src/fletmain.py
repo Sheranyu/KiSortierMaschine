@@ -1,10 +1,14 @@
 import flet as ft
+from DIManager import DependencyInjector
+from Ki.opencvcode import TrainiertesModel
+from logic.aufnahme import WebcamAufnahme
 from windows.fletmaininhalt import Mainwindow 
 from Router import Router
 from logic.KiDatenManager import KiDataManager
 #from Designer.designer import 
 
 def main(page: ft.Page):
+    # RegisterDI(page)
     page.title = "Flet"
     page.padding = 0
     page.window_width = 1400
@@ -19,3 +23,8 @@ def main(page: ft.Page):
 
 ft.app(target=main, view=ft.AppView.FLET_APP_WEB)
 
+
+
+# def RegisterDI(page):
+#     DependencyInjector.register_class("aufnahme", WebcamAufnahme())
+#     DependencyInjector.register_class("TrainiertesModel",TrainiertesModel(page))
