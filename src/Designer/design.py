@@ -7,9 +7,8 @@ from modele.InterneDatenModele import ModelTyp
 class StartSeitePageDesign(ft.UserControl, ABC):
     def __init__(self) -> None:
         super().__init__()
-        self.erkanntesobjectbeschreibung = ft.Text("Erkanntes Objekt: ")
-        self.erkanntesobject = ft.Text()
-        self.erkanntermodus = ft.Text()
+        self.erkanntesobject = ft.TextField(label="Erkanntes Objekt: ", read_only=True, value="N/A")
+        self.erkanntermodus = ft.TextField(label="Erkannter Modus: ", read_only=True,value="N/A")
 
         self.title = ft.Text("Start Application", theme_style="headlineMedium")
         self.startbutton = ft.ElevatedButton(

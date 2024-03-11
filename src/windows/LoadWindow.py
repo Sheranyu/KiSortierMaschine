@@ -75,9 +75,9 @@ class LoadModelPage(LoadModelPageDesign):
         self.columcontainer = ft.Column(
             controls=[self.title, self.card], spacing=10, expand=True
         )
-        self.container = ft.SafeArea(content=self.columcontainer)
+        self.rowcontainer = ft.Row([self.columcontainer],alignment=ft.MainAxisAlignment.CENTER)
 
-        return self.container
+        return self.rowcontainer
 
     def loaddata(self, e):
         if self.sind_alle_nicht_none() == False:

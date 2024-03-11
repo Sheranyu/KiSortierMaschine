@@ -22,11 +22,13 @@ class StartApplicationPage(StartSeitePageDesign):
             [self.colum1, self.pr, self.startrow, self.bildvideoRow],horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                
         )
-        self.columcontainerechts = ft.Container(ft.Column([self.erkanntesobjectbeschreibung,self.erkanntesobject]), padding=ft.padding.all(5))
-        self.anzeigekarte = ft.Card(content=self.columcontainerechts)
+        self.columcontainerechts = ft.Container(ft.Column([self.erkanntesobject,self.erkanntermodus]), 
+                                                padding=ft.padding.all(5),col=6)
+        self.anzeigekarte = ft.Card(content=self.columcontainerechts,col=3)
 
         #self.container = ft.Container(content=self.columendcontainer, alignment=ft.alignment.center)
-        return ft.Row([self.columendcontainer,self.anzeigekarte],alignment=ft.MainAxisAlignment.CENTER)
+        self.resrow = ft.Row([self.columendcontainer,self.anzeigekarte],alignment=ft.MainAxisAlignment.CENTER)
+        return self.resrow
 
     def start(self, e):
         self.pr.visible = True
@@ -62,6 +64,7 @@ class StartApplicationPage(StartSeitePageDesign):
 
     def will_unmount(self):
         LaufZeitConfig.islaufzeit = False
+        
 
     def openwarndialog(self):
 
