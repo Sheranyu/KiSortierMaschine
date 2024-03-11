@@ -198,6 +198,7 @@ class LoadModelPageDesign(ABC, ft.UserControl):
 
 class StatistikPageDesign(ft.UserControl,ABC):
     def __init__(self) -> None:
+        super().__init__()
         self.teile_sortiert = ft.TextField(label="Sortierte Teile", value="0", read_only=True)
         self.modus_anzeige = ft.TextField(label="Modus", value="N/A", read_only=True)
         self.mehr_sortiert = ft.TextField(label="Mehr sortiert (Farbe/Form)", value="N/A", read_only=True)
