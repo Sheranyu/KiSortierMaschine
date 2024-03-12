@@ -38,7 +38,7 @@ class CreateModelPage(CreateModelPageDesign):
             bgcolor=ft.colors.BLACK87,
             border_radius=ft.border_radius.all(7),
             shadow=self.boxshadow,
-            col=4,
+            col=9,
             
             
         )
@@ -60,9 +60,9 @@ class CreateModelPage(CreateModelPageDesign):
            col=3,
         )
     
-        
+        self.buttonwithpr = ft.Column([self.floatedbutton,self.progressring],col=3,horizontal_alignment=ft.CrossAxisAlignment.CENTER)
         #self.floatingactionstack = ft.Stack(controls=[self.floatedbutton],height=200,width=200)
-        self.listwithbutton = ft.ResponsiveRow([self.listcontainer,self.floatedbutton],columns=5)
+        self.listwithbutton = ft.ResponsiveRow([self.listcontainer,self.buttonwithpr])
         self.columleft = ft.Column([self.listwithbutton],col=3)
        
         
@@ -70,6 +70,7 @@ class CreateModelPage(CreateModelPageDesign):
         self.endcontainer = ft.Container(content=self.rowcontainer,expand=True)
         return self.endcontainer
     
+    #---Beginn der Logic-----#
     
 
     def DeleteClass(self,e,classitem):
@@ -98,8 +99,10 @@ class CreateModelPage(CreateModelPageDesign):
         textfield.disabled = True
         self.changebutton(classitem,False,True)
         LaufZeitConfig.islaufzeit = True
+        self.progressring.visible = True
         newdata = KiClassList(classitem["classindex"], textfield.value,self.save_file_pfad.value)
         self.update()
+        return
         #starte aufnahme
         for frame in self.aufnahme.StarteAufnahme(newdata,self.page):
             ZeigeBildan(frame,self.CameraContainer)
@@ -211,8 +214,8 @@ class CreateModelPage(CreateModelPageDesign):
 
     def will_unmount(self):
         self.page.session.remove("listederaufgabenlocalspeicher")
-        print(self.page.session.get("listederaufgabenlocalspeicher"))
         LaufZeitConfig.islaufzeit = False
+        self.progressring.visible = False
         self.page.update()
 
     def did_mount(self):

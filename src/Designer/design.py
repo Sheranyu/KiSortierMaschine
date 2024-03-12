@@ -41,7 +41,7 @@ class CreateModelPageDesign(ABC, ft.UserControl):
     def __init__(self) -> None:
         super().__init__()
         self.CameraContainer = ft.Image()
-
+        self.progressring = ft.ProgressRing(visible=False,width=32, height=32, stroke_width=3 )
         self.classzeahler = 1
         self.boxshadow = ft.BoxShadow(
             spread_radius=1,

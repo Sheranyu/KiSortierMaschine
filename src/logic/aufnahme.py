@@ -6,7 +6,7 @@ import cv2
 from flet import Image
 from configordner.settings import LaufZeitConfig
 from modele.InterneDatenModele import KiClassList
-
+from flet import ProgressRing
 
 class WebcamAufnahme():
     def __init__(self) -> None:
@@ -29,7 +29,7 @@ class WebcamAufnahme():
     def changeSettings():
         pass
 
-    def StarteAufnahme(self,classdata: KiClassList) -> Generator[cv2.typing.MatLike, Any, None]:
+    def StarteAufnahme(self,classdata: KiClassList,pr: ProgressRing) -> Generator[cv2.typing.MatLike, Any, None]:
         cap = cv2.VideoCapture(0)
         cap.set(cv2.CAP_PROP_FRAME_WIDTH, self.width)
         cap.set(cv2.CAP_PROP_FRAME_HEIGHT, self.height)
@@ -50,6 +50,8 @@ class WebcamAufnahme():
         print(os.path.exists(f'{img_path}'))
         if LaufZeitConfig.islaufzeit ==  False:
             return
+        pr.visible = False
+        pr.update()
         while True:
             time.sleep(self.framegap)
             
@@ -63,8 +65,6 @@ class WebcamAufnahme():
 
             cv2.rectangle(frame, self.p1, self.p2, self.MEINEFARBE, self.THICKNESS1)
             img_part = frame[self.cy:self.cy + self.rh, self.cx:self.cx + self.rw, :]
-
-            # Taste "s" -> Bildaufnahme
             
             cv2.imwrite(img_path + f'/{str(i).zfill(5)}.png', img_part)
             i += 1
