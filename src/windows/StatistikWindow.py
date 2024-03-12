@@ -1,18 +1,10 @@
 import flet as ft
-
-class Statistiken(ft.UserControl):
+from Designer.design import StatistikPageDesign
+class Statistiken(StatistikPageDesign):
     def __init__(self):
         super().__init__()
         # Initialize UI elements
-        self.teile_sortiert = ft.TextField(label="Sortierte Teile", value="0", read_only=True)
-        self.modus_anzeige = ft.TextField(label="Modus", value="N/A", read_only=True)
-        self.mehr_sortiert = ft.TextField(label="Mehr sortiert (Farbe/Form)", value="N/A", read_only=True)
-        self.laufzeit_anzeige = ft.TextField(label="Laufzeit", value="0", read_only=True)
-        self.motor_drehung = ft.TextField(label="Motor Drehung", value="0", read_only=True)
-        self.laden_button = ft.ElevatedButton(text="Daten laden", on_click=self.getdata)
-        self.speichern_button = ft.ElevatedButton(text="Daten speichern", on_click=self.savedata)
-        self.bekomme_daten_button = ft.ElevatedButton(text="Bekomme Daten", on_click=self.getdata)
-        self.search_statistikdata = ft.SearchBar(on_submit=self.on_enter_search, divider_color=ft.colors.AMBER)
+
 
     def build(self):
         # Create the title element

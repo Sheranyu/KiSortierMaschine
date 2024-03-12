@@ -5,8 +5,8 @@ from typing import Any, Generator
 import cv2
 from flet import Image
 from configordner.settings import LaufZeitConfig
-from modele.InterneDatenModele import KiClassList
-from flet import ProgressRing
+from modele.InterneDatenModele import AufnahmeDaten, KiClassList
+from flet import ProgressRing, TextField
 
 class WebcamAufnahme():
     def __init__(self) -> None:
@@ -29,7 +29,7 @@ class WebcamAufnahme():
     def changeSettings():
         pass
 
-    def StarteAufnahme(self,classdata: KiClassList,pr: ProgressRing) -> Generator[cv2.typing.MatLike, Any, None]:
+    def StarteAufnahme(self,classdata: KiClassList,pr: ProgressRing) -> Generator[AufnahmeDaten, Any, None]:
         cap = cv2.VideoCapture(0)
         cap.set(cv2.CAP_PROP_FRAME_WIDTH, self.width)
         cap.set(cv2.CAP_PROP_FRAME_HEIGHT, self.height)
@@ -66,13 +66,14 @@ class WebcamAufnahme():
             cv2.rectangle(frame, self.p1, self.p2, self.MEINEFARBE, self.THICKNESS1)
             img_part = frame[self.cy:self.cy + self.rh, self.cx:self.cx + self.rw, :]
             
-            cv2.imwrite(img_path + f'/{str(i).zfill(5)}.png', img_part)
+            imagewrite = img_path + f'/{str(i).zfill(5)}.png'
+            cv2.imwrite(imagewrite, img_part)
             i += 1
             print(i)
             #f"{str(i).zfill(4)} Bild, Klasse: {cur_class} Aufloesung: {l}x{w}, x-Richtung: {self.cx}...{self.cx + self.rw}, y-Richtung: {self.cy}...{self.cy + self.rh} {img_path + f'/{str(i).zfill(4)}.png'}"
 
             # Bild anzeigen, Leertaste beendet
-            yield frame
+            yield AufnahmeDaten(imagedata=frame,aufnahmefotoname=imagewrite)
             if cv2.waitKey(1) % 0xFF == ord(' ') or LaufZeitConfig.islaufzeit == False:
                 break
 
@@ -87,4 +88,7 @@ def ZeigeBildan(frame: cv2.typing.MatLike, fletImage: Image):
         frame_base64 = base64.b64encode(buffer).decode("utf-8")
         fletImage.src_base64 = frame_base64
         fletImage.update()
-    
+
+def Aktuelletextanzeige(zeigemomentanbildintext: TextField ,frame: AufnahmeDaten):
+        zeigemomentanbildintext.value = frame.aufnahmefotoname
+        zeigemomentanbildintext.update()

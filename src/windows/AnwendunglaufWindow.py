@@ -1,34 +1,57 @@
 import base64
 import flet as ft
 import cv2
-from Designer.design import StartSeitePageDesign
+from Designer.design import AnwendungstartPageDesign
 from configordner.settings import LaufZeitConfig
 from logic.kilauflogic import KiDatenVerarbeitung
 
 from modele.InterneDatenModele import KIModelsaverData, KiData
 
 
-class StartApplicationPage(StartSeitePageDesign):
+class StartApplicationPage(AnwendungstartPageDesign):
     def __init__(self):
         super().__init__()
         self.ki_logic = KiDatenVerarbeitung()
 
     def build(self):
-        
+
         self.colum1 = ft.Row([self.title])
         self.startrow = ft.Row([self.startbutton, self.abbruchbutton])
         self.bildvideoRow = ft.Row([self.bildvideo])
-        self.columendcontainer = ft.Column(
-            [self.colum1, self.pr, self.startrow, self.bildvideoRow],horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-               
-        )
-        self.columcontainerechts = ft.Container(ft.Column([self.erkanntesobject,self.erkanntermodus]), 
-                                                padding=ft.padding.all(5),col=6)
-        self.anzeigekarte = ft.Card(content=self.columcontainerechts,col=3)
+     
+        self.columendcontainerlinks = ft.Container(ft.Column(
+            [self.colum1, self.pr, self.startrow, self.bildvideoRow],
+            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+        ))
+        self.columcontainerechts = ft.Container(
+            ft.Column(
+                [
+                    self.erkanntesobject,
+                    self.erkanntermodus,
+                    self.laufzeit,
+                    self.anzahlsortierterobjekte,
+                ],
+                
+            ),
+            padding=ft.padding.all(5),
 
-        #self.container = ft.Container(content=self.columendcontainer, alignment=ft.alignment.center)
-        self.resrow = ft.Row([self.columendcontainer,self.anzeigekarte],alignment=ft.MainAxisAlignment.CENTER)
-        return self.resrow
+        )
+        self.rowtest = ft.Row([self.columendcontainerlinks], alignment=ft.MainAxisAlignment.CENTER)
+        self.anzeigekarte = ft.Card(content=self.columcontainerechts, color=ft.colors.BLUE, height=250)
+        self.gridview = ft.GridView(
+                
+                runs_count=2,
+                
+                run_spacing=5,
+                child_aspect_ratio=1.0,
+                spacing=5,
+                controls=[self.rowtest, self.anzeigekarte],
+                
+        )
+        # self.container = ft.Container(content=self.columendcontainer, alignment=ft.alignment.center)
+        self.rowcont = ft.Container(self.gridview, width=800)
+        self.endrow = ft.Row([self.rowcont], alignment=ft.MainAxisAlignment.CENTER)
+        return self.endrow
 
     def start(self, e):
         self.pr.visible = True
@@ -44,7 +67,6 @@ class StartApplicationPage(StartSeitePageDesign):
             print(f"Fehler: {err}")
             self.openwarndialog()
 
-
         toggle_two_buttons(self, True, False)
 
     def DatenAnzeige(self, kidaten: KiData):
@@ -53,7 +75,7 @@ class StartApplicationPage(StartSeitePageDesign):
 
     def CamAnzeige(self, frame: cv2.typing.MatLike):
         _, buffer = cv2.imencode(".jpg", frame)
-        frame_base64 = base64.b64encode(buffer).decode("utf-8")
+        frame_base64 = base64.b64encode(buffer).decode("utf-8") # type: ignore
         self.bildvideo.src_base64 = frame_base64
         self.update()
 
@@ -64,14 +86,14 @@ class StartApplicationPage(StartSeitePageDesign):
 
     def will_unmount(self):
         LaufZeitConfig.islaufzeit = False
-        
 
     def openwarndialog(self):
 
-        self.page.dialog = self.alertwarn
+        self.page.dialog = self.alertwarn # type: ignore
         self.alertwarn.open = True
-        self.page.update()
-        
+        self.page.update()# type: ignore
+
+
 def toggle_two_buttons(self, start_visible, abbruch_visible):
     self.startbutton.visible = start_visible
     self.abbruchbutton.visible = abbruch_visible

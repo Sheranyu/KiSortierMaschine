@@ -4,12 +4,13 @@ import flet as ft
 from modele.InterneDatenModele import ModelTyp
 
 
-class StartSeitePageDesign(ft.UserControl, ABC):
+class AnwendungstartPageDesign(ft.UserControl, ABC):
     def __init__(self) -> None:
         super().__init__()
-        self.erkanntesobject = ft.TextField(label="Erkanntes Objekt: ", read_only=True, value="N/A")
-        self.erkanntermodus = ft.TextField(label="Erkannter Modus: ", read_only=True,value="N/A")
-
+        self.laufzeit = ft.TextField(label="laufzeit", value="N/A", read_only=True, adaptive=True)
+        self.erkanntesobject = ft.TextField(label="Erkanntes Objekt: ", read_only=True, value="N/A", adaptive=True)
+        self.erkanntermodus = ft.TextField(label="Erkannter Modus: ", read_only=True,value="N/A",adaptive=True)
+        self.anzahlsortierterobjekte = ft.TextField(label="anzahl", value="N/A", read_only=True, adaptive=True)
         self.title = ft.Text("Start Application", theme_style="headlineMedium")
         self.startbutton = ft.ElevatedButton(
             "Start", bgcolor=ft.colors.BLUE, on_click=self.start
@@ -40,6 +41,7 @@ class StartSeitePageDesign(ft.UserControl, ABC):
 class CreateModelPageDesign(ABC, ft.UserControl):
     def __init__(self) -> None:
         super().__init__()
+        self.zeigemomentanbildintext = ft.TextField(label="BildNummer", value="N/A", read_only=True, color=ft.colors.RED)
         self.CameraContainer = ft.Image()
         self.progressring = ft.ProgressRing(visible=False,width=32, height=32, stroke_width=3 )
         self.classzeahler = 1
@@ -204,6 +206,7 @@ class StatistikPageDesign(ft.UserControl,ABC):
         self.laufzeit_anzeige = ft.TextField(label="Laufzeit", value="0", read_only=True)
         self.motor_drehung = ft.TextField(label="Motor Drehung", value="0", read_only=True)
         self.laden_button = ft.ElevatedButton(text="Daten laden", on_click=self.getdata)
+        self.speichern_button = ft.ElevatedButton(text="Daten speichern", on_click=self.savedata)
         self.bekomme_daten_button = ft.ElevatedButton(text="Bekomme Daten", on_click=self.getdata)
         self.search_statistikdata = ft.SearchBar(on_submit=self.on_enter_search, divider_color=ft.colors.AMBER)
 

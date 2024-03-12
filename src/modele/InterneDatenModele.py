@@ -3,6 +3,8 @@
 
 from enum import Enum
 from typing import Any
+from pydantic import BaseModel
+import cv2
 
 
 class ModelTyp(Enum):
@@ -42,5 +44,12 @@ class KiClassList():
         self.index = index
         self.classname = classname
         self.speicherpfad = speicherpfad
-
+        
+#hier kommt pydantic zum einsatz pydandic prüft ob die typen wirklich passen
+class AufnahmeDaten(BaseModel):
+    imagedata: cv2.typing.MatLike
+    aufnahmefotoname: str
+    class Config:
+        arbitrary_types_allowed = True
+    
     

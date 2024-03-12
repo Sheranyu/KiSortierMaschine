@@ -47,14 +47,14 @@ class Router:
 
     def register_route(self) -> None:
         self.create_model_view = ft.View("/create-model", controls=[CreateModelPage()],
-                appbar=ft.AppBar(automatically_imply_leading=True,title=ft.Text("Modell erstellen"), bgcolor=ft.colors.SURFACE_VARIANT), 
+                appbar=ft.AppBar(title=ft.Text("Modell erstellen"), bgcolor=ft.colors.SURFACE_VARIANT), 
                 )
         
         self.load_model_view = ft.View("/load-model", controls=[LoadModelPage()], 
                 appbar=ft.AppBar(title=ft.Text("Modell laden"), bgcolor=ft.colors.SURFACE_VARIANT),
                 )
         
-        self.start_application_view = ft.View("/start-application", controls=[StartApplicationPage() ], 
+        self.start_application_view = ft.View("/start-application",scroll=True, controls=[StartApplicationPage() ], 
                 appbar=ft.AppBar(title=ft.Text("Anwendung starten"), bgcolor=ft.colors.SURFACE_VARIANT),
                 
                 )

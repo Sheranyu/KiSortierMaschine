@@ -17,7 +17,7 @@ from modele.InterneDatenModele import KIModelsaverData, KiData, KiClassList
 from Designer.design import (
     CreateModelPageDesign,
     LoadModelPageDesign,
-    StartSeitePageDesign,
+    AnwendungstartPageDesign,
 )
 from logic.aufnahme import  WebcamAufnahme, ZeigeBildan
 
