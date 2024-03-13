@@ -65,15 +65,15 @@ class WebcamAufnahme():
 
             cv2.rectangle(frame, self.p1, self.p2, self.MEINEFARBE, self.THICKNESS1)
             img_part = frame[self.cy:self.cy + self.rh, self.cx:self.cx + self.rw, :]
-            
-            imagewrite = img_path + f'/{str(i).zfill(5)}.png'
+            bildername= f'/{str(i).zfill(5)}.png'
+            imagewrite = img_path + bildername
             cv2.imwrite(imagewrite, img_part)
             i += 1
             print(i)
             #f"{str(i).zfill(4)} Bild, Klasse: {cur_class} Aufloesung: {l}x{w}, x-Richtung: {self.cx}...{self.cx + self.rw}, y-Richtung: {self.cy}...{self.cy + self.rh} {img_path + f'/{str(i).zfill(4)}.png'}"
 
             # Bild anzeigen, Leertaste beendet
-            yield AufnahmeDaten(imagedata=frame,aufnahmefotoname=imagewrite)
+            yield AufnahmeDaten(imagedata=frame,aufnahmefotoname=bildername)
             if cv2.waitKey(1) % 0xFF == ord(' ') or LaufZeitConfig.islaufzeit == False:
                 break
 

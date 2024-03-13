@@ -65,7 +65,7 @@ class CreateModelPage(CreateModelPageDesign):
         )
 
         self.buttonwithpr = ft.Column(
-            [self.floatedbutton, self.progressring],
+            [self.floatedbutton,self.settingbuttonclass, self.progressring],
             col=3,
             horizontal_alignment=ft.CrossAxisAlignment.CENTER,
         )
@@ -78,7 +78,9 @@ class CreateModelPage(CreateModelPageDesign):
         return self.endcontainer
 
     # ---Beginn der Logic-----#
-
+    def Open_Settings_Class(self):
+        self.page.go("/classcreatorsettings")
+        
     def DeleteClass(self, e, classitem):
         print(classitem)
         daten = self.page.session.get("listederaufgabenlocalspeicher")# type: ignore

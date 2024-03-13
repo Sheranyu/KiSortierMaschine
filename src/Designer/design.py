@@ -41,6 +41,9 @@ class AnwendungstartPageDesign(ft.UserControl, ABC):
 class CreateModelPageDesign(ABC, ft.UserControl):
     def __init__(self) -> None:
         super().__init__()
+        
+        self.settingbuttonclass = ft.FloatingActionButton(content=ft.Icon(ft.icons.SETTINGS), on_click=lambda _: self.Open_Settings_Class())
+        
         self.zeigemomentanbildintext = ft.TextField(label="BildNummer", value="N/A", read_only=True, color=ft.colors.RED)
         self.CameraContainer = ft.Image(src="./")
         self.progressring = ft.ProgressRing(visible=False,width=32, height=32, stroke_width=3 )
@@ -106,6 +109,10 @@ class CreateModelPageDesign(ABC, ft.UserControl):
             on_click=self.start_create_model,
             elevation=0,
         )
+    
+    @abstractmethod
+    def Open_Settings_Class(self):
+        pass
         
     @abstractmethod
     def DeleteClass(self):
@@ -215,4 +222,16 @@ class StatistikPageDesign(ft.UserControl,ABC):
         raise NotImplementedError()
     @abstractmethod
     def on_enter_search(self):
+        raise NotImplementedError()
+    
+    
+    
+class ClassCreatorDesignPage(ABC):
+    def __init__(self) -> None:
+        self.aufnahmegestext = ft.Text("Wie viele Bilder pro Sekunde soll aufgenohmen werden")
+        self.aufnahmeges = ft.Slider(label="{value}%", min=10, max=30, on_change_end=lambda e:self.on_change(e))
+        
+        
+    @abstractmethod    
+    def on_change(self):
         raise NotImplementedError()

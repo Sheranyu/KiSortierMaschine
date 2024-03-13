@@ -53,5 +53,9 @@ class AufnahmeDaten(BaseModel):
     aufnahmefotoname: str
     class Config:
         arbitrary_types_allowed = True
+        
+        
+class ClassCreatorSettingsModel(BaseModel):
+    aufnahmeges: int
     
     

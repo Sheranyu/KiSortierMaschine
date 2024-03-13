@@ -1,5 +1,6 @@
 import flet as ft
 from windows.AnwendunglaufWindow import StartApplicationPage
+from windows.ClassCreatorSettingsWindow import SettingsClassCreator
 from windows.CreateWindow import CreateModelPage
 from windows.LoadWindow import LoadModelPage
 from windows.StatistikWindow import Statistiken
@@ -63,12 +64,16 @@ class Router:
                 appbar=ft.AppBar(title=ft.Text("Statisiken"), bgcolor=ft.colors.SURFACE_VARIANT),
                 )
         
+        self.classcreatorsettings_view = ft.View("/classcreatorsettings", controls=[SettingsClassCreator(self.page)],
+                                                 appbar=ft.AppBar(title=ft.Text("Settings"), bgcolor=ft.colors.SURFACE_VARIANT))
+        
         
         self.routes = {
             "/create-model": self.create_model_view,
             "/load-model": self.load_model_view,
             "/start-application": self.start_application_view,
             "/statistik": self.statistik_view,
+            "/classcreatorsettings": self.classcreatorsettings_view
         }
         
     # def route_change(self, route: ft.RouteChangeEvent):

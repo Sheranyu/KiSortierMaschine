@@ -12,7 +12,7 @@ class StartApplicationPage(AnwendungstartPageDesign):
     def __init__(self):
         super().__init__()
         self.ki_logic = KiDatenVerarbeitung()
-
+        
     def build(self):
 
         self.colum1 = ft.Row([self.title])
@@ -86,6 +86,7 @@ class StartApplicationPage(AnwendungstartPageDesign):
     def will_unmount(self):
         LaufZeitConfig.islaufzeit = False
 
+        
     def openwarndialog(self):
 
         self.page.dialog = self.alertwarn # type: ignore
