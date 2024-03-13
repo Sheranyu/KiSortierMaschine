@@ -1,7 +1,7 @@
 
-from typing import List, Optional
+from typing import Any, List, Optional
 
-from sqlalchemy import DateTime, ForeignKey, Integer, Numeric, Text
+from sqlalchemy import DateTime, Float, ForeignKey, Integer, Numeric, Text
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 import datetime
 import decimal
@@ -18,6 +18,7 @@ class DatumSpeicherung(Base):
     Datum: Mapped[Optional[datetime.datetime]] = mapped_column(DateTime)
 
     Statistik: Mapped[List['Statistik']] = relationship('Statistik', back_populates='fremd')
+    ZeitDaten: Mapped[List['ZeitDaten']] = relationship('ZeitDaten', back_populates='datumspeicherung')
 
     def __init__(self,Datum) -> None:
         self.Datum = Datum
@@ -40,3 +41,13 @@ class Statistik(Base):
         self.modus = modus
         self.fremd_id = fremd_id
 
+class ZeitDaten(Base):
+    __tablename__ = 'ZeitDaten'
+
+    ZeitID: Mapped[Optional[int]] = mapped_column(Integer, primary_key=True)
+    laufzeit: Mapped[Optional[float]] = mapped_column(Float)
+    datumspeicherung_id: Mapped[Optional[decimal.Decimal]] = mapped_column(ForeignKey('DatumSpeicherung.Id'))
+
+    datumspeicherung: Mapped['DatumSpeicherung'] = relationship('DatumSpeicherung', back_populates='ZeitDaten')
+    def __init__(self, laufzeit: int, datumspeicherung_id: int):
+        pass

@@ -7,6 +7,7 @@ import cv2
 import flet as ft
 from sqlalchemy.orm import Session
 from Ki.opencvcode import TrainiertesModel
+from db.CRUD.ZeitDaten import zeitdaten
 from db.db_and_models.models import DatumSpeicherung
 from modele.InterneDatenModele import KiData
 from typing import Any, Callable, Generator, List, Tuple, Type
@@ -24,7 +25,7 @@ class KiDatenVerarbeitung():
     def __init__(self) -> None:
         self.model = TrainiertesModel()
         self.data_to_save: List[KiData] = []
-
+        self.aktuellelaufzeit = None
     
     def start_application(self,callback,progressring :ft.ProgressRing) -> Generator[KiData,Any, Any]:
         datum = self._erstelle_datum()
@@ -33,10 +34,11 @@ class KiDatenVerarbeitung():
             datumid = self._createdatumindb(datum,session)
             for item, image in self.model.loadmodel(progressring):
                 callback(image)
+                self.aktuellelaufzeit = item.laufzeit
                 #print(item.label_name, item.confidence_score)
                 yield item
                 self._verarbeitedaten(item,datumid,session)
-        
+            self._savetime()
 
     def _erstelle_datum(self) -> datetime:
         # Pfad zum Ordner "statistikdata" erstellen
@@ -53,6 +55,7 @@ class KiDatenVerarbeitung():
             StatistikCreater().savestatistik(item,datumid,session)
     
     def _createdatumindb(self,datum, session: Session):
-         return CreateDatumSpeicherung().CreateDatum(session, datum) 
+        return CreateDatumSpeicherung().CreateDatum(session, datum) 
         
-        
+    def _savetime(self,laufzeit: float,datumid:int, session: Session):
+        zeitdaten().createzeitdaten(laufzeit,datumid, session)
