@@ -49,7 +49,8 @@ class KiDatenVerarbeitung():
         pass
 
     def _verarbeitedaten(self,item: KiData,datumid:int, session: Session):
-        StatistikCreater().savestatistik(item,datumid,session)
+        if int(item.confidence_score) > 1:
+            StatistikCreater().savestatistik(item,datumid,session)
     
     def _createdatumindb(self,datum, session: Session):
          return CreateDatumSpeicherung().CreateDatum(session, datum) 

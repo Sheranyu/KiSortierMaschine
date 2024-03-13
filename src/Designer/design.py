@@ -7,19 +7,19 @@ from modele.InterneDatenModele import ModelTyp
 class AnwendungstartPageDesign(ft.UserControl, ABC):
     def __init__(self) -> None:
         super().__init__()
-        self.laufzeit = ft.TextField(label="laufzeit", value="N/A", read_only=True, adaptive=True)
-        self.erkanntesobject = ft.TextField(label="Erkanntes Objekt: ", read_only=True, value="N/A", adaptive=True)
-        self.erkanntermodus = ft.TextField(label="Erkannter Modus: ", read_only=True,value="N/A",adaptive=True)
-        self.anzahlsortierterobjekte = ft.TextField(label="anzahl", value="N/A", read_only=True, adaptive=True)
+        self.laufzeit = ft.TextField(label="laufzeit", value="N/A",border_color=ft.colors.RED, read_only=True, adaptive=True)
+        self.erkanntesobject = ft.TextField(label="Erkanntes Objekt: ", border_color=ft.colors.RED,read_only=True, value="N/A", adaptive=True)
+        self.erkanntermodus = ft.TextField(label="Erkannter Modus: ",border_color=ft.colors.RED, read_only=True,value="N/A",adaptive=True)
+        self.anzahlsortierterobjekte = ft.TextField(label="anzahl",border_color=ft.colors.RED, value="N/A", read_only=True, adaptive=True)
         self.title = ft.Text("Start Application", theme_style="headlineMedium")
         self.startbutton = ft.ElevatedButton(
-            "Start", bgcolor=ft.colors.BLUE, on_click=self.start
+            "Start", bgcolor=ft.colors.BLUE, on_click=self.start_camera
         )
         self.abbruchbutton = ft.ElevatedButton(
             "Abbruch", bgcolor=ft.colors.RED, on_click=self.abbruch, visible=False
         )
         
-        self.bildvideo = ft.Image("")
+        self.bildvideo = ft.Image("./")
         self.alertwarn = ft.AlertDialog(
             modal=False,
             title=ft.Text("Ein Fehler ist aufgetreten"),
@@ -30,7 +30,7 @@ class AnwendungstartPageDesign(ft.UserControl, ABC):
         self.pr = ft.ProgressRing(width=32, height=32, stroke_width=3, visible=False)
 
     @abstractmethod
-    def start(self):
+    def start_camera(self):
         pass
 
     @abstractmethod
@@ -42,7 +42,7 @@ class CreateModelPageDesign(ABC, ft.UserControl):
     def __init__(self) -> None:
         super().__init__()
         self.zeigemomentanbildintext = ft.TextField(label="BildNummer", value="N/A", read_only=True, color=ft.colors.RED)
-        self.CameraContainer = ft.Image()
+        self.CameraContainer = ft.Image(src="./")
         self.progressring = ft.ProgressRing(visible=False,width=32, height=32, stroke_width=3 )
         self.classzeahler = 1
         self.boxshadow = ft.BoxShadow(
@@ -103,7 +103,7 @@ class CreateModelPageDesign(ABC, ft.UserControl):
         self.submit_button = ft.ElevatedButton(
             "Starte Training",
             bgcolor=ft.colors.GREEN_900,
-            on_click=self.create_model,
+            on_click=self.start_create_model,
             elevation=0,
         )
         
@@ -128,7 +128,7 @@ class CreateModelPageDesign(ABC, ft.UserControl):
         pass
 
     @abstractmethod
-    def create_model(self):
+    def start_create_model(self):
         pass
 
 

@@ -22,7 +22,7 @@ class KiData():
         self.confidence_score_max = confidence_score_max
         
 class KIModelsaverData():
-    def __init__(self,ModelName=None, pfad_model=None,label_datei_name=None,pfad_label=None, modeltyp = ModelTyp.KERAS.value) -> None:
+    def __init__(self,ModelName=None, pfad_model=None,label_datei_name=None,pfad_label=None, modeltyp = ModelTyp.KERAS) -> None:
       
         self.ModelName = ModelName
         self.label_datei_name = label_datei_name

@@ -21,7 +21,7 @@ class StartApplicationPage(AnwendungstartPageDesign):
      
         self.columendcontainerlinks = ft.Container(ft.Column(
             [self.colum1, self.pr, self.startrow, self.bildvideoRow],
-            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+            horizontal_alignment=ft.CrossAxisAlignment.CENTER
         ))
         self.columcontainerechts = ft.Container(
             ft.Column(
@@ -31,20 +31,18 @@ class StartApplicationPage(AnwendungstartPageDesign):
                     self.laufzeit,
                     self.anzahlsortierterobjekte,
                 ],
-                
+                alignment=ft.MainAxisAlignment.CENTER
             ),
             padding=ft.padding.all(5),
-
+            height=100
         )
         self.rowtest = ft.Row([self.columendcontainerlinks], alignment=ft.MainAxisAlignment.CENTER)
-        self.anzeigekarte = ft.Card(content=self.columcontainerechts, color=ft.colors.BLUE, height=250)
+        self.anzeigekarte = ft.Card(content=self.columcontainerechts)
         self.gridview = ft.GridView(
                 
                 runs_count=2,
                 
-                run_spacing=5,
-                child_aspect_ratio=1.0,
-                spacing=5,
+               
                 controls=[self.rowtest, self.anzeigekarte],
                 
         )
@@ -53,7 +51,7 @@ class StartApplicationPage(AnwendungstartPageDesign):
         self.endrow = ft.Row([self.rowcont], alignment=ft.MainAxisAlignment.CENTER)
         return self.endrow
 
-    def start(self, e):
+    def start_camera(self, e):
         self.pr.visible = True
         # load configdata
         # daten = Statistik(class_name="testneu",  confidence_score=80)

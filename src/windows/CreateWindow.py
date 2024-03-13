@@ -7,6 +7,7 @@ import flet as ft
 from configordner.settings import LaufZeitConfig
 from flet_core.control import Control, OptionalNumber
 from logic.aufnahme import Aktuelletextanzeige, WebcamAufnahme, ZeigeBildan
+from logic.modeltraining import KiTraining
 from modele.InterneDatenModele import AufnahmeDaten, KIModelsaverData, KiClassList
 
 
@@ -17,7 +18,7 @@ class CreateModelPage(CreateModelPageDesign):
         self.dynabstandadder = 700 / 5
         self.aufnahme = WebcamAufnahme()
         self.listederaufgabenlocalspeicher = []
-
+        self.kitrainer = KiTraining()
     def build(self):
         self.listview = ft.ListView(spacing=8, padding=15, auto_scroll=False, height=40)
 
@@ -237,7 +238,7 @@ class CreateModelPage(CreateModelPageDesign):
 
         self.save_file_pfad.update()
 
-    def create_model(self, e):
+    def start_create_model(self, e):
 
         if self.model_name.value is None or self.model_name.value.strip() == "":
             self.openbanner(WarnStatus.PFAD_OR_MODELNAME_NICHT_GEWAHLT)
@@ -250,7 +251,8 @@ class CreateModelPage(CreateModelPageDesign):
         self.kimodelsaver = KIModelsaverData(
             self.model_name.value, self.save_file_pfad.value, self.modeltyplist.value
         )
-        self.page.session.set("kimodelsaver", self.kimodelsaver.__dict__)
+        #self.page.session.set("kimodelsaver", self.kimodelsaver.__dict__)
+        self.kitrainer.starte_ki_training(self.kimodelsaver) 
 
     def will_unmount(self):
         self.page.session.remove("listederaufgabenlocalspeicher")
