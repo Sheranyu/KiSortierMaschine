@@ -1,5 +1,6 @@
 
 import os
+import time
 from typing import Any, Generator, Tuple
 from keras.models import load_model  # TensorFlow is required for Keras to work
 import cv2  # Install opencv-python
@@ -40,8 +41,9 @@ class TrainiertesModel():
         
         progressring.visible = False
         progressring.update()
-        
+        start_time = time.time()
         while True:
+            
             # Grab the webcamera's image.
             ret, image = camera.read()
             # Resize the raw image into (224-height,224-width) pixels
@@ -58,9 +60,9 @@ class TrainiertesModel():
 
             # Print prediction and confidence score
             #print("Class:", class_name[2:], end="")
-            
+            currenttime = time.time() - start_time
             #print("Confidence Score:", str(np.round(confidence_score * 100))[:-2], "%")
-            yield (KiData(label_name[2:],str(np.round(confidence_score * 100))[:-2],"form"), image)
+            yield (KiData(label_name[2:],str(np.round(confidence_score * 100))[:-2],"form", laufzeit=currenttime), image)
             # Listen to the keyboard for presses.
             keyboard_input = cv2.waitKey(1)
 

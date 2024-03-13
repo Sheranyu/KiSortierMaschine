@@ -136,7 +136,7 @@ class LoadModelPageDesign(ABC, ft.UserControl):
     def __init__(self) -> None:
         super().__init__()
         self.title = ft.Text(
-            "Modell Laden", theme_style=ft.TextThemeStyle.HEADLINE_LARGE
+            "Modell Laden", theme_style=ft.TextThemeStyle.HEADLINE_LARGE, text_align=ft.TextAlign.CENTER
         )
         self.text_model_laden = ft.Text(
             "Wähle ein Modell zum laden aus.", text_align=ft.TextAlign.CENTER

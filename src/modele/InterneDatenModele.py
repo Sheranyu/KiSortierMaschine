@@ -15,14 +15,16 @@ class ModelTyp(Enum):
 
 
 class KiData():
-    def __init__(self, label_name, confidence_score ,erkannter_modus,confidence_score_max= None):
+    def __init__(self, label_name, confidence_score ,erkannter_modus,confidence_score_max= None,laufzeit=None):
         self.label_name = label_name
         self.confidence_score = confidence_score
         self.erkannter_modus = erkannter_modus
+        self.laufzeit = laufzeit
         self.confidence_score_max = confidence_score_max
+
         
 class KIModelsaverData():
-    def __init__(self,ModelName=None, pfad_model=None,label_datei_name=None,pfad_label=None, modeltyp = ModelTyp.KERAS) -> None:
+    def __init__(self,ModelName=None, pfad_model=None,label_datei_name=None,pfad_label=None, modeltyp = ModelTyp.KERAS.value) -> None:
       
         self.ModelName = ModelName
         self.label_datei_name = label_datei_name

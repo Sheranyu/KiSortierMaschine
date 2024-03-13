@@ -70,6 +70,7 @@ class StartApplicationPage(AnwendungstartPageDesign):
     def DatenAnzeige(self, kidaten: KiData):
         print(kidaten.label_name)
         self.erkanntesobject.value = kidaten.label_name
+        self.laufzeit.value = round(kidaten.laufzeit,2)
 
     def CamAnzeige(self, frame: cv2.typing.MatLike):
         _, buffer = cv2.imencode(".jpg", frame)

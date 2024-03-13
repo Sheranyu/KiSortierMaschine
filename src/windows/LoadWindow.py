@@ -73,7 +73,7 @@ class LoadModelPage(LoadModelPageDesign):
         )
         self.card = ft.Card(content=self.cardcontainer)
         self.columcontainer = ft.Column(
-            controls=[self.title, self.card], spacing=10, expand=True
+            controls=[self.title, self.card], spacing=10, horizontal_alignment=ft.CrossAxisAlignment.CENTER
         )
         self.rowcontainer = ft.Row([self.columcontainer],alignment=ft.MainAxisAlignment.CENTER)
 
@@ -84,9 +84,6 @@ class LoadModelPage(LoadModelPageDesign):
             self.warnbanner.open = True
             self.page.update()
             return
-
-        with open("./modeldata.json","w") as json_file:
-            json.dump(self.kimodeldata.__dict__, json_file,indent=4)
             
         self.page.session.set("kimodel", self.kimodeldata.__dict__)
 
