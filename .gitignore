@@ -52,3 +52,6 @@ src/statistikdata/output*
 
 ./src/windows/__pycache__/fletmaininhalt.cpython-311.pyc 
 /src/windows/__pycache__/fletmaininhalt.cpython-311.pyc
+
+./data
+data

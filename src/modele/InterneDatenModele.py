@@ -1,6 +1,7 @@
 
 
 
+from dataclasses import dataclass
 from enum import Enum
 from typing import Any
 from pydantic import BaseModel
@@ -14,6 +15,8 @@ class ModelTyp(Enum):
 
 
 
+
+
 class KiData():
     def __init__(self, label_name, confidence_score ,erkannter_modus,confidence_score_max= None,laufzeit=None):
         self.label_name = label_name
@@ -21,8 +24,7 @@ class KiData():
         self.erkannter_modus = erkannter_modus
         self.laufzeit = laufzeit
         self.confidence_score_max = confidence_score_max
-
-        
+    
 class KIModelsaverData():
     def __init__(self,ModelName=None, pfad_model=None,label_datei_name=None,pfad_label=None, modeltyp = ModelTyp.KERAS.value) -> None:
       
@@ -48,6 +50,7 @@ class KiClassList():
         self.speicherpfad = speicherpfad
         
 #hier kommt pydantic zum einsatz pydandic prüft ob die typen wirklich passen
+
 class AufnahmeDaten(BaseModel):
     imagedata: cv2.typing.MatLike
     aufnahmefotoname: str

@@ -1,6 +1,12 @@
+
+from genericpath import isfile
+import os
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from torch.autograd import Variable
+import torch.optim as optim
+
 
 class MeinNetz(nn.Module):
     def __init__(self, *args, **kwargs) -> None:
@@ -23,6 +29,28 @@ class MeinNetz(nn.Module):
 
 netz = MeinNetz()
 
-print(netz)
 
-# print(torch.add(x,y))
+if os.path.isfile("meinnetz.pt"):
+    netz = torch.load("meinnetz.pt")
+
+for i in range(100):
+    x = [1,0,0,0,1,0,0,0,1,1]
+    input = Variable(torch.Tensor([x for _ in range(10)]))
+    
+
+    out = netz(input)
+
+    x = [0,1,1,1,0,1,1,1,0,0]
+    target = Variable(torch.Tensor([x for _ in range(10)]))
+
+
+    criterum = nn.MSELoss()
+
+    loss = criterum(out,target)
+    print(loss)
+    netz.zero_grad()
+    loss.backward()
+    optimizer = optim.SGD(netz.parameters(),lr=0.05)
+    optimizer.step()
+    
+torch.save(netz,"meinNetz.pt")
