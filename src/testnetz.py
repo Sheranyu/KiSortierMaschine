@@ -103,10 +103,9 @@ def test():
         correct += (predicted == target).sum().item()
         print(correct.item())
         correct = correct.item()
-    # acc = correct / n_samples
-    # print(f'Accuracy of the network on the {n_samples} test images: {100*acc} %')  
-    # loss = loss/len(testloader.dataset)
-    # print("Durchschnittloss: ", loss)
+    acc = correct / n_samples
+    print(f'Accuracy of the network on the {n_samples} test images: {100*acc} %')  
+
         
         
 model = torch.load("meinmodel.pt")
