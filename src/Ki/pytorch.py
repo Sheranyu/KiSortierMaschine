@@ -1,4 +1,5 @@
 
+from genericpath import isfile
 from os.path import isdir, join
 import os
 import random
@@ -12,36 +13,8 @@ from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
 from PIL import Image
 from os import listdir
-
+from modele.KImodels import MeinNetz
 from modele.InterneDatenModele import KIModelsaverData
-
-class MeinNetz(nn.Module):
-    def __init__(self, *args, **kwargs) -> None:
-        super(MeinNetz,self).__init__(*args, **kwargs)
-        self.conv1 = nn.Conv2d(3,6,kernel_size=5)
-        self.conv2 = nn.Conv2d(6,12, kernel_size=5)
-        self.conv3 = nn.Conv2d(12,18, kernel_size=5)
-        self.conv4 = nn.Conv2d(18,24, kernel_size=5)
-        self.fc1 = nn.Linear(3456, 1000)
-        self.fc2 = nn.Linear(1000,2 )
-
-    def forward(self, x):
-        x = self.conv1(x)
-        x = F.max_pool2d(x,2)
-        x = F.relu(x)
-        x = self.conv2(x)
-        x = F.max_pool2d(x,2)
-        x = F.relu(x)
-        x = self.conv3(x)
-        x = F.max_pool2d(x,2)
-        x = F.relu(x)
-        x = self.conv4(x)
-        x = F.max_pool2d(x,2)
-        x = F.relu(x)
-        x = x.view(-1,3456)
-        x = F.relu(self.fc1(x))
-        x = self.fc2(x)
-        return F.sigmoid(x)
 
 class KiTraining():
     def __init__(self) -> None:
@@ -54,10 +27,13 @@ class KiTraining():
         self.maxdatenseatze = 50
         self.maxepoche = 20
         self.learnrate = 0.004
+        self.kidata = None
         # hier können paramter init werden
         pass
 
     def starte_ki_training(self, data: KIModelsaverData):
+        self.kidata = data
+        self.Set_Settings()
         self._Dateneinlesen(data.pfad_model)
         self._train_start()
 
@@ -76,11 +52,9 @@ class KiTraining():
         if os.path.exists(main_folder) and os.path.isdir(main_folder):
             # Durch alle Elemente im Hauptordner iterieren
             for item in os.listdir(main_folder):
-                # Den vollständigen Pfad zum Element erhalten
-                self.subfoldernameslist.append(item)
                 item_path = os.path.join(main_folder, item)
-                # Überprüfen, ob das Element ein Verzeichnis ist
-                if os.path.isdir(item_path):
+                if not os.path.isfile(item_path):
+                    self.subfoldernameslist.append(item)
                     # Wenn ja, den Ordner zur Liste der Unterordner hinzufügen
                     subfolders.append(item_path)
         else:
@@ -90,8 +64,9 @@ class KiTraining():
     def _vergleichBildmitOrdnerName_GetCurrentOrdnerName(self,name_to_compare) ->str:
         ordnername = ""
         for name in self.subfoldernameslist:
+            
             # Überprüfen, ob der Name passt
-            if name == name_to_compare:
+            if name in name_to_compare:
                 self.target.append(1)
                 ordnername = name
                   # Wenn der Name passt, füge 1 zur Ergebnisliste hinzu
@@ -100,7 +75,7 @@ class KiTraining():
         return ordnername
 
     def _train_start(self):
-        self.model = MeinNetz()
+        self.model = MeinNetz(len(self.subfoldernameslist))
         self.optimizer = optim.Adam(self.model.parameters(), lr=self.learnrate)
         for epoche in range(1,self.maxepoche):
             self.train(epoche=epoche)
@@ -110,6 +85,8 @@ class KiTraining():
         self.model.train()
         batch_id = 0
         for data,target in self.train_data:
+            print(data.size())
+            
             target = torch.Tensor(target)
             data = Variable(data)
             target = Variable(target)
@@ -123,11 +100,18 @@ class KiTraining():
             print("Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}".format(
                 epoche, batch_id * len(data), len(self.train_data),
                 100. * batch_id / len(self.train_data), loss.item()))
-        #torch.save(self.model, "katze_hunderkennung.pt")
+        self.savekidata()
 
+    def loadkidata(self):
+        self.model = torch.load(self.kidata.ModelName)
+    
+    def savekidata(self):
+        torch.save(self.model, self.kidata.ModelName + ".pt")
+        #TODO: save labelist
+    
     def _Dateneinlesen(self, main_pfad):
         folders = self.scan_subfolders(main_pfad)
-        print(folders)
+        
         for folder in folders:
             if isdir(folder):
                 listdata = listdir(folder)
@@ -135,24 +119,28 @@ class KiTraining():
             else:
                 print(f"{folder} ist kein gültiger Ordner.")
         
-        
+        listlenge = len(self.files)
 
         for i in range(len(self.files)):
             f = random.choice(self.files)
             self.files.remove(f)
             #geht noch nicht brauche kompletten pfad hier
-            ordnername = self._vergleichBildmitOrdnerName_GetCurrentOrdnerName(f)
-            img  = Image.open(main_pfad + f"/{ordnername}/{f}")
+            ordnersubpfad = self._vergleichBildmitOrdnerName_GetCurrentOrdnerName(f)
+           # print(main_pfad + f"/{ordnersubpfad}/{f}")
+            
+            img  = Image.open(main_pfad + f"/{ordnersubpfad}/{f}")
+          
             img_tensor = self.transformation(img)
             self.train_data_list.append(img_tensor)
             
             self.target_list.append(self.target)
+            self.target = []
             if len(self.train_data_list) >= 64:
                 self.train_data.append((torch.stack(self.train_data_list), self.target_list))
                 self.target_list = []
                 self.train_data_list = []
-                self.target.clear()
-                print('Loaded batch ', len(self.train_data), 'of ', int(len(listdir('./train/train/'))/64))
-                print('Percentage Done: ', 100*len(self.train_data)/int(len(listdir('./train/train/'))/64), '%')
+                
+                print('Loaded batch ', len(self.train_data), 'of ', int(listlenge/64))
+                print('Percentage Done: ', 100*len(self.train_data)/int(listlenge/64), '%')
                 if len(self.train_data) > self.maxdatenseatze:
                     break

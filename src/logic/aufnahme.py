@@ -22,7 +22,7 @@ class WebcamAufnahme():
         self.size = (self.rw, self.rh)
 
         # Weitere Einstellungen
-        self.framegap = 0.1  # für automatisierte Bildaufnahme, delay muss in der Schleife einkommentiert werden
+        self.framegap = 0.05  # für automatisierte Bildaufnahme, delay muss in der Schleife einkommentiert werden
         self.MEINEFARBE = (255, 255, 255)
         self.THICKNESS1 = 2
 

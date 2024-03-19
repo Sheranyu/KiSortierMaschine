@@ -1,7 +1,7 @@
 
 
 
-from dataclasses import dataclass
+from dataclasses import Field, dataclass
 from enum import Enum
 from typing import Any
 from pydantic import BaseModel
@@ -48,7 +48,8 @@ class KiClassList():
         self.index = index
         self.classname = classname
         self.speicherpfad = speicherpfad
-        
+
+  
 #hier kommt pydantic zum einsatz pydandic prüft ob die typen wirklich passen
 
 class AufnahmeDaten(BaseModel):
