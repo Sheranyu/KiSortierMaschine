@@ -7,7 +7,7 @@ import flet as ft
 from configordner.settings import LaufZeitConfig
 from flet_core.control import Control, OptionalNumber
 from logic.aufnahme import Aktuelletextanzeige, WebcamAufnahme, ZeigeBildan
-from logic.modeltraining import KiTraining
+from Ki.pytorch import KiTraining
 from modele.InterneDatenModele import AufnahmeDaten, KIModelsaverData, KiClassList
 
 

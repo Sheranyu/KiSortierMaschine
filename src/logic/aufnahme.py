@@ -65,7 +65,7 @@ class WebcamAufnahme():
 
             cv2.rectangle(frame, self.p1, self.p2, self.MEINEFARBE, self.THICKNESS1)
             img_part = frame[self.cy:self.cy + self.rh, self.cx:self.cx + self.rw, :]
-            bildername= f'/{str(i).zfill(5)}.png'
+            bildername= f'/{cur_class}{str(i).zfill(5)}.png'
             imagewrite = img_path + bildername
             cv2.imwrite(imagewrite, img_part)
             i += 1
