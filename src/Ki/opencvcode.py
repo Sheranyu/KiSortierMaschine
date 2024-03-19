@@ -46,10 +46,10 @@ class TrainiertesModel():
             
             # Grab the webcamera's image.
             ret, image = camera.read()
-            # Resize the raw image into (224-height,224-width) pixels
-            image = cv2.resize(image, (224, 224), interpolation=cv2.INTER_AREA)
+            # Resize the raw image into (256-height,256-width) pixels
+            image = cv2.resize(image, (256, 256), interpolation=cv2.INTER_AREA)
             # Make the image a numpy array and reshape it to the models input shape.
-            imageresharp = np.asarray(image, dtype=np.float32).reshape(1, 224, 224, 3)
+            imageresharp = np.asarray(image, dtype=np.float32).reshape(1, 256, 256, 3)
             # Normalize the image array
             imageresharp = (imageresharp / 127.5) - 1
             # Predicts the model

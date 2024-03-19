@@ -13,8 +13,8 @@ class WebcamAufnahme():
         self.width = 640  # Mögliche Kameraauflösungen (bei mir): 640x380, 640x380, 640x640, 1280x720
         self.height = 480
         # WebCam Rahmen, Region of Interest
-        self.rw = 224
-        self.rh = 224
+        self.rw = 256
+        self.rh = 256
         self.cx = self.width // 2 - self.rw // 2  # Im Moment zentrierte Bildaufnahme
         self.cy = self.height // 2 - self.rh // 2
         self.p1 = (self.cx - 2, self.cy - 2)
