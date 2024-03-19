@@ -60,19 +60,22 @@ class KiTraining():
         else:
             print(f"{main_folder} ist kein gültiger Ordner oder existiert nicht.")
         return subfolders
-    
-    def _vergleichBildmitOrdnerName_GetCurrentOrdnerName(self,name_to_compare) ->str:
+                
+    def getcurrentordner(self, name_to_compare):
         ordnername = ""
         for name in self.subfoldernameslist:
-            
+            if name in name_to_compare:
+                ordnername = name                          
+        return ordnername
+    def _vergleichBildmitOrdnerName_GetCurrentOrdnerName(self,name_to_compare) ->str:
+        for name in self.subfoldernameslist:
             # Überprüfen, ob der Name passt
             if name in name_to_compare:
                 self.target.append(1)
-                ordnername = name
                   # Wenn der Name passt, füge 1 zur Ergebnisliste hinzu
             else:
                 self.target.append(0) 
-        return ordnername
+        
 
     def _train_start(self):
         self.model = MeinNetz(len(self.subfoldernameslist))
@@ -125,7 +128,8 @@ class KiTraining():
             f = random.choice(self.files)
             self.files.remove(f)
             #geht noch nicht brauche kompletten pfad hier
-            ordnersubpfad = self._vergleichBildmitOrdnerName_GetCurrentOrdnerName(f)
+            ordnersubpfad = self.getcurrentordner(f)
+            self._vergleichBildmitOrdnerName_GetCurrentOrdnerName(f)
            # print(main_pfad + f"/{ordnersubpfad}/{f}")
             
             img  = Image.open(main_pfad + f"/{ordnersubpfad}/{f}")
