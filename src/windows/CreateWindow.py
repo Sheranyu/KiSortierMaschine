@@ -37,7 +37,7 @@ class CreateModelPage(CreateModelPageDesign):
                     header=ft.Container(ft.Column([self.start_training_btn,self.abbruchtrainingbtn]), padding=ft.padding.all(5)),
                     content=ft.Container(
                         ft.Column(
-                            [self.modeltyplist, self.epoches, self.lernratetextfield,self.maxeingelesendatenseatz,]
+                            [self.modeltyplist, self.epoches, self.lernratetextfield,self.maxeingelesendatenseatz,self.batchsize]
                         ),
                         padding=ft.padding.all(5),
                     ),

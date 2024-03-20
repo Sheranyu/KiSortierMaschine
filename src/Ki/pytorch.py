@@ -31,7 +31,7 @@ class KiTraining():
         self.learnrate = 0.004
         self.kidata = None
         self.progress = progress
-        self.bachsize = 64
+        self.bachsize = 32
         # hier können paramter init werden
         pass
 
