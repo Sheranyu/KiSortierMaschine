@@ -124,6 +124,7 @@ class LoadModelPage(LoadModelPageDesign):
         
     def will_unmount(self):
         self.page.overlay.clear()
+        self.page.banner.clean()
         self.page.update()
 
     def check_data_in_filepicker(self, e):
