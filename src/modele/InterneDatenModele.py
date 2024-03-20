@@ -6,7 +6,7 @@ from enum import Enum
 from typing import Any
 from pydantic import BaseModel
 import cv2
-
+import flet as ft
 
 class ModelTyp(Enum):
     KERAS = "keras"
@@ -63,3 +63,8 @@ class ClassCreatorSettingsModel(BaseModel):
     aufnahmeges: int
     
     
+@dataclass
+class KiModeltrainingConfigdata():
+    bachsize: int
+    epoches: int
+    lernrate: float

@@ -41,7 +41,11 @@ class AnwendungstartPageDesign(ft.UserControl, ABC):
 class CreateModelPageDesign(ABC, ft.UserControl):
     def __init__(self) -> None:
         super().__init__()
-        
+        self.batchsize = ft.TextField(label="Batch Size", read_only=True, value=64, input_filter=ft.NumbersOnlyInputFilter(),border_color=ft.colors.BLUE)
+        self.epoches = ft.TextField(label="Epoches", value=30, input_filter=ft.NumbersOnlyInputFilter(),border_color=ft.colors.BLUE)
+        self.lernratetextfield = ft.TextField(label="Lern Rate", value=0.001, tooltip="lernrate zwischen 0.001 und 0.01",
+                                              input_filter=ft.InputFilter(regex_string=r"^[0-9.-]*$"), border_color=ft.colors.BLUE)
+        #self.lernrate = ft.Slider(value=0.001, min=0.001, max=0.03, divisions=33, label="{value}", round=4)
         self.settingbuttonclass = ft.FloatingActionButton(content=ft.Icon(ft.icons.SETTINGS), on_click=lambda _: self.Open_Settings_Class())
         
         self.zeigemomentanbildintext = ft.TextField(label="BildNummer", value="N/A", read_only=True, color=ft.colors.RED)
@@ -77,6 +81,11 @@ class CreateModelPageDesign(ABC, ft.UserControl):
                 ft.dropdown.Option(ModelTyp.TORCH, "PyTorch Model"),
             ],
         )
+        self.abbruchtrainingbtn = ft.ElevatedButton("abbruch",ft.icons.CANCEL, 
+                                                    bgcolor=ft.colors.RED, on_click=self.cancel_ki_training)
+
+        self.fortschrittbalkentext = ft.Text("Aktueller fortschrit", text_align=ft.TextAlign.CENTER)
+        self.fortschrittbalken = ft.ProgressBar(width=300, color=ft.colors.BLUE, bar_height=5, value=0.01)
 
         self.pick_files_dialog = ft.FilePicker(on_result=self.save_file_result)
         self.loadmodelbuttonpicker = ft.ElevatedButton(
@@ -110,6 +119,10 @@ class CreateModelPageDesign(ABC, ft.UserControl):
             elevation=0,
         )
     
+    @abstractmethod
+    def cancel_ki_training(self):
+        pass
+
     @abstractmethod
     def Open_Settings_Class(self):
         pass

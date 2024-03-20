@@ -14,10 +14,11 @@ from torch.utils.data import DataLoader
 from PIL import Image
 from os import listdir
 from modele.KImodels import MeinNetz
-from modele.InterneDatenModele import KIModelsaverData
+from modele.InterneDatenModele import KIModelsaverData, KiModeltrainingConfigdata
+from flet import ProgressBar
 
 class KiTraining():
-    def __init__(self) -> None:
+    def __init__(self, progress: ProgressBar) -> None:
         self.train_data_list = []
         self.target_list = []
         self.train_data = []
@@ -28,16 +29,20 @@ class KiTraining():
         self.maxepoche = 20
         self.learnrate = 0.004
         self.kidata = None
+        self.progress = progress
+        self.bachsize = 64
         # hier können paramter init werden
         pass
 
     def starte_ki_training(self, data: KIModelsaverData):
         self.kidata = data
-        self.Set_Settings()
         self._Dateneinlesen(data.pfad_model)
         self._train_start()
 
-    def Set_Settings(self):
+    def Set_Settings(self, configdata: KiModeltrainingConfigdata):#
+        self.learnrate = str(configdata.lernrate)
+        self.maxepoche = int(configdata.epoches)
+        self.bachsize = int(configdata.bachsize)
         self.normalize = transforms.Normalize(mean=[0.485,0.456,0.406], std=[0.229, 0.224, 0.225])
 
         self.transformation = transforms.Compose([
@@ -88,7 +93,7 @@ class KiTraining():
         self.model.train()
         batch_id = 0
         for data,target in self.train_data:
-            print(data.size())
+            
             
             target = torch.Tensor(target)
             data = Variable(data)
@@ -104,6 +109,8 @@ class KiTraining():
                 epoche, batch_id * len(data), len(self.train_data),
                 100. * batch_id / len(self.train_data), loss.item()))
         self.savekidata()
+        self.progress.value = epoche/self.maxepoche
+        self.progress.update()
 
     def loadkidata(self):
         self.model = torch.load(self.kidata.ModelName)
@@ -127,10 +134,9 @@ class KiTraining():
         for i in range(len(self.files)):
             f = random.choice(self.files)
             self.files.remove(f)
-            #geht noch nicht brauche kompletten pfad hier
+    
             ordnersubpfad = self.getcurrentordner(f)
             self._vergleichBildmitOrdnerName_GetCurrentOrdnerName(f)
-           # print(main_pfad + f"/{ordnersubpfad}/{f}")
             
             img  = Image.open(main_pfad + f"/{ordnersubpfad}/{f}")
           
@@ -139,12 +145,12 @@ class KiTraining():
             
             self.target_list.append(self.target)
             self.target = []
-            if len(self.train_data_list) >= 64:
+            if len(self.train_data_list) >= self.bachsize:
                 self.train_data.append((torch.stack(self.train_data_list), self.target_list))
                 self.target_list = []
                 self.train_data_list = []
                 
-                print('Loaded batch ', len(self.train_data), 'of ', int(listlenge/64))
-                print('Percentage Done: ', 100*len(self.train_data)/int(listlenge/64), '%')
+                print('Loaded batch ', len(self.train_data), 'of ', int(listlenge/self.bachsize))
+                print('Percentage Done: ', 100*len(self.train_data)/int(listlenge/self.bachsize), '%')
                 if len(self.train_data) > self.maxdatenseatze:
                     break

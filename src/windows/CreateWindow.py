@@ -8,17 +8,17 @@ from configordner.settings import LaufZeitConfig
 from flet_core.control import Control, OptionalNumber
 from logic.aufnahme import Aktuelletextanzeige, WebcamAufnahme, ZeigeBildan
 from Ki.pytorch import KiTraining
-from modele.InterneDatenModele import AufnahmeDaten, KIModelsaverData, KiClassList
+from modele.InterneDatenModele import AufnahmeDaten, KIModelsaverData, KiClassList, KiModeltrainingConfigdata
 
 
 class CreateModelPage(CreateModelPageDesign):
     def __init__(self):
         super().__init__()
-
+        
         self.dynabstandadder = 700 / 5
         self.aufnahme = WebcamAufnahme()
         self.listederaufgabenlocalspeicher = []
-        self.kitrainer = KiTraining()
+        self.kitrainer = KiTraining(self.fortschrittbalken)
     def build(self):
         self.listview = ft.ListView(spacing=8, padding=15, auto_scroll=False, height=40)
 
@@ -30,7 +30,7 @@ class CreateModelPage(CreateModelPageDesign):
                 ft.ExpansionPanel(
                     header=ft.Container(self.submit_button, padding=ft.padding.all(5)),
                     content=ft.Container(
-                        ft.Column([self.modeltyplist]), padding=ft.padding.all(5)
+                        ft.Column([self.modeltyplist, self.epoches,self.lernratetextfield]), padding=ft.padding.all(5)
                     ),
                 )
             ],
@@ -64,20 +64,36 @@ class CreateModelPage(CreateModelPageDesign):
             col=3,
         )
 
+        self.canvastrenner = ft.canvas.Canvas([ft.canvas.Path([
+                    ft.canvas.Path.MoveTo(25, 25),
+                    ft.canvas.Path.LineTo(35, 25),
+                    ft.canvas.Path.LineTo(35, 400),
+                    ft.canvas.Path.LineTo(25, 400),
+        ])],
+        width=float("inf"),
+        expand=True, col=1)
+
         self.buttonwithpr = ft.Column(
             [self.floatedbutton,self.settingbuttonclass, self.progressring],
             col=3,
             horizontal_alignment=ft.CrossAxisAlignment.CENTER,
         )
-        # self.floatingactionstack = ft.Stack(controls=[self.floatedbutton],height=200,width=200)
-        self.listwithbutton = ft.ResponsiveRow([self.listcontainer, self.buttonwithpr])
-        self.columleft = ft.Column([self.listwithbutton], col=3)
 
-        self.rowcontainer = ft.ResponsiveRow([self.columleft, self.containercolum])
-        self.endcontainer = ft.Container(content=self.rowcontainer, expand=True)
+        self.anzeigerechts = ft.Column([self.fortschrittbalkentext, self.fortschrittbalken, self.abbruchtrainingbtn],col=3, visible=False)
+        self.listwithbutton = ft.ResponsiveRow([self.listcontainer, self.buttonwithpr])
+
+        self.columleft = ft.Column([self.listwithbutton], col=4)
+        self.divider = ft.Container(bgcolor=ft.colors.BLUE_300, width=30, expand=True,col=1)
+        self.rowcontainer = ft.ResponsiveRow([self.columleft, self.containercolum, self.canvastrenner,self.anzeigerechts])
+        self.endcontainer = ft.Container(content=self.rowcontainer)
         return self.endcontainer
 
+
+
     # ---Beginn der Logic-----#
+    def cancel_ki_training(self,e):
+        return super().cancel_ki_training()
+    
     def Open_Settings_Class(self):
         self.page.go("/classcreatorsettings")
         
@@ -253,7 +269,10 @@ class CreateModelPage(CreateModelPageDesign):
         self.kimodelsaver = KIModelsaverData(
             self.model_name.value, self.save_file_pfad.value, self.modeltyplist.value
         )
-        #self.page.session.set("kimodelsaver", self.kimodelsaver.__dict__)
+        self.anzeigerechts.visible = True
+        self.update()
+        configdata = KiModeltrainingConfigdata(bachsize=self.batchsize.value, epoches=self.epoches.value, lernrate=self.lernratetextfield.value)
+        self.kitrainer.Set_Settings(configdata)
         self.kitrainer.starte_ki_training(self.kimodelsaver) 
 
     def will_unmount(self):
