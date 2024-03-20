@@ -41,11 +41,14 @@ class AnwendungstartPageDesign(ft.UserControl, ABC):
 class CreateModelPageDesign(ABC, ft.UserControl):
     def __init__(self) -> None:
         super().__init__()
-        self.maxeingelesendatenseatz = ft.TextField(label="Max Dateneinlesen", value=100, input_filter=ft.NumbersOnlyInputFilter(),border_color=ft.colors.BLUE, filled=True)
-        self.batchsize = ft.TextField(label="Batch Size", read_only=False, value=16, input_filter=ft.NumbersOnlyInputFilter(),border_color=ft.colors.BLUE, filled=True)
-        self.epoches = ft.TextField(label="Epoches", value=30, input_filter=ft.NumbersOnlyInputFilter(),border_color=ft.colors.BLUE, filled=True)
-        self.lernratetextfield = ft.TextField(label="Lern Rate", value=0.001, tooltip="lernrate zwischen 0.001 und 0.01",
+        border_radius = 6
+        self.maxeingelesendatenseatz = ft.TextField(border_radius=border_radius,label="Max Dateneinlesen", value=100, input_filter=ft.NumbersOnlyInputFilter(),border_color=ft.colors.BLUE, filled=True)
+        
+        self.epoches = ft.TextField(border_radius=border_radius,label="Epoches", value=30, input_filter=ft.NumbersOnlyInputFilter(),border_color=ft.colors.BLUE, filled=True)
+        self.lernratetextfield = ft.TextField(border_radius=border_radius,label="Lern Rate", value=0.001, tooltip="lernrate zwischen 0.001 und 0.01",
                                               input_filter=ft.InputFilter(regex_string=r"^[0-9.-]*$"), border_color=ft.colors.BLUE, filled=True)
+        self.batchsizetext = ft.Text("Batch Size")
+        self.batchsize = ft.Slider(value=16, min=16, max=64, divisions=3, label="{value}", height=20)
         
 
 

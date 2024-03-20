@@ -113,7 +113,7 @@ class KiTraining():
                 100. * batch_id / len(self.train_data), loss.item()))
             if LaufZeitConfig.istrainingactive == False:
                 break
-        self.savekidata()
+         
         self.progress.value = epoche/self.maxepoche
         self.progress.update()
 

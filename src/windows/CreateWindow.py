@@ -28,6 +28,9 @@ class CreateModelPage(CreateModelPageDesign):
     def build(self):
         self.listview = ft.ListView(spacing=8, padding=15, auto_scroll=False, height=40)
 
+        
+        self.batchsizecard = ft.Card(ft.Container(ft.Column([self.batchsizetext,self.batchsize]),padding=ft.padding.all(3)))
+
         self.panel = ft.ExpansionPanelList(
             expand_icon_color=ft.colors.AMBER,
             width=300,
@@ -37,7 +40,7 @@ class CreateModelPage(CreateModelPageDesign):
                     header=ft.Container(ft.Column([self.start_training_btn,self.abbruchtrainingbtn]), padding=ft.padding.all(5)),
                     content=ft.Container(
                         ft.Column(
-                            [self.modeltyplist, self.epoches, self.lernratetextfield,self.maxeingelesendatenseatz,self.batchsize]
+                            [self.modeltyplist, self.epoches, self.lernratetextfield,self.maxeingelesendatenseatz, self.batchsizecard]
                         ),
                         padding=ft.padding.all(5),
                     ),
