@@ -13,6 +13,7 @@ from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
 from PIL import Image
 from os import listdir
+from configordner.settings import LaufZeitConfig
 from modele.KImodels import MeinNetz
 from modele.InterneDatenModele import KIModelsaverData, KiModeltrainingConfigdata
 from flet import ProgressBar
@@ -36,15 +37,17 @@ class KiTraining():
 
     def starte_ki_training(self, data: KIModelsaverData):
         self.kidata = data
+        if os.path.isdir(self.kidata.ModelName):
+            self.loadkidata()
         self._Dateneinlesen(data.pfad_model)
         self._train_start()
 
     def Set_Settings(self, configdata: KiModeltrainingConfigdata):#
-        self.learnrate = str(configdata.lernrate)
+        self.learnrate = float(configdata.lernrate)
         self.maxepoche = int(configdata.epoches)
         self.bachsize = int(configdata.bachsize)
         self.normalize = transforms.Normalize(mean=[0.485,0.456,0.406], std=[0.229, 0.224, 0.225])
-
+        self.maxdatenseatze = int(configdata.maxdatenseatze)
         self.transformation = transforms.Compose([
             transforms.Resize(256),transforms.CenterCrop(256),
             transforms.ToTensor(),
@@ -87,14 +90,14 @@ class KiTraining():
         self.optimizer = optim.Adam(self.model.parameters(), lr=self.learnrate)
         for epoche in range(1,self.maxepoche):
             self.train(epoche=epoche)
+            if LaufZeitConfig.istrainingactive == False:
+                break
 
 
     def train(self,epoche: int):
         self.model.train()
         batch_id = 0
         for data,target in self.train_data:
-            
-            
             target = torch.Tensor(target)
             data = Variable(data)
             target = Variable(target)
@@ -108,6 +111,8 @@ class KiTraining():
             print("Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}".format(
                 epoche, batch_id * len(data), len(self.train_data),
                 100. * batch_id / len(self.train_data), loss.item()))
+            if LaufZeitConfig.istrainingactive == False:
+                break
         self.savekidata()
         self.progress.value = epoche/self.maxepoche
         self.progress.update()

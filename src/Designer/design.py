@@ -41,6 +41,7 @@ class AnwendungstartPageDesign(ft.UserControl, ABC):
 class CreateModelPageDesign(ABC, ft.UserControl):
     def __init__(self) -> None:
         super().__init__()
+        self.maxeingelesendatenseatz = ft.TextField(label="Max Dateneinlesen", value=100, input_filter=ft.NumbersOnlyInputFilter())
         self.batchsize = ft.TextField(label="Batch Size", read_only=True, value=64, input_filter=ft.NumbersOnlyInputFilter(),border_color=ft.colors.BLUE)
         self.epoches = ft.TextField(label="Epoches", value=30, input_filter=ft.NumbersOnlyInputFilter(),border_color=ft.colors.BLUE)
         self.lernratetextfield = ft.TextField(label="Lern Rate", value=0.001, tooltip="lernrate zwischen 0.001 und 0.01",
@@ -66,7 +67,7 @@ class CreateModelPageDesign(ABC, ft.UserControl):
         self.firstclasstexteingabe = ft.TextField(label="class name")
         self.deleteclassbutton = ft.IconButton(icon=ft.icons.DELETE,bgcolor=ft.colors.RED, on_click=lambda e,index=self.classzeahler: self.DeleteClass(e,index) )
         
-        self.floatedbutton = ft.FloatingActionButton(col=1,content=ft.Icon(ft.icons.ADD),on_click=lambda _: self.CreateNewTrainingClass())
+        self.floatedbutton = ft.FloatingActionButton(col=1,content=ft.Icon(ft.icons.ADD),on_click=lambda _: self._CreateNewTrainingClass())
         
 
         self.title = ft.Text("Modell erstellen", theme_style=ft.TextThemeStyle.HEADLINE_LARGE)
@@ -87,7 +88,7 @@ class CreateModelPageDesign(ABC, ft.UserControl):
         self.fortschrittbalkentext = ft.Text("Aktueller fortschrit", text_align=ft.TextAlign.CENTER)
         self.fortschrittbalken = ft.ProgressBar(width=300, color=ft.colors.BLUE, bar_height=5, value=0.01)
 
-        self.pick_files_dialog = ft.FilePicker(on_result=self.save_file_result)
+        self.pick_files_dialog = ft.FilePicker(on_result=self._save_file_result)
         self.loadmodelbuttonpicker = ft.ElevatedButton(
             "Wähle Speicherort",
             icon=ft.icons.FILE_UPLOAD,
@@ -109,7 +110,7 @@ class CreateModelPageDesign(ABC, ft.UserControl):
             bgcolor=ft.colors.YELLOW,
             leading=ft.Icon(ft.icons.WARNING_AMBER_ROUNDED, size=40),
             content=self.bannerfailtextcontent,
-            actions=[ft.TextButton("Ok", on_click=self.close_banner)],
+            actions=[ft.TextButton("Ok", on_click=self._close_banner)],
         )
 
         self.submit_button = ft.ElevatedButton(
@@ -136,15 +137,15 @@ class CreateModelPageDesign(ABC, ft.UserControl):
         pass
 
     @abstractmethod
-    def CreateNewTrainingClass(self):
+    def _CreateNewTrainingClass(self):
         pass
 
     @abstractmethod
-    def save_file_result(self):
+    def _save_file_result(self):
         pass
 
     @abstractmethod
-    def close_banner(self):
+    def _close_banner(self):
         pass
 
     @abstractmethod

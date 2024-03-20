@@ -7,6 +7,15 @@ from singelton import SingletonMeta
 
 class LaufZeitConfig():
     islaufzeit:bool = False
+    istrainingactive: bool = False
+
+    @classmethod
+    def Enable_istrainingactive(cls):
+        cls.istrainingactive = True
+        
+    @classmethod
+    def Disable_istrainingactive(cls):
+        cls.istrainingactive = False
 
 #!!!!!nicht löschen dient als erinnerung!!!!#
 

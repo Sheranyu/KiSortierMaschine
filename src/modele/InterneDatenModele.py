@@ -68,3 +68,4 @@ class KiModeltrainingConfigdata():
     bachsize: int
     epoches: int
     lernrate: float
+    maxdatenseatze: int
