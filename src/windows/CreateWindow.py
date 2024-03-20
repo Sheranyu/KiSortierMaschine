@@ -34,10 +34,10 @@ class CreateModelPage(CreateModelPageDesign):
             divider_color=ft.colors.AMBER,
             controls=[
                 ft.ExpansionPanel(
-                    header=ft.Container(self.submit_button, padding=ft.padding.all(5)),
+                    header=ft.Container(ft.Column([self.start_training_btn,self.abbruchtrainingbtn]), padding=ft.padding.all(5)),
                     content=ft.Container(
                         ft.Column(
-                            [self.modeltyplist, self.epoches, self.lernratetextfield]
+                            [self.modeltyplist, self.epoches, self.lernratetextfield,self.maxeingelesendatenseatz,]
                         ),
                         padding=ft.padding.all(5),
                     ),
@@ -99,8 +99,6 @@ class CreateModelPage(CreateModelPageDesign):
             [
                 self.fortschrittbalkentext,
                 self.fortschrittbalken,
-                self.abbruchtrainingbtn,
-                self.maxeingelesendatenseatz,
             ],
             col=3,
             visible=False,
@@ -145,12 +143,21 @@ class CreateModelPage(CreateModelPageDesign):
             lernrate=self.lernratetextfield.value,
             maxdatenseatze=self.maxeingelesendatenseatz.value
         )
+
+        self.start_training_btn.visible = False
+        self.abbruchtrainingbtn.visible = True
+        self.update()
+
         LaufZeitConfig.Enable_istrainingactive()
         self.kitrainer.Set_Settings(configdata)
         self.kitrainer.starte_ki_training(self.kimodelsaver)
+        LaufZeitConfig.Disable_istrainingactive()
+        self.anzeigerechts.visible = False
 
     def cancel_ki_training(self, e):
         LaufZeitConfig.Disable_istrainingactive()
+        self.start_training_btn.visible = True
+        self.abbruchtrainingbtn.visible = False
 
     def Open_Settings_Class(self):
         self.page.go("/classcreatorsettings")

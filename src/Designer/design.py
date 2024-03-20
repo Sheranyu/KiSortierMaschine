@@ -41,11 +41,14 @@ class AnwendungstartPageDesign(ft.UserControl, ABC):
 class CreateModelPageDesign(ABC, ft.UserControl):
     def __init__(self) -> None:
         super().__init__()
-        self.maxeingelesendatenseatz = ft.TextField(label="Max Dateneinlesen", value=100, input_filter=ft.NumbersOnlyInputFilter())
-        self.batchsize = ft.TextField(label="Batch Size", read_only=True, value=64, input_filter=ft.NumbersOnlyInputFilter(),border_color=ft.colors.BLUE)
-        self.epoches = ft.TextField(label="Epoches", value=30, input_filter=ft.NumbersOnlyInputFilter(),border_color=ft.colors.BLUE)
+        self.maxeingelesendatenseatz = ft.TextField(label="Max Dateneinlesen", value=100, input_filter=ft.NumbersOnlyInputFilter(),border_color=ft.colors.BLUE, filled=True)
+        self.batchsize = ft.TextField(label="Batch Size", read_only=True, value=64, input_filter=ft.NumbersOnlyInputFilter(),border_color=ft.colors.BLUE, filled=True)
+        self.epoches = ft.TextField(label="Epoches", value=30, input_filter=ft.NumbersOnlyInputFilter(),border_color=ft.colors.BLUE, filled=True)
         self.lernratetextfield = ft.TextField(label="Lern Rate", value=0.001, tooltip="lernrate zwischen 0.001 und 0.01",
-                                              input_filter=ft.InputFilter(regex_string=r"^[0-9.-]*$"), border_color=ft.colors.BLUE)
+                                              input_filter=ft.InputFilter(regex_string=r"^[0-9.-]*$"), border_color=ft.colors.BLUE, filled=True)
+        
+
+
         #self.lernrate = ft.Slider(value=0.001, min=0.001, max=0.03, divisions=33, label="{value}", round=4)
         self.settingbuttonclass = ft.FloatingActionButton(content=ft.Icon(ft.icons.SETTINGS), on_click=lambda _: self.Open_Settings_Class())
         
@@ -77,13 +80,14 @@ class CreateModelPageDesign(ABC, ft.UserControl):
         self.save_file_pfad = ft.Text()
         self.modeltyplist = ft.Dropdown(
             width=200,
+            value=ModelTyp.TORCH,
             options=[
                 ft.dropdown.Option(ModelTyp.KERAS, "Kera Model"),
                 ft.dropdown.Option(ModelTyp.TORCH, "PyTorch Model"),
             ],
         )
         self.abbruchtrainingbtn = ft.ElevatedButton("abbruch",ft.icons.CANCEL, 
-                                                    bgcolor=ft.colors.RED, on_click=self.cancel_ki_training)
+                                                    bgcolor=ft.colors.RED, on_click=self.cancel_ki_training, visible=False)
 
         self.fortschrittbalkentext = ft.Text("Aktueller fortschrit", text_align=ft.TextAlign.CENTER)
         self.fortschrittbalken = ft.ProgressBar(width=300, color=ft.colors.BLUE, bar_height=5, value=0.01)
@@ -113,7 +117,7 @@ class CreateModelPageDesign(ABC, ft.UserControl):
             actions=[ft.TextButton("Ok", on_click=self._close_banner)],
         )
 
-        self.submit_button = ft.ElevatedButton(
+        self.start_training_btn = ft.ElevatedButton(
             "Starte Training",
             bgcolor=ft.colors.GREEN_900,
             on_click=self.start_create_model,
