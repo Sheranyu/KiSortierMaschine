@@ -1,5 +1,6 @@
 
 from genericpath import isfile
+import json
 from os.path import isdir, join
 import os
 import random
@@ -84,10 +85,15 @@ class KiTraining():
             else:
                 self.target.append(0) 
         
+    def _schreibe_label_daten(self):
+        with open(self.kidata.ModelName +"_label.txt", 'w') as datei:
+            for item in self.subfoldernameslist:
+                datei.write(str(item) + "\n")
 
     def _train_start(self):
         self.model = MeinNetz(len(self.subfoldernameslist))
         self.optimizer = optim.Adam(self.model.parameters(), lr=self.learnrate)
+        self._schreibe_label_daten()
         for epoche in range(1,self.maxepoche):
             self.train(epoche=epoche)
             if LaufZeitConfig.istrainingactive == False:

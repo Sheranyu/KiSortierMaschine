@@ -100,7 +100,7 @@ class CreateModelPageDesign(ABC, ft.UserControl):
         )
 
         self.warhinweistext = ft.Text(
-            "Trainieren eines Models funktioniert nur mit einer Nvidea GPU"
+            "Trainieren eines Models funktioniert nur über die CPU"
         )
         self.alertWarnhinweis = ft.AlertDialog(
             modal=False, title=self.warnhinweis_title_text, content=self.warhinweistext

@@ -28,10 +28,10 @@ class KiData():
 class KIModelsaverData():
     def __init__(self,ModelName=None, pfad_model=None,label_datei_name=None,pfad_label=None, modeltyp = ModelTyp.KERAS.value) -> None:
       
-        self.ModelName = ModelName
-        self.label_datei_name = label_datei_name
-        self.pfad_model = pfad_model
-        self.pfad_label = pfad_label
+        self.ModelName:str = ModelName
+        self.label_datei_name:str = label_datei_name
+        self.pfad_model:str = pfad_model
+        self.pfad_label:str = pfad_label
         self.modeltyp = modeltyp
         
 class KIModelloaderData():

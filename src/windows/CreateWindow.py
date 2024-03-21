@@ -316,8 +316,11 @@ class CreateModelPage(CreateModelPageDesign):
 
     def will_unmount(self):
         self.page.session.remove("listederaufgabenlocalspeicher")
-        LaufZeitConfig.islaufzeit = False
+        LaufZeitConfig.islaufzeit = False#
+        LaufZeitConfig.Disable_istrainingactive()
         self.progressring.visible = False
+        self.page.banner.clean()
+        self.page.overlay.clear()
         self._close_banner(None)
         self.page.update()
 
