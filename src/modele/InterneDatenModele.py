@@ -4,7 +4,7 @@
 from dataclasses import Field, dataclass
 from enum import Enum
 from typing import Any
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 import cv2
 import flet as ft
 
@@ -28,10 +28,10 @@ class KiData():
 class KIModelsaverData():
     def __init__(self,ModelName=None, pfad_model=None,label_datei_name=None,pfad_label=None, modeltyp = ModelTyp.KERAS.value) -> None:
       
-        self.ModelName:str = ModelName
-        self.label_datei_name:str = label_datei_name
-        self.pfad_model:str = pfad_model
-        self.pfad_label:str = pfad_label
+        self.ModelName = ModelName
+        self.label_datei_name = label_datei_name
+        self.pfad_model = pfad_model
+        self.pfad_label = pfad_label
         self.modeltyp = modeltyp
         
 class KIModelloaderData():
@@ -53,10 +53,10 @@ class KiClassList():
 #hier kommt pydantic zum einsatz pydandic prüft ob die typen wirklich passen
 
 class AufnahmeDaten(BaseModel):
+    model_config = ConfigDict(extra='ignore',arbitrary_types_allowed=True)
     imagedata: cv2.typing.MatLike
     aufnahmefotoname: str
-    class Config:
-        arbitrary_types_allowed = True
+   
         
         
 class ClassCreatorSettingsModel(BaseModel):

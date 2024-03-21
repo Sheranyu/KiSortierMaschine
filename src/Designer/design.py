@@ -247,12 +247,13 @@ class StatistikPageDesign(ft.UserControl,ABC):
     
     
     
-class ClassCreatorDesignPage(ABC):
+class ClassCreatorDesignPage(ft.UserControl,ABC):
     def __init__(self) -> None:
-        self.aufnahmegestext = ft.Text("Wie viele Bilder pro Sekunde soll aufgenohmen werden")
-        self.aufnahmeges = ft.Slider(label="{value}%", min=10, max=30, on_change_end=lambda e:self.on_change(e))
+        super().__init__(self)
+        self.aufnahmeges = ft.Slider(value=10, label="{value}%", min=10, max=30, on_change=lambda e:self.on_change(e))
+        self.aufnahmegestext = ft.Text("Wie viele Bilder pro Sekunde soll aufgenohmen werden:")
         
-        
+    
     @abstractmethod    
     def on_change(self):
         raise NotImplementedError()

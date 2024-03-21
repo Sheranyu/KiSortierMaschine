@@ -14,6 +14,7 @@ from modele.InterneDatenModele import (
     KiClassList,
     KiModeltrainingConfigdata,
 )
+from windows.subseiten.ClassCreatorSettingsWindow import SettingsClassCreator
 
 
 class CreateModelPage(CreateModelPageDesign):
@@ -116,20 +117,22 @@ class CreateModelPage(CreateModelPageDesign):
         self.divider = ft.Container(
             bgcolor=ft.colors.BLUE_300, width=30, expand=True, col=1
         )
+        
+        self.enddrawer = ft.NavigationDrawer([SettingsClassCreator()])
+        self.pageletseite = ft.Pagelet(content=self.columleft,col=4 ,width=self.page.width, height=self.page.height, drawer=self.enddrawer)
+        
+        
         self.rowcontainer = ft.ResponsiveRow(
             [
-                self.columleft,
+                self.pageletseite,
                 self.containercolum,
                 self.canvastrenner,
                 self.anzeigerechts,
             ]
         )
-
-
-        self.settingscontainer = ft.Container(bgcolor=ft.colors.SURFACE, width=400, height=400, left=100)
-
-       
+   
         self.endcontainer = ft.Container(content=self.rowcontainer)
+       
         self.stack = ft.Stack([self.endcontainer])
         return self.stack
 
@@ -178,7 +181,9 @@ class CreateModelPage(CreateModelPageDesign):
 
 
     def Open_Settings_Class(self):
-        self.page.go("/classcreatorsettings")
+        self.enddrawer.open = True
+        self.enddrawer.update()
+        #self.page.go("/classcreatorsettings")
 
     def DeleteClass(self, e, classitem):
         print(classitem)
