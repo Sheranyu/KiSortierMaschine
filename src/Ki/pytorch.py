@@ -32,7 +32,7 @@ class KiTraining():
         self.learnrate = 0.004
         self.kidata = None
         self.progress = progress
-        self.bachsize = 64
+        self.bachsize = 32
         # hier können paramter init werden
         pass
 
@@ -119,7 +119,7 @@ class KiTraining():
                 100. * batch_id / len(self.train_data), loss.item()))
             if LaufZeitConfig.istrainingactive == False:
                 break
-        self.savekidata()
+         
         self.progress.value = epoche/self.maxepoche
         self.progress.update()
 

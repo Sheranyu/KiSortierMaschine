@@ -120,6 +120,12 @@ class LoadModelPage(LoadModelPageDesign):
         self.page.overlay.append(self.pick_files_dialog)
         self.page.overlay.append(self.pick_file_label)
         self.page.banner = self.warnbanner
+        self.page.update()
+        
+    def will_unmount(self):
+        self.page.overlay.clear()
+        self.page.banner.clean()
+        self.page.update()
 
     def check_data_in_filepicker(self, e):
         self.selected_files.value = (
