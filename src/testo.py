@@ -1,14 +1,18 @@
-import json
+import flet as ft
 
-# Beispiel-Dictionary
-data = ["hi","test","testnbeu"]
+def main(page: ft.Page):
 
-# Pfad zur Textdatei, in die die Daten geschrieben werden sollen
-dateipfad = "daten.txt"
+    colum = ft.Column([ft.FilledButton("hallo", on_click=clickme),ft.FilledButton("test2")])
+    container = ft.Container(colum, animate=ft.animation.Animation(1000,ft.animation.AnimationCurve.BOUNCE_IN),visible=False)
 
-# Daten als JSON in die Textdatei schreiben
-with open(dateipfad, 'w') as datei:
-    for item in data:
-        datei.write(str(item) + "\n")
+    page.add(container)
+    page.add(ft.FilledButton("click me", on_click=clickanimation))
 
-print("Daten wurden erfolgreich in die Datei geschrieben.")
+
+def clickme(e):
+    pass
+
+def clickanimation():
+    pass
+
+ft.app(target=main)

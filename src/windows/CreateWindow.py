@@ -29,7 +29,11 @@ class CreateModelPage(CreateModelPageDesign):
         self.listview = ft.ListView(spacing=8, padding=15, auto_scroll=False, height=40)
 
         
-        self.batchsizecard = ft.Card(ft.Container(ft.Column([self.batchsizetext,self.batchsize]),padding=ft.padding.all(3)))
+        self.batchsizecard = ft.Card(ft.Container(ft.Column(
+            [self.batchsizetext,self.batchsize])
+            ,padding=ft.padding.all(3), border=ft.border.all(2), border_radius=ft.border_radius.all(2))
+            
+            )
 
         self.panel = ft.ExpansionPanelList(
             expand_icon_color=ft.colors.AMBER,
@@ -120,8 +124,14 @@ class CreateModelPage(CreateModelPageDesign):
                 self.anzeigerechts,
             ]
         )
+
+
+        self.settingscontainer = ft.Container(bgcolor=ft.colors.SURFACE, width=400, height=400, left=100)
+
+       
         self.endcontainer = ft.Container(content=self.rowcontainer)
-        return self.endcontainer
+        self.stack = ft.Stack([self.endcontainer])
+        return self.stack
 
     # ---Beginn der Logic-----#
     def start_create_model(self, e):
@@ -161,6 +171,11 @@ class CreateModelPage(CreateModelPageDesign):
         LaufZeitConfig.Disable_istrainingactive()
         self.start_training_btn.visible = True
         self.abbruchtrainingbtn.visible = False
+    def delete_drawer(self,e):
+        self.page.views[1].end_drawer.clean()
+        
+        
+
 
     def Open_Settings_Class(self):
         self.page.go("/classcreatorsettings")
@@ -331,7 +346,8 @@ class CreateModelPage(CreateModelPageDesign):
         if self.page is None:
             print("fehler beim mounten")
             return
-
+        
+        
         self.listederaufgabenlocalspeicher = []
         self._CreateNewTrainingClass()
         self.page.banner = self.warningbanner

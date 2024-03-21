@@ -1,11 +1,11 @@
 from typing import Self
 import flet as ft
 
-from Designer.design import ClassCreatorDesignPage
+#from Designer.design import ClassCreatorDesignPage
 from modele.InterneDatenModele import ClassCreatorSettingsModel
 
 
-class SettingsClassCreator(ClassCreatorDesignPage):
+class SettingsClassCreator():
     def __new__(self, page: ft.Page) -> Self:
         self.page = page
        
