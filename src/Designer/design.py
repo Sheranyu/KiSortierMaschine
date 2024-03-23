@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 import flet as ft
 
+from StatusMeldungen.messageinfo import ClassCreatorSettingsMessage as CCSM
 from modele.InterneDatenModele import ModelTyp
 
 
@@ -224,7 +225,8 @@ class LoadModelPageDesign(ABC, ft.UserControl):
     def pick_files_result(self):
         pass
 
-
+#beschreibde den code   
+ 
 class StatistikPageDesign(ft.UserControl,ABC):
     def __init__(self) -> None:
         super().__init__()
@@ -250,9 +252,16 @@ class StatistikPageDesign(ft.UserControl,ABC):
 class ClassCreatorDesignPage(ft.UserControl,ABC):
     def __init__(self) -> None:
         super().__init__(self)
-        self.aufnahmeges = ft.Slider(value=10, label="{value}%", min=10, max=30, on_change=lambda e:self.on_change(e))
-        self.aufnahmegestext = ft.Text("Wie viele Bilder pro Sekunde soll aufgenohmen werden:")
-        
+    # Kommentiert den ausgewählten Code
+
+        self.aufnahmegestext = ft.Text(CCSM.GESSLIDERTEXT, text_align=ft.TextAlign.CENTER)
+    # Slider zur Auswahl der Aufnahmegeschwindigkeit mit Standardwert von 10% und einem Bereich von 10% bis 30%
+        self.aufnahmeges = ft.Slider(value=10, label="{value} BPS",divisions=20, min=10, max=30, on_change=lambda e:self.on_change(e))
+        self.aufnahmegestextausgabe = ft.Text(value=self.aufnahmeges.value, text_align=ft.TextAlign.CENTER)
+        # Text zur Beschreibung der Aufnahmegeschwindigkeit
+
+        # Textfeld mit dem Label "test"
+        self.textbox = ft.TextField(label="test")
     
     @abstractmethod    
     def on_change(self):

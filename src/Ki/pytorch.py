@@ -4,6 +4,7 @@ import json
 from os.path import isdir, join
 import os
 import random
+import time
 from typing import Type
 import torch
 import torch.nn as nn
@@ -47,8 +48,8 @@ class KiTraining():
         self.learnrate = float(configdata.lernrate)
         self.maxepoche = int(configdata.epoches)
         self.bachsize = int(configdata.bachsize)
-        self.normalize = transforms.Normalize(mean=[0.485,0.456,0.406], std=[0.229, 0.224, 0.225])
         self.maxdatenseatze = int(configdata.maxdatenseatze)
+        self.normalize = transforms.Normalize(mean=[0.485,0.456,0.406], std=[0.229, 0.224, 0.225])
         self.transformation = transforms.Compose([
             transforms.Resize(256),transforms.CenterCrop(256),
             transforms.ToTensor(),
@@ -94,7 +95,7 @@ class KiTraining():
         self.model = MeinNetz(len(self.subfoldernameslist))
         self.optimizer = optim.Adam(self.model.parameters(), lr=self.learnrate)
         self._schreibe_label_daten()
-        for epoche in range(1,self.maxepoche):
+        for epoche in range(1,self.maxepoche+1):
             self.train(epoche=epoche)
             if LaufZeitConfig.istrainingactive == False:
                 break
@@ -121,6 +122,7 @@ class KiTraining():
                 break
          
         self.progress.value = epoche/self.maxepoche
+        self.savekidata()
         self.progress.update()
 
     def loadkidata(self):
@@ -128,7 +130,7 @@ class KiTraining():
     
     def savekidata(self):
         torch.save(self.model, self.kidata.ModelName + ".pt")
-        #TODO: save labelist
+        
     
     def _Dateneinlesen(self, main_pfad):
         folders = self.scan_subfolders(main_pfad)
@@ -140,9 +142,11 @@ class KiTraining():
             else:
                 print(f"{folder} ist kein gültiger Ordner.")
         
+        print(self.files)
         listlenge = len(self.files)
 
         for i in range(len(self.files)):
+            
             f = random.choice(self.files)
             self.files.remove(f)
     
@@ -150,18 +154,18 @@ class KiTraining():
             self._vergleichBildmitOrdnerName_GetCurrentOrdnerName(f)
             
             img  = Image.open(main_pfad + f"/{ordnersubpfad}/{f}")
-          
+            
             img_tensor = self.transformation(img)
             self.train_data_list.append(img_tensor)
-            
             self.target_list.append(self.target)
+            print(self.target_list)
             self.target = []
             if len(self.train_data_list) >= self.bachsize:
                 self.train_data.append((torch.stack(self.train_data_list), self.target_list))
                 self.target_list = []
                 self.train_data_list = []
                 
-                print('Loaded batch ', len(self.train_data), 'of ', int(listlenge/self.bachsize))
-                print('Percentage Done: ', 100*len(self.train_data)/int(listlenge/self.bachsize), '%')
+                # print('Loaded batch ', len(self.train_data), 'of ', int(listlenge/self.bachsize))
+                # print('Percentage Done: ', 100*len(self.train_data)/int(listlenge/self.bachsize), '%')
                 if len(self.train_data) > self.maxdatenseatze:
                     break

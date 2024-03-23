@@ -11,7 +11,7 @@ from db.CRUD.ZeitDaten import zeitdaten
 from db.db_and_models.models import DatumSpeicherung
 from modele.InterneDatenModele import KiData
 from typing import Any, Callable, Generator, List, Tuple, Type
-from jsonconverter.converter import converttoJson
+
 from pathlib import Path
 from datetime import datetime
 
@@ -32,7 +32,7 @@ class KiDatenVerarbeitung():
         with sessiongen() as session:
             
             datumid = self._createdatumindb(datum,session)
-            for item, image in self.model.loadmodel(progressring):
+            for item, image in self.model.loadmodelpytorch(progressring):
                 callback(image)
                 self.aktuellelaufzeit = item.laufzeit
                 #print(item.label_name, item.confidence_score)

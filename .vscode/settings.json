@@ -13,5 +13,7 @@
             "database": "${workspaceFolder:kisortiermaschine}/daten.sqlite"
         }
     ],
-    "python.analysis.typeCheckingMode": "off"
+    "python.analysis.typeCheckingMode": "off",
+    "CodeGPT.Autocomplete.enabled": false,
+    "CodeGPT.Autocomplete.provider": "Anthropic - claude-2"
 }

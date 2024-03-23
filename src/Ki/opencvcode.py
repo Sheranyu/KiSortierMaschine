@@ -1,16 +1,18 @@
 
-import os
 import time
 from typing import Any, Generator, Tuple
 from keras.models import load_model  # TensorFlow is required for Keras to work
 import cv2  # Install opencv-python
-
+from torch.autograd import Variable
 import numpy as np
-from DIManager import DependencyInjector
 from logic.KiDatenManager import KiDataManager
-from modele.InterneDatenModele import KIModelsaverData, KiData
+from modele.InterneDatenModele import KiData
 from configordner.settings import LaufZeitConfig
 import flet as ft
+import torch
+from torchvision import transforms
+from PIL import Image
+
 
 
 class TrainiertesModel():
@@ -18,11 +20,72 @@ class TrainiertesModel():
     
     def __init__(self) -> None:
         self.kidata = None
+        self.model = None
         
         
+    def normalizedata(self):
+        self.normalize = transforms.Normalize(mean=[0.485,0.456,0.406], std=[0.229, 0.224, 0.225])
+        self.transformation = transforms.Compose([
+            transforms.Resize(256),transforms.CenterCrop(256),
+            transforms.ToTensor(),
+            self.normalize
+        ])
+        
+    def predict_image(self,image)-> Tuple[torch.Tensor,torch.Tensor]:
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        pil_image = Image.fromarray(image)
+        img_eval_tensor = self.transformation(pil_image)
+        img_eval_tensor.unsqueeze_(0)
+        data = Variable(img_eval_tensor)
+        outputs = self.model(data)
+        predictprozent, predicted_index = torch.max(outputs, 1)
+        #print(predicted_index.size())
+        predicted_class = predicted_index.item()
 
-    def loadmodel(self, progressring: ft.ProgressRing) -> Generator[Tuple[KiData,cv2.typing.MatLike], Any, Any]:
-        self.kidata = KiDataManager.ladeKIDaten()
+        return (predicted_class,predictprozent)
+      
+    def loadlabeldata(self):
+        return open(self.kidata.pfad_label, "r").readlines()
+    
+    def loadmodelpytorch(self, progressring: ft.ProgressRing) -> Generator[Tuple[KiData,cv2.typing.MatLike], Any, Any]:
+        self.kidata = KiDataManager.ladeKImodel()
+        self.normalizedata()
+        print(self.kidata.pfad_model)
+        
+        self.model = torch.load(self.kidata.pfad_model)
+        if self.kidata is None:
+            print("error")
+            return
+        self.model.eval()
+        label_names = self.loadlabeldata()
+        cap = cv2.VideoCapture(0)  # 0 steht für die erste angeschlossene Kamera
+        start_time = time.time()
+        progressring.visible = False
+        progressring.update()
+        while True:
+            ret, frame = cap.read()
+            confidence_class,prediction_score = self.predict_image(frame)
+            print(prediction_score)
+            print(confidence_class)
+            # Hier kannst du das Ergebnis der Vorhersage verwenden, um z.B. ein Rechteck um das erkannte Objekt zu zeichnen oder es zu beschriften
+            # Beispiel: Zeichne ein Rechteck um das erkannte Objekt
+            #cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)# Erfasse ein Bild von der Kamera
+            #cv2.imshow('Webcam', frame)  # Zeige das erfasste Bild an
+            currenttime = time.time() - start_time
+            #label_name = label_names[prediction]
+            label_name = "hallo"
+            yield (KiData(label_name,str(np.round(confidence_class * 100)),"form", laufzeit=currenttime), frame)
+            keyboard_input = cv2.waitKey(1)
+            if keyboard_input == 27 or LaufZeitConfig.islaufzeit == False:  # Beende die Schleife, wenn 'q' gedrückt wird
+                break
+        
+        cap.release()  # Gib die Ressourcen der Webcam frei
+        cv2.destroyAllWindows()
+        
+        
+        
+    def loadmodelKera(self, progressring: ft.ProgressRing) -> Generator[Tuple[KiData,cv2.typing.MatLike], Any, Any]:
+        self.kidata = KiDataManager.ladeKImodel()
         print(self.kidata)
         if self.kidata is None:
             print("error")

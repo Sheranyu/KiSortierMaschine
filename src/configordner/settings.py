@@ -1,9 +1,3 @@
-import json
-
-from numpy import deprecate
-
-from singelton import SingletonMeta
-
 
 class LaufZeitConfig():
     islaufzeit:bool = False
@@ -16,7 +10,11 @@ class LaufZeitConfig():
     @classmethod
     def Disable_istrainingactive(cls):
         cls.istrainingactive = False
-
+        
+        
+class SaveDictName():
+    kimodel: str = "kimodel"
+    classcreatorsettings: str = "classcreatorsettings"
 #!!!!!nicht löschen dient als erinnerung!!!!#
 
 

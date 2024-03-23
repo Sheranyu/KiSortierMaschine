@@ -1,7 +1,6 @@
 
 
 
-from dataclasses import Field, dataclass
 from enum import Enum
 from typing import Any
 from pydantic import BaseModel, ConfigDict
@@ -24,7 +23,7 @@ class KiData():
         self.erkannter_modus = erkannter_modus
         self.laufzeit = laufzeit
         self.confidence_score_max = confidence_score_max
-    
+ 
 class KIModelsaverData():
     def __init__(self,ModelName=None, pfad_model=None,label_datei_name=None,pfad_label=None, modeltyp = ModelTyp.KERAS.value) -> None:
       
@@ -61,10 +60,10 @@ class AufnahmeDaten(BaseModel):
         
 class ClassCreatorSettingsModel(BaseModel):
     aufnahmeges: int
+
     
-    
-@dataclass
-class KiModeltrainingConfigdata():
+
+class KiModeltrainingConfigdata(BaseModel):
     bachsize: int
     epoches: int
     lernrate: float

@@ -2,7 +2,7 @@ from datetime import date
 from typing import Any, List
 from DIManager import DependencyInjector
 from Designer.design import CreateModelPageDesign
-from StatusMeldungen.status import WarnStatus
+from StatusMeldungen.status import WarnStatus, check_and_warn
 import flet as ft
 from configordner.settings import LaufZeitConfig
 from flet_core.control import Control, OptionalNumber
@@ -27,14 +27,28 @@ class CreateModelPage(CreateModelPageDesign):
         self.kitrainer = KiTraining(self.fortschrittbalken)
 
     def build(self):
+        """Builds the UI for the create model page.
+
+        Builds the full page layout, including:
+
+        - ListView for displaying model training status
+        - ExpansionPanel for model training settings
+        - Webcam and image display
+        - Progress bar and text for tracking training
+        - NavigationDrawer for settings page
+        - Responsive grid layout
+        """
+        
         self.listview = ft.ListView(spacing=8, padding=15, auto_scroll=False, height=40)
 
-        
-        self.batchsizecard = ft.Card(ft.Container(ft.Column(
-            [self.batchsizetext,self.batchsize])
-            ,padding=ft.padding.all(3), border=ft.border.all(2), border_radius=ft.border_radius.all(2))
-            
+        self.batchsizecard = ft.Card(
+            ft.Container(
+                ft.Column([self.batchsizetext, self.batchsize]),
+                padding=ft.padding.all(3),
+                border=ft.border.all(2),
+                border_radius=ft.border_radius.all(2),
             )
+        )
 
         self.panel = ft.ExpansionPanelList(
             expand_icon_color=ft.colors.AMBER,
@@ -42,10 +56,19 @@ class CreateModelPage(CreateModelPageDesign):
             divider_color=ft.colors.AMBER,
             controls=[
                 ft.ExpansionPanel(
-                    header=ft.Container(ft.Column([self.start_training_btn,self.abbruchtrainingbtn]), padding=ft.padding.all(5)),
+                    header=ft.Container(
+                        ft.Column([self.start_training_btn, self.abbruchtrainingbtn]),
+                        padding=ft.padding.all(5),
+                    ),
                     content=ft.Container(
                         ft.Column(
-                            [self.modeltyplist, self.epoches, self.lernratetextfield,self.maxeingelesendatenseatz, self.batchsizecard]
+                            [
+                                self.modeltyplist,
+                                self.epoches,
+                                self.lernratetextfield,
+                                self.maxeingelesendatenseatz,
+                                self.batchsizecard,
+                            ]
                         ),
                         padding=ft.padding.all(5),
                     ),
@@ -117,11 +140,16 @@ class CreateModelPage(CreateModelPageDesign):
         self.divider = ft.Container(
             bgcolor=ft.colors.BLUE_300, width=30, expand=True, col=1
         )
-        
+
         self.enddrawer = ft.NavigationDrawer([SettingsClassCreator()])
-        self.pageletseite = ft.Pagelet(content=self.columleft,col=4 ,width=self.page.width, height=self.page.height, drawer=self.enddrawer)
-        
-        
+        self.pageletseite = ft.Pagelet(
+            content=self.columleft,
+            col=4,
+            width=self.page.width,
+            height=self.page.height,
+            drawer=self.enddrawer,
+        )
+
         self.rowcontainer = ft.ResponsiveRow(
             [
                 self.pageletseite,
@@ -130,9 +158,9 @@ class CreateModelPage(CreateModelPageDesign):
                 self.anzeigerechts,
             ]
         )
-   
+
         self.endcontainer = ft.Container(content=self.rowcontainer)
-       
+
         self.stack = ft.Stack([self.endcontainer])
         return self.stack
 
@@ -169,6 +197,9 @@ class CreateModelPage(CreateModelPageDesign):
         self.kitrainer.starte_ki_training(self.kimodelsaver)
         LaufZeitConfig.Disable_istrainingactive()
         self.anzeigerechts.visible = False
+        self.start_training_btn.visible = True
+        self.abbruchtrainingbtn.visible = False
+        self.update()
 
     def cancel_ki_training(self, e):
         LaufZeitConfig.Disable_istrainingactive()
@@ -186,7 +217,7 @@ class CreateModelPage(CreateModelPageDesign):
         #self.page.go("/classcreatorsettings")
 
     def DeleteClass(self, e, classitem):
-        print(classitem)
+        
         daten = self.page.session.get("listederaufgabenlocalspeicher")  # type: ignore
         daten = [
             item for item in daten if item["classindex"] != classitem["classindex"]  # type: ignore
@@ -200,17 +231,19 @@ class CreateModelPage(CreateModelPageDesign):
     def ZeigeaktuelelBilder(self, e):
         # print("zeige aktuelel bilder")
         pass
-
+    
+    def check_and_warn(self,condition, warn_status):
+        if condition:
+            self._openbanner(warn_status)
+            return True
+        return False
+    
     def StartCamera(self, classitem, textfield: ft.TextField):
-        print("instartcamera")
-        if (
-            self.save_file_pfad.value == "Cancelled!"
-            or self.save_file_pfad.value == None
-        ):
-            self._openbanner(WarnStatus.PFAD_IS_EMPTY)
+        if check_and_warn(self._openbanner,self.save_file_pfad.value == "Cancelled!" or self.save_file_pfad.value is None, WarnStatus.PFAD_IS_EMPTY):
             return
-        if textfield.value == None or textfield.value == "":
-            self._openbanner(WarnStatus.CLASS_NAME_EMPTY)
+        if check_and_warn(self._openbanner,textfield.value is None or textfield.value == "", WarnStatus.CLASS_NAME_EMPTY):
+            return
+        if check_and_warn(self._openbanner,LaufZeitConfig.islaufzeit, WarnStatus.FORBIDDEN_TWO_VIDEO_REC):
             return
 
         textfield.disabled = True
@@ -244,7 +277,7 @@ class CreateModelPage(CreateModelPageDesign):
             if oneitem["classindex"] == item["classindex"]:
                 oneitem["classname"] = e.data
 
-        print(daten)
+        
         self.page.session.set("listederaufgabenlocalspeicher", daten)
         self.page.update()
 
@@ -252,7 +285,7 @@ class CreateModelPage(CreateModelPageDesign):
         self.listederaufgabenlocalspeicher = self.page.session.get(
             "listederaufgabenlocalspeicher"
         )
-        print(self.listederaufgabenlocalspeicher)
+        
         self.listview.controls.clear()
         self.listdict = {}
         for item in self.listederaufgabenlocalspeicher:
@@ -314,7 +347,7 @@ class CreateModelPage(CreateModelPageDesign):
         self.classzeahler += 1
         if self.listview.height < 700:
             self.listview.height += self.dynabstandadder
-            print(self.listview.height)
+            
         self._ladeliste()
 
     def _close_banner(self, e):
