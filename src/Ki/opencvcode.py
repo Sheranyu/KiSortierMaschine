@@ -41,6 +41,7 @@ class TrainiertesModel():
         predictprozent, predicted_index = torch.max(outputs, 1)
         #print(predicted_index.size())
         predicted_class = predicted_index.item()
+        
 
         return (predicted_class,predictprozent)
       
@@ -58,22 +59,26 @@ class TrainiertesModel():
             return
         self.model.eval()
         label_names = self.loadlabeldata()
+       
         cap = cv2.VideoCapture(0)  # 0 steht für die erste angeschlossene Kamera
         start_time = time.time()
         progressring.visible = False
         progressring.update()
+        if LaufZeitConfig.islaufzeit == False:
+            self.destroycam(cap)
+        
         while True:
             ret, frame = cap.read()
             confidence_class,prediction_score = self.predict_image(frame)
             print(prediction_score)
             print(confidence_class)
+            label_name = label_names[confidence_class]
             # Hier kannst du das Ergebnis der Vorhersage verwenden, um z.B. ein Rechteck um das erkannte Objekt zu zeichnen oder es zu beschriften
             # Beispiel: Zeichne ein Rechteck um das erkannte Objekt
             #cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)# Erfasse ein Bild von der Kamera
             #cv2.imshow('Webcam', frame)  # Zeige das erfasste Bild an
             currenttime = time.time() - start_time
             #label_name = label_names[prediction]
-            label_name = "hallo"
             yield (KiData(label_name,str(np.round(confidence_class * 100)),"form", laufzeit=currenttime), frame)
             keyboard_input = cv2.waitKey(1)
             if keyboard_input == 27 or LaufZeitConfig.islaufzeit == False:  # Beende die Schleife, wenn 'q' gedrückt wird
@@ -82,7 +87,9 @@ class TrainiertesModel():
         cap.release()  # Gib die Ressourcen der Webcam frei
         cv2.destroyAllWindows()
         
-        
+    def destroycam(self,cap: cv2.VideoCapture):
+        cap.release()  # Gib die Ressourcen der Webcam frei
+        cv2.destroyAllWindows()
         
     def loadmodelKera(self, progressring: ft.ProgressRing) -> Generator[Tuple[KiData,cv2.typing.MatLike], Any, Any]:
         self.kidata = KiDataManager.ladeKImodel()
@@ -133,8 +140,7 @@ class TrainiertesModel():
             if keyboard_input == 27 or LaufZeitConfig.islaufzeit == False:
                 break
 
-        camera.release()
-        cv2.destroyAllWindows()
+        self.destroycam(camera)
 
     
   
