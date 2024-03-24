@@ -1,18 +1,12 @@
 import datetime
 from io import TextIOWrapper
-import json
-import os
-import time
-import cv2
+
 import flet as ft
 from sqlalchemy.orm import Session
 from Ki.opencvcode import TrainiertesModel
-from db.CRUD.ZeitDaten import zeitdaten
-from db.db_and_models.models import DatumSpeicherung
+from db.CRUD.EndStatistik import EndStatistik
 from modele.InterneDatenModele import KiData
-from typing import Any, Callable, Generator, List, Tuple, Type
-
-from pathlib import Path
+from typing import Any, Generator
 from datetime import datetime
 
 
@@ -24,8 +18,8 @@ from db.db_and_models.session import sessiongen
 class KiDatenVerarbeitung():
     def __init__(self) -> None:
         self.model = TrainiertesModel()
-        self.data_to_save: List[KiData] = []
         self.aktuellelaufzeit = None
+        self.kidaten = KiData()
     
     def start_application(self,callback,progressring :ft.ProgressRing) -> Generator[KiData,Any, Any]:
         datum = self._erstelle_datum()
@@ -38,7 +32,8 @@ class KiDatenVerarbeitung():
                 #print(item.label_name, item.confidence_score)
                 yield item
                 self._verarbeitedaten(item,datumid,session)
-            self._savetime()
+                self.kidaten = item
+            self._savetime(self.kidaten.laufzeit,datumid,session,self.kidaten.anzahl)
 
     def _erstelle_datum(self) -> datetime:
         # Pfad zum Ordner "statistikdata" erstellen
@@ -57,5 +52,5 @@ class KiDatenVerarbeitung():
     def _createdatumindb(self,datum, session: Session):
         return CreateDatumSpeicherung().CreateDatum(session, datum) 
         
-    def _savetime(self,laufzeit: float,datumid:int, session: Session):
-        zeitdaten().createzeitdaten(laufzeit,datumid, session)
+    def _savetime(self,laufzeit: float,datumid:int, session: Session,aktuellestueckzahl: int):
+        EndStatistik().createzeitdaten(laufzeit,datumid, session,aktuellestueckzahl)

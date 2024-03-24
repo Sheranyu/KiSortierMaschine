@@ -23,6 +23,8 @@ class KiData(BaseModel):
     laufzeit: float
     confidence_score_max: Optional[int] = Field(default=None)
     anzahl: int
+    
+
  
 class KIModelsaverData():
     def __init__(self,ModelName=None, pfad_model=None,label_datei_name=None,pfad_label=None, modeltyp = ModelTyp.KERAS.value) -> None:

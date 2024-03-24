@@ -18,7 +18,7 @@ class DatumSpeicherung(Base):
     Datum: Mapped[Optional[datetime.datetime]] = mapped_column(DateTime)
 
     Statistik: Mapped[List['Statistik']] = relationship('Statistik', back_populates='fremd')
-    ZeitDaten: Mapped[List['ZeitDaten']] = relationship('ZeitDaten', back_populates='datumspeicherung')
+    EndStastik: Mapped[List['EndStastik']] = relationship('EndStastik', back_populates='datumspeicherung')
 
     def __init__(self,Datum) -> None:
         self.Datum = Datum
@@ -41,13 +41,14 @@ class Statistik(Base):
         self.modus = modus
         self.fremd_id = fremd_id
 
-class ZeitDaten(Base):
-    __tablename__ = 'ZeitDaten'
+class EndStastik(Base):
+    __tablename__ = 'EndStastik'
 
     ZeitID: Mapped[Optional[int]] = mapped_column(Integer, primary_key=True)
-    laufzeit: Mapped[Optional[float]] = mapped_column(Float)
     datumspeicherung_id: Mapped[Optional[decimal.Decimal]] = mapped_column(ForeignKey('DatumSpeicherung.Id'))
+    laufzeit: Mapped[Optional[float]] = mapped_column(Float)
+    stueckzahl: Mapped[Optional[int]] = mapped_column(Integer)
 
-    datumspeicherung: Mapped['DatumSpeicherung'] = relationship('DatumSpeicherung', back_populates='ZeitDaten')
-    def __init__(self, laufzeit: int, datumspeicherung_id: int):
+    datumspeicherung: Mapped['DatumSpeicherung'] = relationship('DatumSpeicherung', back_populates='EndStastik')
+    def __init__(self, laufzeit: int, datumspeicherung_id: int ,stueckzahl: int):
         pass

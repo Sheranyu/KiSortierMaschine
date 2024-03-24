@@ -1,6 +1,6 @@
 from datetime import date
 from typing import Any, List
-from DIManager import DependencyInjector
+
 from Designer.design import CreateModelPageDesign
 from StatusMeldungen.status import WarnStatus, check_and_warn
 import flet as ft
@@ -9,7 +9,6 @@ from flet_core.control import Control, OptionalNumber
 from logic.aufnahme import Aktuelletextanzeige, WebcamAufnahme, ZeigeBildan
 from Ki.pytorch import KiTraining
 from modele.InterneDatenModele import (
-    AufnahmeDaten,
     KIModelsaverData,
     KiClassList,
     KiModeltrainingConfigdata,

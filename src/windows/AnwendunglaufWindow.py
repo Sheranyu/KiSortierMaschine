@@ -69,11 +69,10 @@ class StartApplicationPage(AnwendungstartPageDesign):
         toggle_two_buttons(self, True, False)
 
     def DatenAnzeige(self, kidaten: KiData):
-        print(kidaten.label_name)
         self.erkanntesobject.value = kidaten.label_name
         self.laufzeit.value = round(kidaten.laufzeit,2)
         self.anzahlsortierterobjekte.value = kidaten.anzahl
-        self.update()
+        self.erkanntermodus.value = kidaten.erkannter_modus
 
     def CamAnzeige(self, frame: cv2.typing.MatLike):
         _, buffer = cv2.imencode(".jpg", frame)

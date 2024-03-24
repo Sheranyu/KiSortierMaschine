@@ -44,6 +44,7 @@ class TrainiertesModel():
         
         
     def predict_image(self,image)-> Tuple[torch.Tensor,torch.Tensor]:
+        
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         pil_image = Image.fromarray(image)
         img_eval_tensor = self.transformation(pil_image)
