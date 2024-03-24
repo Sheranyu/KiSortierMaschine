@@ -20,7 +20,7 @@ class AnwendungstartPageDesign(ft.UserControl, ABC):
             "Abbruch", bgcolor=ft.colors.RED, on_click=self.abbruch, visible=False
         )
         
-        self.bildvideo = ft.Image("./")
+        self.bildvideo = ft.Image("./",fit=ft.ImageFit.CONTAIN)
         self.alertwarn = ft.AlertDialog(
             modal=False,
             title=ft.Text("Ein Fehler ist aufgetreten"),
@@ -176,6 +176,7 @@ class LoadModelPageDesign(ABC, ft.UserControl):
 
         self.isloadedcheckbox = ft.Icon(visible=True, color=ft.colors.GREEN)
         self.isloadedcheckboxlabel = ft.Icon(visible=True, color=ft.colors.GREEN)
+        self.isloadedfinal = ft.Icon(visible=True, color=ft.colors.GREEN)
 
         self.bannertext = ft.Text(
             "Label oder Model wurde nicht gewählt", color=ft.colors.BLACK

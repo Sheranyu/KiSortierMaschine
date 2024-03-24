@@ -21,7 +21,8 @@ class TrainiertesModel():
     def __init__(self) -> None:
         self.kidata = None
         self.model = None
-        
+        self.zeahler: int = 0
+        self.isbackgroundvisible = False
         
     def normalizedata(self):
         self.normalize = transforms.Normalize(mean=[0.485,0.456,0.406], std=[0.229, 0.224, 0.225])
@@ -30,6 +31,17 @@ class TrainiertesModel():
             transforms.ToTensor(),
             self.normalize
         ])
+    
+    def UpdateZeahler(self,predicted_class:str, predictprozent: int):
+        if "background" in predicted_class.lower().strip() and predictprozent > 0.5:
+            print("drin")
+            self.isbackgroundvisible = True
+        elif self.isbackgroundvisible == True:
+            self.zeahler += 1
+            self.isbackgroundvisible = False
+
+            
+        
         
     def predict_image(self,image)-> Tuple[torch.Tensor,torch.Tensor]:
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
@@ -51,7 +63,7 @@ class TrainiertesModel():
     def loadmodelpytorch(self, progressring: ft.ProgressRing) -> Generator[Tuple[KiData,cv2.typing.MatLike], Any, Any]:
         self.kidata = KiDataManager.ladeKImodel()
         self.normalizedata()
-        print(self.kidata.pfad_model)
+       
         
         self.model = torch.load(self.kidata.pfad_model)
         if self.kidata is None:
@@ -70,16 +82,17 @@ class TrainiertesModel():
         while True:
             ret, frame = cap.read()
             confidence_class,prediction_score = self.predict_image(frame)
-            print(prediction_score)
-            print(confidence_class)
+
             label_name = label_names[confidence_class]
             # Hier kannst du das Ergebnis der Vorhersage verwenden, um z.B. ein Rechteck um das erkannte Objekt zu zeichnen oder es zu beschriften
             # Beispiel: Zeichne ein Rechteck um das erkannte Objekt
             #cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)# Erfasse ein Bild von der Kamera
             #cv2.imshow('Webcam', frame)  # Zeige das erfasste Bild an
+            self.UpdateZeahler(label_name,prediction_score.item())
             currenttime = time.time() - start_time
+            kidaten = KiData(label_name=label_name,confidence_score=int(np.round(confidence_class * 100)),erkannter_modus="form", laufzeit=currenttime,anzahl=self.zeahler)
             #label_name = label_names[prediction]
-            yield (KiData(label_name,str(np.round(confidence_class * 100)),"form", laufzeit=currenttime), frame)
+            yield (kidaten, frame)
             keyboard_input = cv2.waitKey(1)
             if keyboard_input == 27 or LaufZeitConfig.islaufzeit == False:  # Beende die Schleife, wenn 'q' gedrückt wird
                 break
@@ -90,10 +103,10 @@ class TrainiertesModel():
     def destroycam(self,cap: cv2.VideoCapture):
         cap.release()  # Gib die Ressourcen der Webcam frei
         cv2.destroyAllWindows()
-        
+       
     def loadmodelKera(self, progressring: ft.ProgressRing) -> Generator[Tuple[KiData,cv2.typing.MatLike], Any, Any]:
         self.kidata = KiDataManager.ladeKImodel()
-        print(self.kidata)
+        
         if self.kidata is None:
             print("error")
             return

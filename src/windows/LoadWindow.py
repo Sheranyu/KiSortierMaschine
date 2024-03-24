@@ -36,7 +36,12 @@ class LoadModelPage(LoadModelPageDesign):
             ),
             padding=ft.padding.only(left=20),
         )
-
+        
+        self.loadbuttoncontainer = ft.Container(ft.Row([ ft.Container(
+                        self.isloadedfinal, padding=ft.padding.only(right=20)
+                    ),self.loaddatabutton
+                ]),padding=ft.padding.only(left=35))
+        
         self.columncardoben = ft.Column(
             [
                 self.text_model_laden,
@@ -52,7 +57,8 @@ class LoadModelPage(LoadModelPageDesign):
 
         self.columncardunten = ft.Column(
             [
-                self.loaddatabutton,
+                
+                self.loadbuttoncontainer,
                 self.cardseperator,
                 self.modelhinweistextue,
                 self.modelhinweistext,
@@ -86,6 +92,8 @@ class LoadModelPage(LoadModelPageDesign):
             return
             
         self.page.session.set("kimodel", self.kimodeldata.__dict__)
+        self.isloadedfinal.name = ft.icons.CHECK_BOX_ROUNDED
+        self.isloadedfinal.update()
 
     def close_banner(self, e):
         self.warnbanner.open = False
@@ -97,8 +105,8 @@ class LoadModelPage(LoadModelPageDesign):
             return
 
         self.kimodeldata.ModelName = e.files[0].name
-        self.kimodeldata.pfad_model = e.files[0].path
         self.isloadedcheckbox.name = ft.icons.CHECK_BOX_ROUNDED
+        self.kimodeldata.pfad_model = e.files[0].path
         self.selected_files.value = "erfolgreich geladen"
         self.selected_files.visible = True
         self.selected_files.color = ft.colors.GREEN

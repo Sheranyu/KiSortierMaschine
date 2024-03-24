@@ -51,7 +51,7 @@ class KiDatenVerarbeitung():
         pass
 
     def _verarbeitedaten(self,item: KiData,datumid:int, session: Session):
-        if item.label_name != "Background"   and int(item.confidence_score) > 1:
+        if item.label_name.lower() != "background" and int(item.confidence_score) > 1:
             StatistikCreater().savestatistik(item,datumid,session)
     
     def _createdatumindb(self,datum, session: Session):

@@ -38,16 +38,14 @@ class StartApplicationPage(AnwendungstartPageDesign):
         )
         self.rowtest = ft.Row([self.columendcontainerlinks], alignment=ft.MainAxisAlignment.CENTER)
         self.anzeigekarte = ft.Card(content=self.columcontainerechts)
+        # self.rowbilder = ft.Row([self.rowtest, self.anzeigekarte])
         self.gridview = ft.GridView(
-                
                 runs_count=2,
-                
-               
-                controls=[self.rowtest, self.anzeigekarte],
-                
+                child_aspect_ratio=1,
+                controls=[self.rowtest, self.anzeigekarte],  
         )
         # self.container = ft.Container(content=self.columendcontainer, alignment=ft.alignment.center)
-        self.rowcont = ft.Container(self.gridview, width=800)
+        self.rowcont = ft.Container(self.gridview, width=self.page.width)
         self.endrow = ft.Row([self.rowcont], alignment=ft.MainAxisAlignment.CENTER)
         return self.endrow
 
@@ -60,10 +58,13 @@ class StartApplicationPage(AnwendungstartPageDesign):
         toggle_two_buttons(self, False, True)
         try:
             for data in self.ki_logic.start_application(self.CamAnzeige, self.pr):
+                if LaufZeitConfig.islaufzeit == False:
+                    return
                 self.DatenAnzeige(data)
         except Exception as err:
             print(f"Fehler: {err}")
             self.openwarndialog()
+            
 
         toggle_two_buttons(self, True, False)
 
@@ -71,11 +72,14 @@ class StartApplicationPage(AnwendungstartPageDesign):
         print(kidaten.label_name)
         self.erkanntesobject.value = kidaten.label_name
         self.laufzeit.value = round(kidaten.laufzeit,2)
+        self.anzahlsortierterobjekte.value = kidaten.anzahl
+        self.update()
 
     def CamAnzeige(self, frame: cv2.typing.MatLike):
         _, buffer = cv2.imencode(".jpg", frame)
         frame_base64 = base64.b64encode(buffer).decode("utf-8") # type: ignore
         self.bildvideo.src_base64 = frame_base64
+    
         self.update()
 
     def abbruch(self, e):
@@ -88,9 +92,10 @@ class StartApplicationPage(AnwendungstartPageDesign):
 
         
     def openwarndialog(self):
-
+        self.pr.visible = False
         self.page.dialog = self.alertwarn # type: ignore
         self.alertwarn.open = True
+        LaufZeitConfig.islaufzeit == False
         self.page.update()# type: ignore
 
 

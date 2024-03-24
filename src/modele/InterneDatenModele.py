@@ -2,8 +2,8 @@
 
 
 from enum import Enum
-from typing import Any
-from pydantic import BaseModel, ConfigDict
+from typing import Any, Optional
+from pydantic import BaseModel, ConfigDict, Field
 import cv2
 import flet as ft
 
@@ -16,13 +16,13 @@ class ModelTyp(Enum):
 
 
 
-class KiData():
-    def __init__(self, label_name, confidence_score ,erkannter_modus,confidence_score_max= None,laufzeit=None):
-        self.label_name = label_name
-        self.confidence_score = confidence_score
-        self.erkannter_modus = erkannter_modus
-        self.laufzeit = laufzeit
-        self.confidence_score_max = confidence_score_max
+class KiData(BaseModel):
+    label_name: str
+    confidence_score: int
+    erkannter_modus: Optional[str] = Field(default=None)
+    laufzeit: float
+    confidence_score_max: Optional[int] = Field(default=None)
+    anzahl: int
  
 class KIModelsaverData():
     def __init__(self,ModelName=None, pfad_model=None,label_datei_name=None,pfad_label=None, modeltyp = ModelTyp.KERAS.value) -> None:
