@@ -5,7 +5,6 @@ from logic.aufnahme import WebcamAufnahme
 from windows.fletmaininhalt import Mainwindow 
 from Router import Router
 from logic.KiDatenManager import KiDataManager
-from modele.testnetz import MeinNetz
 #from Designer.designer import 
 
 def main(page: ft.Page):

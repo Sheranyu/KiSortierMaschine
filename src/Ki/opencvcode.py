@@ -85,17 +85,12 @@ class TrainiertesModel():
             confidence_class,prediction_score = self.predict_image(frame)
 
             label_name = label_names[confidence_class]
-            # Hier kannst du das Ergebnis der Vorhersage verwenden, um z.B. ein Rechteck um das erkannte Objekt zu zeichnen oder es zu beschriften
-            # Beispiel: Zeichne ein Rechteck um das erkannte Objekt
-            #cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)# Erfasse ein Bild von der Kamera
-            #cv2.imshow('Webcam', frame)  # Zeige das erfasste Bild an
             self.UpdateZeahler(label_name,prediction_score.item())
-            currenttime = time.time() - start_time
+            currenttime = round(time.time() - start_time,2)
             kidaten = KiData(label_name=label_name,confidence_score=int(np.round(confidence_class * 100)),erkannter_modus="form", laufzeit=currenttime,anzahl=self.zeahler)
-            #label_name = label_names[prediction]
             yield (kidaten, frame)
             keyboard_input = cv2.waitKey(1)
-            if keyboard_input == 27 or LaufZeitConfig.islaufzeit == False:  # Beende die Schleife, wenn 'q' gedrückt wird
+            if keyboard_input == 27 or LaufZeitConfig.islaufzeit == False: 
                 break
         
         cap.release()  # Gib die Ressourcen der Webcam frei

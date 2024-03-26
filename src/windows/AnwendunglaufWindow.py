@@ -70,7 +70,7 @@ class StartApplicationPage(AnwendungstartPageDesign):
 
     def DatenAnzeige(self, kidaten: KiData):
         self.erkanntesobject.value = kidaten.label_name
-        self.laufzeit.value = round(kidaten.laufzeit,2)
+        self.laufzeit.value = kidaten.laufzeit
         self.anzahlsortierterobjekte.value = kidaten.anzahl
         self.erkanntermodus.value = kidaten.erkannter_modus
 

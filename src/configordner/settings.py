@@ -15,6 +15,7 @@ class LaufZeitConfig():
 class SaveDictName():
     kimodel: str = "kimodel"
     classcreatorsettings: str = "classcreatorsettings"
+    kidatenzwischenspeicher: str = "kidatenzwischenspeicher"
 #!!!!!nicht löschen dient als erinnerung!!!!#
 
 
