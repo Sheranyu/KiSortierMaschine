@@ -1,18 +1,17 @@
 #include <Arduino.h>
 
-// put function declarations here:
-int myFunction(int, int);
-
 void setup() {
-  // put your setup code here, to run once:
-  int result = myFunction(2, 3);
+  // Initialisieren der seriellen Kommunikation mit der Baudrate von 115200
+  Serial.begin(9600);
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-}
-
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
+  // Prüfen, ob Daten verfügbar sind
+  if (Serial.available() > 0) {
+    // Lesen des eingehenden Zeichens
+    char c = Serial.read();
+    
+    // Ausgabe des empfangenen Zeichens zurück an den Sender
+    Serial.print(c);
+  }
 }
