@@ -31,4 +31,14 @@ void StepperMotor::oneStep(bool dir) {
   digitalWrite(pins[stepNumber % 4], HIGH);  // Schalte den nächsten Pin ein
 }
 
+void StepperMotor::setRunning(bool running) {
+    this->running = running;
+}
+
+void StepperMotor::runIfNeeded() {
+    if (running) {
+        oneStep(direction); // Richtung ist bereits als Zustand gespeichert
+        delay(10); // Anpassbare Verzögerung zur Geschwindigkeitskontrolle
+    }
+}
 

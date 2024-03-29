@@ -18,11 +18,11 @@ void UARTHandler::processInput() {
     if (receivedChar == ';' || receivedChar == '\n' || receivedChar == '\r') {
       if (incomingCommand.startsWith("start")) {
         Serial.println("\nStarte Schrittmotor...");
-        setMotorRunning(true);
+        stepperMotor.setRunning(true);
       }
       else if (incomingCommand.startsWith("stop")) {
         Serial.println("\nStoppe Schrittmotor...");
-        setMotorRunning(false);
+        stepperMotor.setRunning(false);
       }
       else if (incomingCommand.startsWith("sg1")) {
         int angle = incomingCommand.substring(3).toInt();

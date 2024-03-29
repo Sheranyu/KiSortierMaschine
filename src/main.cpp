@@ -29,12 +29,5 @@ void setup() {
 
 void loop() {
   uartHandler.processInput(); // Verarbeitet UART-Eingaben
-
-  // Prüfen, ob der Motor laufen soll
-  if (uartHandler.isMotorRunning()) {
-    // Führt einen Schritt aus, wenn der Motor laufen soll
-    // Die Richtung ist bereits im StepperMotor-Objekt eingestellt
-    stepperMotor.oneStep(true); // Das 'true' hier ist eigentlich irrelevant, da die Richtung intern im StepperMotor gesteuert wird
-    delay(10); // Verzögerung zur Steuerung der Schrittmotorgeschwindigkeit, kann angepasst werden
-  }
+  stepperMotor.runIfNeeded(); // Steuert den Motor basierend auf seinem Zustand
 }
