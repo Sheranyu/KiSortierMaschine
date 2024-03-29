@@ -176,7 +176,8 @@ void OneStep(bool dir)
     }
   }
   step_number++;
-  if (step_number > 3) {
+  if (step_number > 3) 
+  {
     step_number = 0;
   }
 }
