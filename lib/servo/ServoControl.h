@@ -10,6 +10,7 @@ public:
     void attach();
     void testServo();
     void update();
+    void setAngle(int angle);
 
 private:
     Servo servo;

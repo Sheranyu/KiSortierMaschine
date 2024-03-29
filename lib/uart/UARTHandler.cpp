@@ -68,9 +68,11 @@ void UARTHandler::processLEDCommand(String command) {
 }
 
 void UARTHandler::setServoAngle(int angle) {
-  if (angle >= 0 && angle <= 180) {
-    servo.write(angle);
-  }
+    if (servoControl != nullptr) {
+        servoControl->setAngle(angle);
+        Serial.print("Setze Servo-Winkel auf: ");
+        Serial.println(angle);
+    }
 }
 
 void UARTHandler::setServoControl(ServoControl& servoControl) {

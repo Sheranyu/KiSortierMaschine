@@ -24,3 +24,10 @@ void ServoControl::update() {
         }
     }
 }
+
+void ServoControl::setAngle(int angle) {
+    if (angle >= 0 && angle <= 180) {
+        this->angle = angle; // Speichere den Winkel für den nächsten Update-Zyklus
+        servo.write(angle); // Setze den Winkel sofort
+    }
+}
