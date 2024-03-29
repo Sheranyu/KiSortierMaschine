@@ -5,10 +5,9 @@
 extern Servo servo;
 extern StepperMotor stepperMotor; // Definiere dies extern, um Zugriff darauf zu haben
 
-UARTHandler::UARTHandler(LED& led) : ledObj(led) {
-  motorRunning = false;
-  incomingCommand = "";
-
+UARTHandler::UARTHandler(LED& led) : ledObj(led), servoControl(nullptr) {
+    motorRunning = false;
+    incomingCommand = "";
 }
 
 void UARTHandler::processInput() {
@@ -72,4 +71,8 @@ void UARTHandler::setServoAngle(int angle) {
   if (angle >= 0 && angle <= 180) {
     servo.write(angle);
   }
+}
+
+void UARTHandler::setServoControl(ServoControl& servoControl) {
+    this->servoControl = &servoControl;
 }

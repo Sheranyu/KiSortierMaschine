@@ -18,9 +18,7 @@ class UARTHandler {
 
     void processLEDCommand(String command);
 
-    void setServoControl(ServoControl& servoControl) {
-        this->servoControl = &servoControl;
-    }
+    void setServoControl(ServoControl& servoControl);
 
   private:
     String incomingCommand;
