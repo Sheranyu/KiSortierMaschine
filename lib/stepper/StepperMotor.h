@@ -12,7 +12,7 @@ class StepperMotor {
   private:
     int pins[4];
     int stepNumber;
-    bool direction = true; // Standardmäßig im Uhrzeigersinn
+    bool direction = false; // Standardmäßig Gegen den Uhrzeigersinn
 };
 
 #endif
