@@ -8,7 +8,7 @@ extern StepperMotor stepperMotor; // Definiere dies extern, um Zugriff darauf zu
 UARTHandler::UARTHandler(LED& led) : ledObj(led) {
   motorRunning = false;
   incomingCommand = "";
-  
+
 }
 
 void UARTHandler::processInput() {
@@ -37,6 +37,12 @@ void UARTHandler::processInput() {
       }
       else if (incomingCommand.startsWith("led")) {
         processLEDCommand(incomingCommand);
+      }
+      else if (incomingCommand.startsWith("testservo")) {
+        if (servoControl != nullptr) {
+          servoControl->testServo();
+          Serial.println("Testmodus für Servo umgeschaltet.");
+        }
       }
       else if (incomingCommand.length() > 0) {
         Serial.println("\nUnknown command: " + incomingCommand);

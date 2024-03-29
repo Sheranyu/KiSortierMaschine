@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 #include "LED.h"
+#include "ServoControl.h"
 
 class UARTHandler {
   public:
@@ -17,10 +18,15 @@ class UARTHandler {
 
     void processLEDCommand(String command);
 
+    void setServoControl(ServoControl& servoControl) {
+        this->servoControl = &servoControl;
+    }
+
   private:
     String incomingCommand;
     bool motorRunning;
     LED& ledObj; // Referenz auf das LED-Objekt
+    ServoControl* servoControl; // Zeiger auf das ServoControl-Objekt
 };
 
 #endif

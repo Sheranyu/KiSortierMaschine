@@ -4,6 +4,7 @@
 #include "UARTHandler.h"
 #include "LED.h"
 #include "Button.h"
+#include "ServoControl.h"
 
 #define STEPPER_PIN_1 PA5
 #define STEPPER_PIN_2 PA6
@@ -25,10 +26,12 @@ Servo servo; // Globales Servo-Objekt, das im UARTHandler.cpp extern referenzier
 StepperMotor stepperMotor(STEPPER_PIN_1, STEPPER_PIN_2, STEPPER_PIN_3, STEPPER_PIN_4); // Extern im UARTHandler.cpp
 Button button(BUTTON_PIN);
 UARTHandler uartHandler(led); // Verwendet servo und stepperMotor
+ServoControl servoControl(SERVO_PIN);
 
 void setup() {
   Serial.begin(9600); // Initialisiere die serielle Kommunikation
-  servo.attach(SERVO_PIN); // Binde das Servo-Objekt an den entsprechenden Pin
+  servoControl.attach();
+  uartHandler.setServoControl(servoControl); // Setze das ServoControl-Objekt
   button.setMotorControlCallback([](bool pressed) {
     static bool motorRunning = false;
     if (pressed) {
@@ -40,6 +43,7 @@ void setup() {
 
 void loop() {
   uartHandler.processInput(); // Verarbeitet UART-Eingaben
+  servoControl.update(); // Stellt sicher, dass der Servo aktualisiert wird
   button.update();
   stepperMotor.runIfNeeded(); // Steuert den Motor basierend auf seinem Zustand
 }
