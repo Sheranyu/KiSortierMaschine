@@ -5,7 +5,7 @@
 extern Servo servo;
 extern StepperMotor stepperMotor; // Definiere dies extern, um Zugriff darauf zu haben
 
-UARTHandler::UARTHandler() {
+UARTHandler::UARTHandler(LED& led) : ledObj(led) {
   motorRunning = false;
   incomingCommand = "";
 }
@@ -34,6 +34,9 @@ void UARTHandler::processInput() {
         stepperMotor.setDirection(dir);
         Serial.println(dir ? "\nRichtung: im Uhrzeigersinn" : "\nRichtung: gegen den Uhrzeigersinn");
       }
+      else if (incomingCommand.startsWith("led")) {
+        processLEDCommand(incomingCommand);
+      }
       else if (incomingCommand.length() > 0) {
         Serial.println("\nUnknown command: " + incomingCommand);
       }
@@ -46,6 +49,16 @@ void UARTHandler::processInput() {
 
 void UARTHandler::setMotorRunning(bool running) {
   motorRunning = running;
+}
+
+void UARTHandler::processLEDCommand(String command) {
+  if (command.startsWith("led")) {
+    int R = command.substring(3, 6).toInt();
+    int G = command.substring(6, 9).toInt();
+    int B = command.substring(9, 12).toInt();
+    ledObj.setColor(R, G, B);
+    Serial.println("Setze LED auf " + command.substring(3, 12));
+  }
 }
 
 void UARTHandler::setServoAngle(int angle) {
