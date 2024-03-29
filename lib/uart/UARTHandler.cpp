@@ -8,6 +8,7 @@ extern StepperMotor stepperMotor; // Definiere dies extern, um Zugriff darauf zu
 UARTHandler::UARTHandler(LED& led) : ledObj(led) {
   motorRunning = false;
   incomingCommand = "";
+  
 }
 
 void UARTHandler::processInput() {
