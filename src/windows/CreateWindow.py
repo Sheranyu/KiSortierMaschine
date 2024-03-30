@@ -281,7 +281,7 @@ class CreateModelPage(CreateModelPageDesign):
         self.page.update()
 
     
-    def pause_aufnahme(self):
+    def pause_aufnahme(self,e):
         if LaufZeitConfig.ispauseactive:
             LaufZeitConfig.ispauseactive = False
         else:
