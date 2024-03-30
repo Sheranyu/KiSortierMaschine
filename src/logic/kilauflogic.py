@@ -38,7 +38,7 @@ class KiDatenVerarbeitung():
                 self._verarbeitedaten(item)
                 self.currentkidata = item
                 if item.laufzeit >= 1*timemulti:
-                     endkidata = self._berechnedurchschnitt(item.laufzeit,item.anzahl)
+                     endkidata = self._berechnedurchschnitt(item.laufzeit,item.anzahl, modus=item.erkannter_modus)
                      timemulti += 1
                      self._delete_tmp_data()
                      self._verarbeite_entdaten(endkidata,datumid,session)
@@ -73,7 +73,7 @@ class KiDatenVerarbeitung():
         result_confidence_score = df['confidence_score'].mean()
         
         
-        return KiData(label_name=result_label_name,anzahl=anzahl,confidence_score=int(result_confidence_score),laufzeit=laufzeit)
+        return KiData(label_name=result_label_name,anzahl=anzahl,confidence_score=int(result_confidence_score),laufzeit=laufzeit, erkannter_modus=modus)
 
         
 
