@@ -10,7 +10,7 @@ from logic.KiDatenManager import KiDataManager
 from modele.InterneDatenModele import KiData
 from typing import Any, Generator, List
 from datetime import datetime
-
+import pandas as pd
 
 from db.CRUD.Statistik import  StatistikCreater
 from db.CRUD.DatumSpeicherung import CreateDatumSpeicherung
@@ -21,7 +21,7 @@ class KiDatenVerarbeitung():
     def __init__(self) -> None:
         self.model = TrainiertesModel()
         self.aktuellelaufzeit = None
-        self.kidaten: KiData = None
+        self.currentkidata: KiData = None
         self.kidatenlist: List[KiData] = []
     
     def start_application(self,callback,progressring :ft.ProgressRing) -> Generator[KiData,Any, Any]:
@@ -36,16 +36,19 @@ class KiDatenVerarbeitung():
                 #print(item.label_name, item.confidence_score)
                 yield item
                 self._verarbeitedaten(item)
-                self.kidaten = item
+                self.currentkidata = item
                 if item.laufzeit >= 1*timemulti:
-                     self._berechnedurchschnitt()
+                     endkidata = self._berechnedurchschnitt(item.laufzeit,item.anzahl)
                      timemulti += 1
+                     self._delete_tmp_data()
+                     self._verarbeite_entdaten(endkidata,datumid,session)
                      
-            self._savetime(self.kidaten.laufzeit,datumid,session,self.kidaten.anzahl)
+            self._savetime(self.currentkidata.laufzeit,datumid,session,self.currentkidata.anzahl)
 
     
     def _delete_tmp_data(self):
         KiDataManager.deleteSessionData(SaveDictName.kidatenzwischenspeicher)
+        self.kidatenlist.clear()
     
     def _erstelle_datum(self) -> datetime:
         # Pfad zum Ordner "statistikdata" erstellen
@@ -59,10 +62,19 @@ class KiDatenVerarbeitung():
         if item.label_name.lower() != "background" and int(item.confidence_score) > 1:
             StatistikCreater().savestatistik(item,datumid,session)
 
-    def _berechnedurchschnitt(self) ->KiData:
-        print("data")
+    def _berechnedurchschnitt(self, laufzeit: float, anzahl: int, modus: str) ->KiData:
+        
         daten = KiDataManager.ladeSessiondata(SaveDictName.kidatenzwischenspeicher,List[KiData])   
-        print(daten)
+        
+        
+        df = pd.DataFrame([vars(data)for data in daten])
+        
+        result_label_name = df['label_name'].value_counts().idxmax()
+        result_confidence_score = df['confidence_score'].mean()
+        
+        
+        return KiData(label_name=result_label_name,anzahl=anzahl,confidence_score=int(result_confidence_score),laufzeit=laufzeit)
+
         
 
     def _verarbeitedaten(self,item: KiData):
