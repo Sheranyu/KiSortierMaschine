@@ -15,7 +15,7 @@ void UARTHandler::processInput() {
     // char receivedChar = Serial.read();
     // Serial.print(receivedChar);
     incomingCommand = Serial.readString();
-    Serial.println("Received: " + incomingCommand);
+    // Serial.println("Received: " + incomingCommand);
     
 
     
@@ -39,6 +39,7 @@ void UARTHandler::processInput() {
       }
       else if (incomingCommand.startsWith("led")) {
         processLEDCommand(incomingCommand);
+        Serial.println("LED umgeschaltet");
       }
       else if (incomingCommand.startsWith("testservo")) {
         if (servoControl != nullptr) {

@@ -29,7 +29,7 @@ UARTHandler uartHandler(led); // Verwendet servo und stepperMotor
 ServoControl servoControl(SERVO_PIN);
 
 void setup() {
-  Serial.begin(9600); // Initialisiere die serielle Kommunikation
+  Serial.begin(115200); // Initialisiere die serielle Kommunikation
   servoControl.attach();
   uartHandler.setServoControl(servoControl); // Setze das ServoControl-Objekt
   button.setMotorControlCallback([](bool pressed) {
