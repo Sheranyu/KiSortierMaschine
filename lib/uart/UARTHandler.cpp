@@ -12,10 +12,13 @@ UARTHandler::UARTHandler(LED& led) : ledObj(led), servoControl(nullptr) {
 
 void UARTHandler::processInput() {
   if (Serial.available() > 0) {
-    char receivedChar = Serial.read();
-    Serial.print(receivedChar);
+    // char receivedChar = Serial.read();
+    // Serial.print(receivedChar);
+    incomingCommand = Serial.readString();
+    Serial.println("Received: " + incomingCommand);
     
-    if (receivedChar == ';' || receivedChar == '\n' || receivedChar == '\r') {
+
+    
       if (incomingCommand.startsWith("start")) {
         Serial.println("\nStarte Schrittmotor...");
         stepperMotor.setRunning(true);
@@ -47,9 +50,6 @@ void UARTHandler::processInput() {
         Serial.println("\nUnknown command: " + incomingCommand);
       }
       incomingCommand = "";
-    } else {
-      incomingCommand += receivedChar;
-    }
   }
 }
 
