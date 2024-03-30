@@ -2,6 +2,7 @@
 class LaufZeitConfig():
     islaufzeit:bool = False
     istrainingactive: bool = False
+    ispauseactive: bool = True
 
     @classmethod
     def Enable_istrainingactive(cls):

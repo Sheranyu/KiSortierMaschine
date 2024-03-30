@@ -280,6 +280,14 @@ class CreateModelPage(CreateModelPageDesign):
         self.page.session.set("listederaufgabenlocalspeicher", daten)
         self.page.update()
 
+    
+    def pause_aufnahme(self):
+        if LaufZeitConfig.ispauseactive:
+            LaufZeitConfig.ispauseactive = False
+        else:
+            LaufZeitConfig.ispauseactive = True
+            
+                
     def _ladeliste(self):
         self.listederaufgabenlocalspeicher = self.page.session.get(
             "listederaufgabenlocalspeicher"
@@ -300,6 +308,9 @@ class CreateModelPage(CreateModelPageDesign):
                     anzahl, text
                 ),
             )
+            
+            self.pausevideo = ft.ElevatedButton(content=ft.Icon(ft.icons.PLAY_ARROW),on_click=self.pause_aufnahme)
+            
             self.breakvideocapture = ft.ElevatedButton(
                 "beenden",
                 bgcolor=ft.colors.RED,
@@ -315,6 +326,7 @@ class CreateModelPage(CreateModelPageDesign):
                 [
                     self.newcameraaufnahmebutton,
                     self.breakvideocapture,
+                    self.pausevideo,
                     self.deleteclassbuttonnew,
                 ],
                 alignment=ft.MainAxisAlignment.SPACE_BETWEEN,

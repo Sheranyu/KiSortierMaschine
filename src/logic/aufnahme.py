@@ -64,6 +64,12 @@ class WebcamAufnahme:
         pr.visible = False
         pr.update()
         while True:
+            
+            if LaufZeitConfig.ispauseactive:
+                time.sleep(0.1)
+                if LaufZeitConfig.islaufzeit == False:
+                    return
+                continue
             time.sleep(self.framegap)
 
             # Lies ein Bild
