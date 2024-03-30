@@ -93,7 +93,7 @@ class KiTraining():
 
     def _train_start(self):
         self.model = MeinNetz(len(self.subfoldernameslist))
-        self.optimizer = optim.Adam(self.model.parameters(), lr=self.learnrate)
+        self.optimizer = optim.SGD(self.model.parameters(), lr=self.learnrate)
         self._schreibe_label_daten()
         for epoche in range(1,self.maxepoche+1):
             self.train(epoche=epoche)
@@ -110,7 +110,7 @@ class KiTraining():
             target = Variable(target)
             self.optimizer.zero_grad()
             out = self.model(data)
-            criterien = F.binary_cross_entropy 
+            criterien = F.cross_entropy 
             loss  = criterien(out, target)
             loss.backward()
             self.optimizer.step()

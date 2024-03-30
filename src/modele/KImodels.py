@@ -30,4 +30,4 @@ class MeinNetz(nn.Module):
         x = x.view(-1,3456)
         x = F.relu(self.fc1(x))
         x = self.fc2(x)
-        return F.sigmoid(x)
+        return x
