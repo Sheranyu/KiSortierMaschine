@@ -42,8 +42,7 @@ void UARTHandler::processInput() {
       }
       else if (incomingCommand.startsWith("go")) {
         Serial.println("\nDrehe den Steppermotor um 120°...");
-        int stepsFor120Degrees = stepperMotor.getStepsForDegrees(120);
-        stepperMotor.moveSteps(stepsFor120Degrees);
+        stepperMotor.goCommandReceived();
       } 
       else if (incomingCommand.startsWith("init")) {
         Serial.println("\nFahre Steppermotor in Initialisierungsposition...");

@@ -14,6 +14,7 @@ class StepperMotor {
     void goToInitialPosition(); // Initialisiert den Motor in eine Startposition
     void setStepsPerRevolution(int steps); // Setter für stepsPerRevolution
     int getStepsForDegrees(int degrees);
+    void goCommandReceived();
 
   private:
     int pins[4];
@@ -22,6 +23,7 @@ class StepperMotor {
     bool running = false;
     int totalSteps; // Hält die Gesamtzahl der Schritte seit dem letzten Reset
     int stepsPerRevolution; // Schritte pro Umdrehung
+    int goCommandCount = 0;
 };
 
 #endif
