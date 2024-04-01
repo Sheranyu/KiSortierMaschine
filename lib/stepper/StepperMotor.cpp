@@ -1,6 +1,6 @@
 #include "StepperMotor.h"
 
-StepperMotor::StepperMotor(int pin1, int pin2, int pin3, int pin4) {
+StepperMotor::StepperMotor(int pin1, int pin2, int pin3, int pin4) : totalSteps(0) {
   pins[0] = pin1;
   pins[1] = pin2;
   pins[2] = pin3;
@@ -42,3 +42,23 @@ void StepperMotor::runIfNeeded() {
     }
 }
 
+void StepperMotor::moveSteps(int steps) {
+    for(int i = 0; i < abs(steps); i++) {
+        oneStep(steps > 0);
+        totalSteps += (steps > 0) ? 1 : -1;
+        delay(10); // Kurze Verzögerung für den Schritt
+    }
+}
+
+void StepperMotor::goToInitialPosition() {
+    moveSteps(-totalSteps); // Bewegt sich zurück zur angenommenen Startposition
+    totalSteps = 0; // Setzt die Gesamtzahl der Schritte zurück
+}
+
+void StepperMotor::setStepsPerRevolution(int steps) {
+    stepsPerRevolution = steps;
+}
+
+int StepperMotor::getStepsForDegrees(int degrees) {
+    return stepsPerRevolution * degrees / 360;
+}

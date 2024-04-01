@@ -32,6 +32,7 @@ void setup() {
   Serial.begin(115200); // Initialisiere die serielle Kommunikation
   servoControl.attach();
   uartHandler.setServoControl(servoControl); // Setze das ServoControl-Objekt
+  stepperMotor.setStepsPerRevolution(2048);
   button.setMotorControlCallback([](bool pressed) {
     static bool motorRunning = false;
     if (pressed) {

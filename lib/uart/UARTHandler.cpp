@@ -40,6 +40,15 @@ void UARTHandler::processInput() {
         stepperMotor.setDirection(false);
         Serial.println("\nRichtung: gegen den Uhrzeigersinn");
       }
+      else if (incomingCommand.startsWith("go")) {
+        Serial.println("\nDrehe den Steppermotor um 120°...");
+        int stepsFor120Degrees = stepperMotor.getStepsForDegrees(120);
+        stepperMotor.moveSteps(stepsFor120Degrees);
+      } 
+      else if (incomingCommand.startsWith("init")) {
+        Serial.println("\nFahre Steppermotor in Initialisierungsposition...");
+        stepperMotor.goToInitialPosition();
+      }
       else if (incomingCommand.startsWith("led")) {
         processLEDCommand(incomingCommand);
         Serial.println("LED umgeschaltet");
