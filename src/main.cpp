@@ -52,6 +52,4 @@ void loop() {
   servoControl.update(); // Stellt sicher, dass der Servo aktualisiert wird
   button.update();
   stepperMotor.runIfNeeded(); // Steuert den Motor basierend auf seinem Zustand
-  stepperMotor.goCommandReceived();
-  delay(1000);
 }
