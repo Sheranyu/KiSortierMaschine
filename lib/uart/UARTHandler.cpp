@@ -32,10 +32,13 @@ void UARTHandler::processInput() {
         Serial.println("\nSetze Servoposition...");
         setServoAngle(angle);
       }
-      else if (incomingCommand.startsWith("dir")) {
-        bool dir = incomingCommand.substring(3) == "1";
-        stepperMotor.setDirection(dir);
-        Serial.println(dir ? "\nRichtung: im Uhrzeigersinn" : "\nRichtung: gegen den Uhrzeigersinn");
+      else if (incomingCommand.startsWith("diru")) {
+        stepperMotor.setDirection(true);
+        Serial.println("\nRichtung: im Uhrzeigersinn");
+      }
+      else if (incomingCommand.startsWith("dirgu")) {
+        stepperMotor.setDirection(false);
+        Serial.println("\nRichtung: gegen den Uhrzeigersinn");
       }
       else if (incomingCommand.startsWith("led")) {
         processLEDCommand(incomingCommand);
