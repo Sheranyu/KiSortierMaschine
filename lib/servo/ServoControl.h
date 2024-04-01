@@ -11,6 +11,7 @@ public:
     void testServo();
     void update();
     void setAngle(int angle);
+    void moveToCup(int cupNumber);
 
 private:
     Servo servo;

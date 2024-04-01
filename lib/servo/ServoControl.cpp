@@ -31,3 +31,17 @@ void ServoControl::setAngle(int angle) {
         servo.write(angle); // Setze den Winkel sofort
     }
 }
+
+void ServoControl::moveToCup(int cupNumber) {
+    int angle;
+    switch (cupNumber) {
+        case 1: angle = 180; break; // Becher 1: 180 Grad
+        case 2: angle = 120; break; // Becher 2: 120 Grad
+        case 3: angle = 50; break;  // Becher 3: 50 Grad
+        case 4: angle = 0; break;   // Becher 4: 0 Grad
+        default: return; // Ungültige Bechernummer
+    }
+    setAngle(angle);
+    Serial.print("Bewege Servo zu Becher ");
+    Serial.println(cupNumber);
+}

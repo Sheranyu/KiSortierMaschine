@@ -49,6 +49,26 @@ void UARTHandler::processInput() {
         Serial.println("\nFahre Steppermotor in Initialisierungsposition...");
         stepperMotor.goToInitialPosition();
       }
+      else if (incomingCommand.startsWith("b1")) {
+        if (servoControl != nullptr) {
+          servoControl->moveToCup(1);
+        }
+      }
+      else if (incomingCommand.startsWith("b2")) {
+        if (servoControl != nullptr) {
+          servoControl->moveToCup(2);
+        }
+      }
+      else if (incomingCommand.startsWith("b3")) {
+        if (servoControl != nullptr) {
+          servoControl->moveToCup(3);
+        }
+      }
+      else if (incomingCommand.startsWith("b4")) {
+        if (servoControl != nullptr) {
+          servoControl->moveToCup(4);
+        }
+      }
       else if (incomingCommand.startsWith("led")) {
         processLEDCommand(incomingCommand);
         Serial.println("LED umgeschaltet");

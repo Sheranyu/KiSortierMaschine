@@ -6,12 +6,16 @@
 #include "Button.h"
 #include "ServoControl.h"
 
+#define SERIAL_BAUDRATE 115200
+
 #define STEPPER_PIN_1 PA5
 #define STEPPER_PIN_2 PA6
 #define STEPPER_PIN_3 PA7
 #define STEPPER_PIN_4 PA8
+#define STEPPER_STEPS_PER_REVOLUTION 2048
 
 #define SERVO_PIN PB7
+#define SERVO_INIT 120
 
 #define LED_PIN_RED PC5
 #define LED_PIN_GREEN PC6
@@ -29,10 +33,10 @@ UARTHandler uartHandler(led); // Verwendet servo und stepperMotor
 ServoControl servoControl(SERVO_PIN);
 
 void setup() {
-  Serial.begin(115200); // Initialisiere die serielle Kommunikation
+  Serial.begin(SERIAL_BAUDRATE); // Initialisiere die serielle Kommunikation
   servoControl.attach();
   uartHandler.setServoControl(servoControl); // Setze das ServoControl-Objekt
-  stepperMotor.setStepsPerRevolution(2048);
+  stepperMotor.setStepsPerRevolution(STEPPER_STEPS_PER_REVOLUTION); // Setzt die Anzahl der notwendigen Schritte des Stepper Motors auf den definiert Wert (2048) für 1 Umdrehung (Typ: 28BYJ-48 5VDC 15031801)
   button.setMotorControlCallback([](bool pressed) {
     static bool motorRunning = false;
     if (pressed) {
@@ -40,6 +44,7 @@ void setup() {
       stepperMotor.setRunning(motorRunning);
     }
   });
+  servoControl.setAngle(SERVO_INIT); // Setzt den Servo Motor bei Start auf den Start Wert (Becher 2)
 }
 
 void loop() {
