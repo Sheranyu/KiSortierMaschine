@@ -41,7 +41,6 @@ void UARTHandler::processInput() {
         Serial.println("\nRichtung: gegen den Uhrzeigersinn");
       }
       else if (incomingCommand.startsWith("go")) {
-        Serial.println("\nDrehe den Steppermotor um 120°...");
         stepperMotor.goCommandReceived();
       } 
       else if (incomingCommand.startsWith("init")) {

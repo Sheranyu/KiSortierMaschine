@@ -82,9 +82,15 @@ void StepperMotor::goCommandReceived() {
     const int stepsFor120Degrees = getStepsForDegrees(120); // Berechnet die Schritte für 120°
 
     if (goCommandCount % 3 == 0) { // Jedes dritte Mal
+        Serial.print("\nDrehe den Steppermotor um 120° (");
+        Serial.print(stepsFor120Degrees + 2);
+        Serial.println(" Schritte)");
         moveSteps(stepsFor120Degrees + 2); // Bewegt den Motor um die berechneten Schritte, füge 2 zusätzliche Schritte hinzu, um die Abweichung auszugleichen
     }
     else if (goCommandCount % 3 != 0) { // Jedes Mal, außer jedes dritte Mai
+        Serial.print("\nDrehe den Steppermotor um 120° (");
+        Serial.print(stepsFor120Degrees);
+        Serial.println(" Schritte)");
         moveSteps(stepsFor120Degrees); // Bewegt den Motor um die berechneten Schritte
     }
 }
