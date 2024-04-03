@@ -107,7 +107,7 @@ class KiTraining():
         self.model = MeinNetz(len(self.subfoldernameslist))
         if os.path.isdir(self.kidata.ModelName):
             self.loadkidata()
-        self.optimizer = optim.Adam(self.model.parameters(), lr=self.learnrate)
+        self.optimizer = optim.SGD(self.model.parameters(), lr=self.learnrate, momentum=0.9)
         self._schreibe_label_daten()
         for epoche in range(1,self.maxepoche+1):
             self.train(epoche=epoche)
