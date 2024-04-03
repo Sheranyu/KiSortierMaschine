@@ -50,6 +50,7 @@ void StepperMotor::moveSteps(int steps) {
         totalSteps += (steps > 0) ? 1 : -1;
         delay(10); // Kurze Verzögerung für den Schritt
     }
+    Serial.println("gedreht");
 }
 
 void StepperMotor::goToInitialPosition() {
