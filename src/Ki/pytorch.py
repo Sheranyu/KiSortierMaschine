@@ -50,10 +50,18 @@ class KiTraining():
         self.bachsize = int(configdata.bachsize)
         self.maxdatenseatze = int(configdata.maxdatenseatze)
         self.normalize = transforms.Normalize(mean=[0.485,0.456,0.406], std=[0.229, 0.224, 0.225])
+        # self.transformation = transforms.Compose([
+        #     transforms.Resize(256),transforms.CenterCrop(256),
+        #     transforms.ToTensor(),
+        #     self.normalize
+        # ])
         self.transformation = transforms.Compose([
-            transforms.Resize(256),transforms.CenterCrop(256),
-            transforms.ToTensor(),
-            self.normalize
+            transforms.Resize(256),        # Größenanpassung auf eine einheitliche Größe
+            transforms.CenterCrop(224),    # Zuschneiden auf einen zentralen Bereich des Bildes
+            transforms.RandomHorizontalFlip(),  # Zufällige horizontale Spiegelung für Datenverbesserung
+            transforms.ColorJitter(brightness=0.1, contrast=0.1, saturation=0.1, hue=0.1),  # Farbtransformationen
+            transforms.ToTensor(),         # Konvertierung in Tensor
+            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])  # Normalisierung
         ])
 
     def scan_subfolders(self,main_folder):

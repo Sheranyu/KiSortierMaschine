@@ -7,7 +7,8 @@ from Ki.opencvcode import TrainiertesModel
 from configordner.settings import SaveDictName
 from db.CRUD.EndStatistik import EndStatistik
 from logic.KiDatenManager import KiDataManager
-from modele.InterneDatenModele import KiData
+from logic.MoveLogic import SchwanzenBewegungNachFarbe
+from modele.InterneDatenModele import Erkanntermodus, KiData
 from typing import Any, Generator, List
 from datetime import datetime
 import pandas as pd
@@ -23,6 +24,8 @@ class KiDatenVerarbeitung():
         self.aktuellelaufzeit = None
         self.currentkidata: KiData = None
         self.kidatenlist: List[KiData] = []
+        self.schanze = SchwanzenBewegungNachFarbe()
+        self.isamdrehen = False
     
     def start_application(self,callback,progressring :ft.ProgressRing) -> Generator[KiData,Any, Any]:
         timemulti = 1
@@ -40,11 +43,17 @@ class KiDatenVerarbeitung():
                 if item.laufzeit >= 1*timemulti:
                      endkidata = self._berechnedurchschnitt(item.laufzeit,item.anzahl, modus=item.erkannter_modus)
                      timemulti += 1
+                     #self.MoveSchanze(item)
                      self._delete_tmp_data()
                      self._verarbeite_entdaten(endkidata,datumid,session)
                      
             self._savetime(self.currentkidata.laufzeit,datumid,session,self.currentkidata.anzahl)
 
+    
+    
+    def MoveSchanze(self, Kidata: KiData):
+        if Kidata.erkannter_modus == Erkanntermodus.FARBE:
+            self.schanze.start_changeposition(Kidata)
     
     def _delete_tmp_data(self):
         KiDataManager.deleteSessionData(SaveDictName.kidatenzwischenspeicher)

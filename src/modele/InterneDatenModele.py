@@ -2,7 +2,7 @@
 
 
 from enum import Enum
-from typing import Any, Optional
+from typing import Any, Optional, Union
 from pydantic import BaseModel, ConfigDict, Field
 import cv2
 import flet as ft
@@ -11,15 +11,25 @@ class ModelTyp(Enum):
     KERAS = "keras"
     ONNX = "onnx"
     TORCH = "torch"
+    
+class Erkanntermodus(Enum):
+    FARBE = "farbmodus"
+    FORM = "Formmodus"
 
 
-
+class SchnazenSteuerungFarbe(Enum):
+    ROT = "rot"
+    GRUEN = "gruen"
+    BLAU = "blau"
+    SONSTIGES = "sonstiges"
+    BACKGROUND = "background"
+    
 
 
 class KiData(BaseModel):
     label_name: str
     confidence_score: int
-    erkannter_modus: Optional[str] = Field(default=None)
+    erkannter_modus: Optional[Union[Erkanntermodus, str]] = Field(default=None)
     laufzeit: float
     confidence_score_max: Optional[int] = Field(default=None)
     anzahl: int
@@ -70,3 +80,9 @@ class KiModeltrainingConfigdata(BaseModel):
     epoches: int
     lernrate: float
     maxdatenseatze: int
+    
+    
+    
+
+    
+    

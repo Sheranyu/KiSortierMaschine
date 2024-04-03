@@ -6,7 +6,7 @@ import cv2  # Install opencv-python
 from torch.autograd import Variable
 import numpy as np
 from logic.KiDatenManager import KiDataManager
-from modele.InterneDatenModele import KiData
+from modele.InterneDatenModele import Erkanntermodus, KiData
 from configordner.settings import LaufZeitConfig
 import flet as ft
 import torch
@@ -87,7 +87,7 @@ class TrainiertesModel():
             label_name = label_names[confidence_class]
             self.UpdateZeahler(label_name,prediction_score.item())
             currenttime = round(time.time() - start_time,2)
-            kidaten = KiData(label_name=label_name,confidence_score=int(np.round(confidence_class * 100)),erkannter_modus="form", laufzeit=currenttime,anzahl=self.zeahler)
+            kidaten = KiData(label_name=label_name,confidence_score=int(np.round(confidence_class * 100)),erkannter_modus=Erkanntermodus.FARBE, laufzeit=currenttime,anzahl=self.zeahler)
             yield (kidaten, frame)
             keyboard_input = cv2.waitKey(1)
             if keyboard_input == 27 or LaufZeitConfig.islaufzeit == False: 
