@@ -34,12 +34,35 @@ class SchwanzenBewegungNachFarbe():
             time.sleep(1)
             while True:  
                 # Antwort vom Arduino lesen
+                
                     response = self.ser.readline().decode().strip()
-                    if response in "gedreht":
+                    if response:
                         return
                     time.sleep(0.3)
         except:
             self.ser.close()
             print("Program terminated.")
+    
+    
+    
+    def start_raddrehen(self, kilaufdaten: KiData):
+        if kilaufdaten.label_name == SchnazenSteuerungFarbe.BACKGROUND.value:
+            self._raddrehen()  
+            
+    def _raddrehen(self):
+        self._initserial()
+        data_to_send = "go"
+        self.ser.write(data_to_send.encode())
+        
+        
+        while True:
+            response = self.ser.readline().decode().strip()
+            if response == "gedreht":
+                self.ser.close()
+                return
+            
+            time.sleep(0.3)
+            
+            
      
     

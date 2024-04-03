@@ -23,7 +23,14 @@ class SchnazenSteuerungFarbe(Enum):
     BLAU = "blau"
     SONSTIGES = "sonstiges"
     BACKGROUND = "background"
-    
+ 
+ 
+class LeuchtFarbenLampe(Enum):
+    ROT = ""
+    GRUEN = ""
+    BLAU = ""
+    BACKGROUND = ""
+    SONSTIGES = ""   
 
 
 class KiData(BaseModel):

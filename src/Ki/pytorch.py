@@ -39,8 +39,7 @@ class KiTraining():
 
     def starte_ki_training(self, data: KIModelsaverData):
         self.kidata = data
-        if os.path.isdir(self.kidata.ModelName):
-            self.loadkidata()
+       
         self._Dateneinlesen(data.pfad_model)
         self._train_start()
 
@@ -101,6 +100,8 @@ class KiTraining():
 
     def _train_start(self):
         self.model = MeinNetz(len(self.subfoldernameslist))
+        if os.path.isdir(self.kidata.ModelName):
+            self.loadkidata()
         self.optimizer = optim.SGD(self.model.parameters(), lr=self.learnrate)
         self._schreibe_label_daten()
         for epoche in range(1,self.maxepoche+1):
