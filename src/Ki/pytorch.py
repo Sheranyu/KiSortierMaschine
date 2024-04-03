@@ -55,12 +55,17 @@ class KiTraining():
         #     self.normalize
         # ])
         self.transformation = transforms.Compose([
-            transforms.Resize(256),        # Größenanpassung auf eine einheitliche Größe
-            transforms.CenterCrop(224),    # Zuschneiden auf einen zentralen Bereich des Bildes
-            transforms.RandomHorizontalFlip(),  # Zufällige horizontale Spiegelung für Datenverbesserung
-            transforms.ColorJitter(brightness=0.1, contrast=0.1, saturation=0.1, hue=0.1),  # Farbtransformationen
-            transforms.ToTensor(),         # Konvertierung in Tensor
-            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])  # Normalisierung
+            transforms.Resize(256),  # Größenanpassung
+            transforms.RandomHorizontalFlip(),  # Zufällige horizontale Spiegelung
+            transforms.RandomRotation(degrees=10),  # Zufällige Rotation um bis zu 10 Grad
+            transforms.RandomResizedCrop(224),
+            transforms.RandomAdjustSharpness(2, p=0.5),
+            transforms.RandomGrayscale(p=0.1),
+            # Zufällige Skalierung und Zuschneiden
+            transforms.ColorJitter(brightness=0.1, contrast=0.1, saturation=0.1),  # Farbtransformationen
+            transforms.ToTensor(),  # Konvertierung in Tensor
+            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+            # Normalisierung
         ])
 
     def scan_subfolders(self,main_folder):
@@ -102,7 +107,7 @@ class KiTraining():
         self.model = MeinNetz(len(self.subfoldernameslist))
         if os.path.isdir(self.kidata.ModelName):
             self.loadkidata()
-        self.optimizer = optim.SGD(self.model.parameters(), lr=self.learnrate)
+        self.optimizer = optim.Adam(self.model.parameters(), lr=self.learnrate)
         self._schreibe_label_daten()
         for epoche in range(1,self.maxepoche+1):
             self.train(epoche=epoche)

@@ -28,8 +28,9 @@ class TrainiertesModel():
         self.normalize = transforms.Normalize(mean=[0.485,0.456,0.406], std=[0.229, 0.224, 0.225])
         self.transformation = transforms.Compose([
             transforms.Resize(256),transforms.CenterCrop(224),
+            
             transforms.ToTensor(),
-            self.normalize
+            self.normalize,
         ])
     
     def UpdateZeahler(self,predicted_class:str, predictprozent: int):
@@ -87,7 +88,7 @@ class TrainiertesModel():
             label_name = label_names[confidence_class]
             self.UpdateZeahler(label_name,prediction_score.item())
             currenttime = round(time.time() - start_time,2)
-            kidaten = KiData(label_name=label_name,confidence_score=int(np.round(confidence_class * 100)),erkannter_modus=Erkanntermodus.FARBE, laufzeit=currenttime,anzahl=self.zeahler)
+            kidaten = KiData(label_name=label_name,confidence_score=int(np.round(confidence_class * 100)),erkannter_modus=Erkanntermodus.FARBE.value, laufzeit=currenttime,anzahl=self.zeahler)
             yield (kidaten, frame)
             keyboard_input = cv2.waitKey(1)
             if keyboard_input == 27 or LaufZeitConfig.islaufzeit == False: 
