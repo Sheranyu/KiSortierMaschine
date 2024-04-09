@@ -36,14 +36,15 @@ class KiDatenVerarbeitung():
             for item, image in self.model.loadmodelpytorch(progressring):
                 callback(image)
                 self.aktuellelaufzeit = item.laufzeit
+                
                 #print(item.label_name, item.confidence_score)
                 yield item
                 self._verarbeitedaten(item)
                 self.currentkidata = item
                 if item.laufzeit >= 1*timemulti:
-                     endkidata = self._berechnedurchschnitt(item.laufzeit,item.anzahl, modus=item.erkannter_modus)
+                     endkidata = self._berechnedurchschnitt(item.laufzeit,item.anzahl, modus=item.erkannter_modus.value)
                      timemulti += 1
-                     #self.MoveSchanze(item)
+                     self.MoveSchanze(item)
                      self._delete_tmp_data()
                      self._verarbeite_entdaten(endkidata,datumid,session)
                      

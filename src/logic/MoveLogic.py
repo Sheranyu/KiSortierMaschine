@@ -1,4 +1,4 @@
-import serial
+import serialsteuererung
 import time
 
 from sqlalchemy import null
@@ -10,7 +10,7 @@ from modele.InterneDatenModele import KiData, SchnazenSteuerungFarbe
 class SchwanzenBewegungNachFarbe():
     
     def _initserial(self):
-        self.ser = serial.Serial('/dev/ttyUSB0', 9600)
+        self.ser = serialsteuererung.Serial('/dev/ttyUSB0', 9600)
        
     def start_changeposition(self, kilaufdaten: KiData):
         label = kilaufdaten.label_name

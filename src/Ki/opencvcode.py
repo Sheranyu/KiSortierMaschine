@@ -23,6 +23,7 @@ class TrainiertesModel():
         self.model = None
         self.zeahler: int = 0
         self.isbackgroundvisible = False
+        self.selectcamera = 0
         
     def normalizedata(self):
         self.normalize = transforms.Normalize(mean=[0.485,0.456,0.406], std=[0.229, 0.224, 0.225])
@@ -74,7 +75,7 @@ class TrainiertesModel():
         self.model.eval()
         label_names = self.loadlabeldata()
        
-        cap = cv2.VideoCapture(0)  # 0 steht für die erste angeschlossene Kamera
+        cap = cv2.VideoCapture(self.selectcamera)  # 0 steht für die erste angeschlossene Kamera
         start_time = time.time()
         progressring.visible = False
         progressring.update()
@@ -88,7 +89,10 @@ class TrainiertesModel():
             label_name = label_names[confidence_class]
             self.UpdateZeahler(label_name,prediction_score.item())
             currenttime = round(time.time() - start_time,2)
-            kidaten = KiData(label_name=label_name,confidence_score=int(np.round(confidence_class * 100)),erkannter_modus=Erkanntermodus.FARBE.value, laufzeit=currenttime,anzahl=self.zeahler)
+            erkannt = Erkanntermodus.FARBE
+
+
+            kidaten = KiData(label_name=label_name,confidence_score=int(np.round(confidence_class * 100)),erkannter_modus=erkannt, laufzeit=currenttime,anzahl=self.zeahler)
             yield (kidaten, frame)
             keyboard_input = cv2.waitKey(1)
             if keyboard_input == 27 or LaufZeitConfig.islaufzeit == False: 

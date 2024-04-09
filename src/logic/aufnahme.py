@@ -42,7 +42,7 @@ class WebcamAufnahme:
         self, classdata: KiClassList, pr: ProgressRing
     ) -> Generator[AufnahmeDaten, Any, None]:
         self.changeSettings()
-        cap = cv2.VideoCapture(0)
+        cap = cv2.VideoCapture(1)
         cap.set(cv2.CAP_PROP_FRAME_WIDTH, self.width)
         cap.set(cv2.CAP_PROP_FRAME_HEIGHT, self.height)
 

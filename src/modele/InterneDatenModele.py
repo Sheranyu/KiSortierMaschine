@@ -71,8 +71,8 @@ class KiClassList():
 #hier kommt pydantic zum einsatz pydandic prüft ob die typen wirklich passen
 
 class AufnahmeDaten(BaseModel):
-    model_config = ConfigDict(extra='ignore',arbitrary_types_allowed=True)
-    imagedata: cv2.typing.MatLike
+    model_config = ConfigDict(extra='ignore',arbitrary_types_allowed=False)
+    imagedata: Any
     aufnahmefotoname: str
    
         

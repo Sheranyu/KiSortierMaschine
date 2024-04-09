@@ -140,7 +140,8 @@ class KiTraining():
         self.progress.update()
 
     def loadkidata(self):
-        self.model = torch.load(self.kidata.ModelName)
+    
+        self.model = torch.load(self.kidata.ModelName + ".pt")
     
     def savekidata(self):
         torch.save(self.model, self.kidata.ModelName + ".pt")
