@@ -48,7 +48,7 @@ class KiDatenVerarbeitung():
                 if item.laufzeit >= 1*timemulti:
                      endkidata = self._berechnedurchschnitt(item.laufzeit,item.anzahl, modus=item.erkannter_modus.value)
                      timemulti += 1
-                     self.MoveSchanze(item)
+                     self._MoveSchanze(item)
                      self._change_color()
                      self._delete_tmp_data()
                      self._verarbeite_entdaten(endkidata,datumid,session)
@@ -59,7 +59,7 @@ class KiDatenVerarbeitung():
         if kidaten.erkannter_modus in Erkanntermodus.FARBE:
             self.colorchange.setledcolor(kidaten.label_name)
     
-    def MoveSchanze(self, Kidata: KiData):
+    def _MoveSchanze(self, Kidata: KiData):
         if Kidata.erkannter_modus == Erkanntermodus.FARBE and Kidata.label_name != "background":
             self.schanze.start_changeposition(Kidata)
             time.sleep(0.5)
