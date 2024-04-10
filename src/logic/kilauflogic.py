@@ -8,7 +8,7 @@ from Ki.opencvcode import TrainiertesModel
 from configordner.settings import SaveDictName
 from db.CRUD.EndStatistik import EndStatistik
 from logic.KiDatenManager import KiDataManager
-from logic.MCRLogic import SchwanzenBewegungNachFarbe
+from logic.MCRLogic import LedSteuerung, SchwanzenBewegungNachFarbe
 from modele.InterneDatenModele import Erkanntermodus, KiData
 from typing import Any, Generator, List
 from datetime import datetime
@@ -27,6 +27,8 @@ class KiDatenVerarbeitung():
         self.kidatenlist: List[KiData] = []
         self.schanze = SchwanzenBewegungNachFarbe()
         self.isamdrehen = False
+        self.colorchange = LedSteuerung()
+        
     
     def start_application(self,callback,progressring :ft.ProgressRing) -> Generator[KiData,Any, Any]:
         timemulti = 1
@@ -47,12 +49,15 @@ class KiDatenVerarbeitung():
                      endkidata = self._berechnedurchschnitt(item.laufzeit,item.anzahl, modus=item.erkannter_modus.value)
                      timemulti += 1
                      self.MoveSchanze(item)
+                     self._change_color()
                      self._delete_tmp_data()
                      self._verarbeite_entdaten(endkidata,datumid,session)
                      
             self._savetime(self.currentkidata.laufzeit,datumid,session,self.currentkidata.anzahl)
 
-    
+    def _change_color(self, kidaten: KiData):
+        if kidaten.erkannter_modus in Erkanntermodus.FARBE:
+            self.colorchange.setledcolor(kidaten.label_name)
     
     def MoveSchanze(self, Kidata: KiData):
         if Kidata.erkannter_modus == Erkanntermodus.FARBE and Kidata.label_name != "background":
