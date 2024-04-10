@@ -45,21 +45,23 @@ class KiDatenVerarbeitung():
                 self.aktuellelaufzeit = item.laufzeit
                 
                 #print(item.label_name, item.confidence_score)
+                print("vor item yield")
                 yield item
                 self._verarbeitedaten(item)
                 self.currentkidata = item
                 if item.laufzeit >= 1*timemulti:
                      endkidata = self._berechnedurchschnitt(item.laufzeit,item.anzahl, modus=item.erkannter_modus.value)
                      timemulti += 1
+                     print("vormoveschanze")
                      self._MoveSchanze(item)
-                     self._change_color(item)
+                     #self._change_color(item)
                      self._delete_tmp_data()
                      self._verarbeite_entdaten(endkidata,datumid,session)
                      
             self._savetime(self.currentkidata.laufzeit,datumid,session,self.currentkidata.anzahl)
 
     def _change_color(self, kidaten: KiData):
-        if kidaten.erkannter_modus in Erkanntermodus.FARBE:
+        if kidaten.erkannter_modus == Erkanntermodus.FARBE:
             self.colorchange.setledcolor(kidaten.label_name)
     
     def _MoveSchanze(self, Kidata: KiData):

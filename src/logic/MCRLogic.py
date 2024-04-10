@@ -17,13 +17,16 @@ class SchwanzenBewegungNachFarbe():
        
     def start_changeposition(self, kilaufdaten: KiData):
         label = kilaufdaten.label_name.strip()
-
+        print(label)
         if label in SchnazenSteuerungFarbe.BLUE.value:
+            print("blue")
             self._ChangePosition("b1")
-        if "green" in SchnazenSteuerungFarbe.GREEN.value:
+        if label in SchnazenSteuerungFarbe.GREEN.value:
+            print("green")
             self._ChangePosition("b2")
         
-        if "rot" in SchnazenSteuerungFarbe.ROT.value:
+        if label in SchnazenSteuerungFarbe.ROT.value:
+            print("rot")
             self._ChangePosition("b3")
         
         if label in SchnazenSteuerungFarbe.SONSTIGES.value:
@@ -32,7 +35,7 @@ class SchwanzenBewegungNachFarbe():
     def _ChangePosition(self, Positionsnummer: str):
         self._initserial()
         try:
-            
+            print(Positionsnummer)
             data_to_send = Positionsnummer
             self.ser.write(data_to_send.encode())
             time.sleep(1)
