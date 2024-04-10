@@ -41,8 +41,9 @@ class KiDatenVerarbeitung():
             datumid = self._createdatumindb(datum,session)
             self._drehe_rad()
             for item, image in self.model.loadmodelpytorch(progressring):
+                print("vor callback")
                 callback(image)
-                self.aktuellelaufzeit = item.laufzeit
+                #self.aktuellelaufzeit = item.laufzeit
                 
                 #print(item.label_name, item.confidence_score)
                 print("vor item yield")
