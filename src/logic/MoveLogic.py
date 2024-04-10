@@ -1,4 +1,4 @@
-import serialsteuererung
+import serial
 import time
 
 from sqlalchemy import null
@@ -10,7 +10,9 @@ from modele.InterneDatenModele import KiData, SchnazenSteuerungFarbe
 class SchwanzenBewegungNachFarbe():
     
     def _initserial(self):
-        self.ser = serialsteuererung.Serial('/dev/ttyUSB0', 9600)
+        self.ser = serial.Serial('COM6', 115200)
+        self.timeout = 0
+        self.TIMEOUTEND = 5
        
     def start_changeposition(self, kilaufdaten: KiData):
         label = kilaufdaten.label_name
@@ -32,22 +34,23 @@ class SchwanzenBewegungNachFarbe():
             data_to_send = Positionsnummer
             self.ser.write(data_to_send.encode())
             time.sleep(1)
-            while True:  
-                # Antwort vom Arduino lesen
+            while not response:
+                response = self.ser.readline().decode().strip()
+                time.sleep(0.1)
+                self.timeout += 0.1
+                if self.timeout> self.TIMEOUTEND:
+                    raise TimeoutError("Zeitüberschreitung")
                 
-                    response = self.ser.readline().decode().strip()
-                    if response:
-                        return
-                    time.sleep(0.3)
+            return
         except:
             self.ser.close()
             print("Program terminated.")
     
     
     
-    def start_raddrehen(self, kilaufdaten: KiData):
-        if kilaufdaten.label_name == SchnazenSteuerungFarbe.BACKGROUND.value:
-            self._raddrehen()  
+    def start_raddrehen(self):
+        #if kilaufdaten.label_name == SchnazenSteuerungFarbe.BACKGROUND.value:
+        self._raddrehen()  
             
     def _raddrehen(self):
         self._initserial()
@@ -55,13 +58,16 @@ class SchwanzenBewegungNachFarbe():
         self.ser.write(data_to_send.encode())
         
         
-        while True:
+        while response != "gedreht":
             response = self.ser.readline().decode().strip()
-            if response == "gedreht":
-                self.ser.close()
-                return
+            time.sleep(0.1)
+            self.timeout += 0.1
+            if self.timeout> self.TIMEOUTEND:
+                raise TimeoutError("Zeitüberschreitung")
+                
+        return
             
-            time.sleep(0.3)
+            
             
             
      

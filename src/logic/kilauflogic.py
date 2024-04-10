@@ -33,6 +33,7 @@ class KiDatenVerarbeitung():
         with sessiongen() as session:
             
             datumid = self._createdatumindb(datum,session)
+            self._drehe_rad()
             for item, image in self.model.loadmodelpytorch(progressring):
                 callback(image)
                 self.aktuellelaufzeit = item.laufzeit
@@ -44,7 +45,7 @@ class KiDatenVerarbeitung():
                 if item.laufzeit >= 1*timemulti:
                      endkidata = self._berechnedurchschnitt(item.laufzeit,item.anzahl, modus=item.erkannter_modus.value)
                      timemulti += 1
-                     self.MoveSchanze(item)
+                     #self.MoveSchanze(item)
                      self._delete_tmp_data()
                      self._verarbeite_entdaten(endkidata,datumid,session)
                      
@@ -55,6 +56,7 @@ class KiDatenVerarbeitung():
     def MoveSchanze(self, Kidata: KiData):
         if Kidata.erkannter_modus == Erkanntermodus.FARBE:
             self.schanze.start_changeposition(Kidata)
+            self.schanze.start_raddrehen()
     
     def _delete_tmp_data(self):
         KiDataManager.deleteSessionData(SaveDictName.kidatenzwischenspeicher)
@@ -67,6 +69,9 @@ class KiDatenVerarbeitung():
         #datei_name = datum.strftime("output_%Y-%m-%d_%H-%M-%S.json")
         return datum
 
+
+    def _drehe_rad(self):
+        self.schanze.start_raddrehen()
 
     def _verarbeite_entdaten(self,item: KiData,datumid:int, session: Session):
         if item.label_name.lower() != "background" and int(item.confidence_score) > 1:

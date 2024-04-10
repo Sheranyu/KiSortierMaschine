@@ -5,6 +5,7 @@ from keras.models import load_model  # TensorFlow is required for Keras to work
 import cv2  # Install opencv-python
 from torch.autograd import Variable
 import numpy as np
+from configordner.aufnahmesetting import RecordSettings
 from logic.KiDatenManager import KiDataManager
 from modele.InterneDatenModele import Erkanntermodus, KiData
 from configordner.settings import LaufZeitConfig
@@ -15,7 +16,7 @@ from PIL import Image
 
 
 
-class TrainiertesModel():
+class TrainiertesModel(RecordSettings):
 
     
     def __init__(self) -> None:
