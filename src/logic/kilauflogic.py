@@ -1,5 +1,6 @@
 import datetime
 from io import TextIOWrapper
+import time
 
 import flet as ft
 from sqlalchemy.orm import Session
@@ -7,7 +8,7 @@ from Ki.opencvcode import TrainiertesModel
 from configordner.settings import SaveDictName
 from db.CRUD.EndStatistik import EndStatistik
 from logic.KiDatenManager import KiDataManager
-from logic.MoveLogic import SchwanzenBewegungNachFarbe
+from logic.MCRLogic import SchwanzenBewegungNachFarbe
 from modele.InterneDatenModele import Erkanntermodus, KiData
 from typing import Any, Generator, List
 from datetime import datetime
@@ -45,7 +46,7 @@ class KiDatenVerarbeitung():
                 if item.laufzeit >= 1*timemulti:
                      endkidata = self._berechnedurchschnitt(item.laufzeit,item.anzahl, modus=item.erkannter_modus.value)
                      timemulti += 1
-                     #self.MoveSchanze(item)
+                     self.MoveSchanze(item)
                      self._delete_tmp_data()
                      self._verarbeite_entdaten(endkidata,datumid,session)
                      
@@ -54,8 +55,9 @@ class KiDatenVerarbeitung():
     
     
     def MoveSchanze(self, Kidata: KiData):
-        if Kidata.erkannter_modus == Erkanntermodus.FARBE:
+        if Kidata.erkannter_modus == Erkanntermodus.FARBE and Kidata.label_name != "background":
             self.schanze.start_changeposition(Kidata)
+            time.sleep(0.5)
             self.schanze.start_raddrehen()
     
     def _delete_tmp_data(self):

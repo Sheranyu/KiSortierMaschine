@@ -19,18 +19,25 @@ class Erkanntermodus(Enum):
 
 class SchnazenSteuerungFarbe(Enum):
     ROT = "rot"
-    GRUEN = "gruen"
-    BLAU = "blau"
+    GREEN = "green"
+    BLUE = "blue"
     SONSTIGES = "sonstiges"
     BACKGROUND = "background"
  
  
+
+
+
 class LeuchtFarbenLampe(Enum):
-    ROT = ""
-    GRUEN = ""
-    BLAU = ""
+    ROT = "rot"
+    GRUEN = "gruen"
+    BLAU = "blau"
     BACKGROUND = ""
-    SONSTIGES = ""   
+    LILA = "lila"
+    WEISS = "weiss"
+    SCHWARZ = "schwarz"
+    GELB = "gelb"
+    SONSTIGES = "sonstiges"   
 
 
 class KiData(BaseModel):

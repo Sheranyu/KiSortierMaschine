@@ -20,11 +20,14 @@ class TrainiertesModel(RecordSettings):
 
     
     def __init__(self) -> None:
+        super().__init__()
         self.kidata = None
         self.model = None
         self.zeahler: int = 0
         self.isbackgroundvisible = False
-        self.selectcamera = 0
+        self.selectcamera = 1
+        self.leerzeit = 0
+        self.currenttime = 0
         
     def normalizedata(self):
         self.normalize = transforms.Normalize(mean=[0.485,0.456,0.406], std=[0.229, 0.224, 0.225])
@@ -151,9 +154,10 @@ class TrainiertesModel(RecordSettings):
 
             # Print prediction and confidence score
             #print("Class:", class_name[2:], end="")
-            currenttime = time.time() - start_time
+            self.currenttime = time.time() - start_time - self.leerzeit
             #print("Confidence Score:", str(np.round(confidence_score * 100))[:-2], "%")
-            yield (KiData(label_name[2:],str(np.round(confidence_score * 100))[:-2],"form", laufzeit=currenttime), image)
+            yield (KiData(label_name[2:],str(np.round(confidence_score * 100))[:-2],"form", laufzeit=self.currenttime), image)
+            self.leerzeit = time.time() - self.currenttime
             # Listen to the keyboard for presses.
             keyboard_input = cv2.waitKey(1)
 

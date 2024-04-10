@@ -3,6 +3,8 @@ import os
 import time
 from typing import Any, Generator
 import cv2
+import cv2.typing
+import cv2.typing
 from flet import Image
 from configordner.aufnahmesetting import RecordSettings
 from configordner.settings import LaufZeitConfig, SaveDictName
@@ -17,7 +19,8 @@ from flet import ProgressRing, TextField
 
 class WebcamAufnahme(RecordSettings):
     def __init__(self) -> None:
-        pass
+        super().__init__()
+        
 
     def changeSettings(self):
         self.CCSWSettings = KiDataManager.ladeDaten(
@@ -87,6 +90,22 @@ class WebcamAufnahme(RecordSettings):
 
     def BeendeAufnahme(self):
         pass
+
+
+
+class RecordWebcam(RecordSettings):
+    def __init__(self) -> None:
+        super().__init__()
+
+    def aufnahme_bild(self,cap: cv2.VideoCapture)-> cv2.typing.MatLike:     
+        if LaufZeitConfig.ispauseactive:
+            time.sleep(0.1)
+            if LaufZeitConfig.islaufzeit == False:
+                return
+        ret, frame = cap.read()
+        return frame
+
+
 
 
 def ZeigeBildan(frame: cv2.typing.MatLike, fletImage: Image):
