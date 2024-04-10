@@ -76,7 +76,9 @@ class TrainiertesModel(RecordSettings):
         self.model.eval()
         label_names = self.loadlabeldata()
        
-        cap = cv2.VideoCapture(self.selectcamera)  # 0 steht für die erste angeschlossene Kamera
+        cap = cv2.VideoCapture(self.selectcamera) 
+        cap.set(cv2.CAP_PROP_FRAME_WIDTH, self.width)
+        cap.set(cv2.CAP_PROP_FRAME_HEIGHT, self.height) # 0 steht für die erste angeschlossene Kamera
         start_time = time.time()
         progressring.visible = False
         progressring.update()
@@ -85,7 +87,11 @@ class TrainiertesModel(RecordSettings):
         
         while True:
             ret, frame = cap.read()
-            confidence_class,prediction_score = self.predict_image(frame)
+            cv2.rectangle(frame, self.p1, self.p2, self.MEINEFARBE, self.THICKNESS1)
+            img_part = frame[
+                self.cy : self.cy + self.rh, self.cx : self.cx + self.rw, :
+            ]
+            confidence_class,prediction_score = self.predict_image(img_part)
 
             label_name = label_names[confidence_class]
             self.UpdateZeahler(label_name,prediction_score.item())
