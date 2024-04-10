@@ -29,7 +29,7 @@ void UARTHandler::processInput() {
       }
       else if (incomingCommand.startsWith("sg1")) {
         int angle = incomingCommand.substring(3).toInt();
-        Serial.print("Setze Servo-Winkel auf: ");
+        Serial.print("Setze Servo auf Winkel: ");
         Serial.println(angle);
         setServoAngle(angle);
       }
