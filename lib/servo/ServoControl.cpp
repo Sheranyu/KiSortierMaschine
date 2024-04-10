@@ -42,7 +42,7 @@ void ServoControl::moveToCup(int cupNumber) {
         case 4: angle = 0; break;   // Becher 4: 0 Grad
         default: return; // Ungültige Bechernummer
     }
-    Serial.println("Bewege Servo zu Becher ");
+    Serial.print("Bewege Servo zu Becher ");
     Serial.println(cupNumber);
     setAngle(angle);
 }
