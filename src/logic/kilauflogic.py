@@ -49,7 +49,7 @@ class KiDatenVerarbeitung():
                      endkidata = self._berechnedurchschnitt(item.laufzeit,item.anzahl, modus=item.erkannter_modus.value)
                      timemulti += 1
                      self._MoveSchanze(item)
-                     self._change_color()
+                     self._change_color(item)
                      self._delete_tmp_data()
                      self._verarbeite_entdaten(endkidata,datumid,session)
                      
