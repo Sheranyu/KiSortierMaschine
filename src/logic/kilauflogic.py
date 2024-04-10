@@ -1,3 +1,4 @@
+import asyncio
 import datetime
 from io import TextIOWrapper
 import time
@@ -5,7 +6,7 @@ import time
 import flet as ft
 from sqlalchemy.orm import Session
 from Ki.opencvcode import TrainiertesModel
-from configordner.settings import SaveDictName
+from configordner.settings import LaufZeitConfig, SaveDictName
 from db.CRUD.EndStatistik import EndStatistik
 from logic.KiDatenManager import KiDataManager
 from logic.MCRLogic import LedSteuerung, SchwanzenBewegungNachFarbe
@@ -21,50 +22,73 @@ from db.db_and_models.session import sessiongen
 
 
 
-
 class KiDatenVerarbeitung():
     def __init__(self) -> None:
         self.model = TrainiertesModel()
         self.aktuellelaufzeit = None
         self.currentkidata: KiData = None
         self.kidatenlist: List[KiData] = []
-        self.schanze = SchwanzenBewegungNachFarbe()
+        #self.schanze = SchwanzenBewegungNachFarbe()
         self.isamdrehen = False
         self.colorchange = LedSteuerung()
-        
+        self.ismoveschanzeaktiv = False
+       
     
-    def start_application(self,callback,progressring :ft.ProgressRing) -> Generator[KiData,Any, Any]:
+    def start_application(self,callback,progressring :ft.ProgressRing, callbackinfos) -> Generator[KiData,Any, Any]:
+        asyncio.run(self._start_async_app(callback,progressring,callbackinfos))
+    
+
+    async def _start_async_app(self, callback, progressring: ft.ProgressRing, callbackinfos) -> None:
+        queue = asyncio.Queue()
+        # Starte beide Funktionen asynchron
+        task1 = asyncio.create_task(self._startasync(queue, progressring, callback, callbackinfos))
+        task2 = asyncio.create_task(self._start_ki_verarbeitung(queue))
+        await asyncio.gather(task1, task2)
+
+    async def _start_ki_verarbeitung(self, shareddata: asyncio.Queue):  
+            while True:            
+                item: KiData = await shareddata.get()
+                #self._MoveSchanze(item)
+                await asyncio.sleep(5)
+                self.ismoveschanzeaktiv = False
+
+    async def _startasync(self, shareddata: asyncio.Queue, progressring: ft.ProgressRing, callback, callbackinfos):
+        #self._drehe_rad()
         timemulti = 1
         datum = self._erstelle_datum()
         with sessiongen() as session:
-            
-            datumid = self._createdatumindb(datum,session)
-            self._drehe_rad()
+            datumid = self._createdatumindb(datum, session)
             for item, image in self.model.loadmodelpytorch(progressring):
-                print("vor callback")
-                callback(image)
-                #self.aktuellelaufzeit = item.laufzeit
-                
-                #print(item.label_name, item.confidence_score)
-                print("vor item yield")
-                yield item
+
+                callback(image)        
+                callbackinfos(item) 
                 self._verarbeitedaten(item)
                 self.currentkidata = item
-                if item.laufzeit >= 1*timemulti:
-                     endkidata = self._berechnedurchschnitt(item.laufzeit,item.anzahl, modus=item.erkannter_modus)
-                     timemulti += 1
-                     print("vormoveschanze")
-                     self._MoveSchanze(item)
-                     self._delete_tmp_data()
-                     self._verarbeite_entdaten(endkidata,datumid,session)
-                     
-            self._savetime(self.currentkidata.laufzeit,datumid,session,self.currentkidata.anzahl)
 
-    def _change_color(self, kidaten: KiData):
+                if item.laufzeit >= 2 * timemulti:
+                    endkidata = self._berechnedurchschnitt(item.laufzeit, item.anzahl, modus=item.erkannter_modus)
+                    timemulti += 1
+                    self._delete_tmp_data()
+                    self._verarbeite_entdaten(endkidata, datumid, session)
+                    print(item.laufzeit)
+                
+                    if not self.ismoveschanzeaktiv:
+                        await shareddata.put(item)
+                        self.ismoveschanzeaktiv = True
+               
+                
+                    
+                if not LaufZeitConfig.islaufzeit:
+                    self._savetime(self.currentkidata.laufzeit, datumid, session, self.currentkidata.anzahl)
+                    break
+                            
+            
+
+    async def _change_color(self, kidaten: KiData):
         if kidaten.erkannter_modus == Erkanntermodus.FARBE:
             self.colorchange.setledcolor(kidaten)
     
-    def _MoveSchanze(self, Kidata: KiData):
+    async def _MoveSchanze(self, Kidata: KiData):
         if Kidata.erkannter_modus == Erkanntermodus.FARBE and Kidata.label_name != "background":
             self.schanze.start_changeposition(Kidata)
             self._change_color(Kidata)
@@ -89,7 +113,7 @@ class KiDatenVerarbeitung():
     def _verarbeite_entdaten(self,item: KiData,datumid:int, session: Session):
         if item.label_name.lower() != "background" and int(item.confidence_score) > 1:
             StatistikCreater().savestatistik(item,datumid,session)
-        print("ende")
+        
 
     def _berechnedurchschnitt(self, laufzeit: float, anzahl: int, modus: str) ->KiData:
         

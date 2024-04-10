@@ -13,7 +13,32 @@ import flet as ft
 import torch
 from torchvision import transforms
 from PIL import Image
+import asyncio
 
+
+
+class ModelAblauf(RecordSettings):
+    async def __init__(self,):
+        super().__init__()
+        self.kidata = None
+        self.model = None
+        self.zeahler: int = 0
+        self.isbackgroundvisible = False
+        self.selectcamera = 0
+        self.leerzeit = 0
+        self.currenttime = 0
+
+    async def normalizedata(self):
+        self.normalize = transforms.Normalize(mean=[0.485,0.456,0.406], std=[0.229, 0.224, 0.225])
+        self.transformation = transforms.Compose([
+            transforms.Resize(256),transforms.CenterCrop(224),
+            
+            transforms.ToTensor(),
+            self.normalize,
+        ])
+
+    async def predict_image(self, shareddata: asyncio.Queue):
+        pass
 
 
 class TrainiertesModel(RecordSettings):
@@ -40,7 +65,7 @@ class TrainiertesModel(RecordSettings):
     
     def UpdateZeahler(self,predicted_class:str, predictprozent: int):
         if "background" in predicted_class.lower().strip() and predictprozent > 0.5:
-            print("drin")
+            
             self.isbackgroundvisible = True
         elif self.isbackgroundvisible == True:
             self.zeahler += 1
@@ -106,7 +131,7 @@ class TrainiertesModel(RecordSettings):
 
             kidaten = KiData(label_name=label_name,confidence_score=int(np.round(confidence_class * 100)),erkannter_modus=erkannt, laufzeit=currenttime,anzahl=self.zeahler)
             yield (kidaten, frame)
-            print("nach yield")
+            
             self.leerzeit = time.time() - self.currenttime
             keyboard_input = cv2.waitKey(1)
             if keyboard_input == 27 or LaufZeitConfig.islaufzeit == False: 
