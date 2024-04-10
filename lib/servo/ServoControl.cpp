@@ -30,6 +30,7 @@ void ServoControl::setAngle(int angle) {
         this->angle = angle; // Speichere den Winkel für den nächsten Update-Zyklus
         servo.write(angle); // Setze den Winkel sofort
     }
+    Serial.print("servo_gedreht");
 }
 
 void ServoControl::moveToCup(int cupNumber) {
@@ -41,7 +42,7 @@ void ServoControl::moveToCup(int cupNumber) {
         case 4: angle = 0; break;   // Becher 4: 0 Grad
         default: return; // Ungültige Bechernummer
     }
-    setAngle(angle);
     Serial.print("Bewege Servo zu Becher ");
+    setAngle(angle);
     Serial.println(cupNumber);
 }
