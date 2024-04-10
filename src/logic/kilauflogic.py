@@ -19,6 +19,9 @@ from db.CRUD.DatumSpeicherung import CreateDatumSpeicherung
 from db.db_and_models.session import sessiongen
 
 
+
+
+
 class KiDatenVerarbeitung():
     def __init__(self) -> None:
         self.model = TrainiertesModel()

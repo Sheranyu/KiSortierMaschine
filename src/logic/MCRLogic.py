@@ -6,12 +6,12 @@ from sqlalchemy import null
 from StatusMeldungen.status import MCRMeldungen, WarnStatus
 from modele.InterneDatenModele import KiData, LeuchtFarbenLampe, SchnazenSteuerungFarbe
 
-
+COMMODE = "COM5"
 
 class SchwanzenBewegungNachFarbe():
     
     def _initserial(self):
-        self.ser = serial.Serial('COM6', 115200)
+        self.ser = serial.Serial(COMMODE, 115200)
         self.timeout = 0
         self.TIMEOUTEND = 5
        
@@ -73,7 +73,7 @@ class SchwanzenBewegungNachFarbe():
             
 class LedSteuerung():
     def _initserial(self):
-        self.ser = serial.Serial('COM6', 115200)
+        self.ser = serial.Serial(COMMODE, 115200)
         self.timeout = 0
         self.TIMEOUTEND = 5     
     
