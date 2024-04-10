@@ -29,7 +29,8 @@ void UARTHandler::processInput() {
       }
       else if (incomingCommand.startsWith("sg1")) {
         int angle = incomingCommand.substring(3).toInt();
-        Serial.println("\nSetze Servoposition...");
+        Serial.print("Setze Servo-Winkel auf: ");
+        Serial.println(angle);
         setServoAngle(angle);
       }
       else if (incomingCommand.startsWith("diru")) {
@@ -101,8 +102,6 @@ void UARTHandler::processLEDCommand(String command) {
 void UARTHandler::setServoAngle(int angle) {
     if (servoControl != nullptr) {
         servoControl->setAngle(angle);
-        Serial.print("Setze Servo-Winkel auf: ");
-        Serial.println(angle);
     }
 }
 
