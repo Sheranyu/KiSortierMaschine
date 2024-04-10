@@ -51,11 +51,10 @@ class KiDatenVerarbeitung():
                 self._verarbeitedaten(item)
                 self.currentkidata = item
                 if item.laufzeit >= 1*timemulti:
-                     endkidata = self._berechnedurchschnitt(item.laufzeit,item.anzahl, modus=item.erkannter_modus.value)
+                     endkidata = self._berechnedurchschnitt(item.laufzeit,item.anzahl, modus=item.erkannter_modus)
                      timemulti += 1
                      print("vormoveschanze")
                      self._MoveSchanze(item)
-                     #self._change_color(item)
                      self._delete_tmp_data()
                      self._verarbeite_entdaten(endkidata,datumid,session)
                      
@@ -63,11 +62,12 @@ class KiDatenVerarbeitung():
 
     def _change_color(self, kidaten: KiData):
         if kidaten.erkannter_modus == Erkanntermodus.FARBE:
-            self.colorchange.setledcolor(kidaten.label_name)
+            self.colorchange.setledcolor(kidaten)
     
     def _MoveSchanze(self, Kidata: KiData):
         if Kidata.erkannter_modus == Erkanntermodus.FARBE and Kidata.label_name != "background":
             self.schanze.start_changeposition(Kidata)
+            self._change_color(Kidata)
             time.sleep(0.5)
             self.schanze.start_raddrehen()
     
@@ -89,6 +89,7 @@ class KiDatenVerarbeitung():
     def _verarbeite_entdaten(self,item: KiData,datumid:int, session: Session):
         if item.label_name.lower() != "background" and int(item.confidence_score) > 1:
             StatistikCreater().savestatistik(item,datumid,session)
+        print("ende")
 
     def _berechnedurchschnitt(self, laufzeit: float, anzahl: int, modus: str) ->KiData:
         

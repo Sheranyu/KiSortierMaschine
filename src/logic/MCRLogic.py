@@ -6,7 +6,7 @@ from sqlalchemy import null
 from StatusMeldungen.status import MCRMeldungen, WarnStatus
 from modele.InterneDatenModele import KiData, LeuchtFarbenLampe, SchnazenSteuerungFarbe
 
-COMMODE = "COM6"
+COMMODE = "COM5"
 
 class SchwanzenBewegungNachFarbe():
     

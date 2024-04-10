@@ -73,6 +73,7 @@ class StartApplicationPage(AnwendungstartPageDesign):
         self.laufzeit.value = kidaten.laufzeit
         self.anzahlsortierterobjekte.value = kidaten.anzahl
         self.erkanntermodus.value = kidaten.erkannter_modus.value
+        pass
 
     def CamAnzeige(self, frame: cv2.typing.MatLike):
         _, buffer = cv2.imencode(".jpg", frame)

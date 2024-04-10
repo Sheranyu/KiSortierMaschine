@@ -25,7 +25,7 @@ class TrainiertesModel(RecordSettings):
         self.model = None
         self.zeahler: int = 0
         self.isbackgroundvisible = False
-        self.selectcamera = 1
+        self.selectcamera = 0
         self.leerzeit = 0
         self.currenttime = 0
         
@@ -68,6 +68,7 @@ class TrainiertesModel(RecordSettings):
         return open(self.kidata.pfad_label, "r").readlines()
     
     def loadmodelpytorch(self, progressring: ft.ProgressRing) -> Generator[Tuple[KiData,cv2.typing.MatLike], Any, Any]:
+
         self.kidata = KiDataManager.ladeKImodel()
         self.normalizedata()
        
@@ -89,6 +90,7 @@ class TrainiertesModel(RecordSettings):
             self.destroycam(cap)
         
         while True:
+            
             ret, frame = cap.read()
             cv2.rectangle(frame, self.p1, self.p2, self.MEINEFARBE, self.THICKNESS1)
             img_part = frame[
@@ -98,12 +100,13 @@ class TrainiertesModel(RecordSettings):
 
             label_name = label_names[confidence_class]
             self.UpdateZeahler(label_name,prediction_score.item())
-            currenttime = round(time.time() - start_time - self.leerzeit,2)
+            currenttime = round(time.time() - start_time,2)
             erkannt = Erkanntermodus.FARBE
 
 
             kidaten = KiData(label_name=label_name,confidence_score=int(np.round(confidence_class * 100)),erkannter_modus=erkannt, laufzeit=currenttime,anzahl=self.zeahler)
             yield (kidaten, frame)
+            print("nach yield")
             self.leerzeit = time.time() - self.currenttime
             keyboard_input = cv2.waitKey(1)
             if keyboard_input == 27 or LaufZeitConfig.islaufzeit == False: 
