@@ -15,6 +15,7 @@ void UARTHandler::processInput() {
     // char receivedChar = Serial.read();
     // Serial.print(receivedChar);
     incomingCommand = Serial.readString();
+    incomingCommand.trim();
     // Serial.println("Received: " + incomingCommand);
     
 
@@ -70,7 +71,11 @@ void UARTHandler::processInput() {
       }
       else if (incomingCommand.startsWith("led")) {
         processLEDCommand(incomingCommand);
-        Serial.println("LED umgeschaltet");
+      }
+      else if (incomingCommand == "blau" || incomingCommand == "rot" || incomingCommand == "gruen" ||
+            incomingCommand == "lila" || incomingCommand == "weiss" || incomingCommand == "schwarz" ||
+            incomingCommand == "gelb" || incomingCommand == "sonstig") {
+            ledObj.setColorByName(incomingCommand);
       }
       else if (incomingCommand.startsWith("testservo")) {
         if (servoControl != nullptr) {
@@ -94,8 +99,8 @@ void UARTHandler::processLEDCommand(String command) {
     int R = command.substring(3, 6).toInt();
     int G = command.substring(6, 9).toInt();
     int B = command.substring(9, 12).toInt();
-    ledObj.setColor(R, G, B);
     Serial.println("Setze LED auf " + command.substring(3, 12));
+    ledObj.setColor(R, G, B);
   }
 }
 
