@@ -50,7 +50,6 @@ class TrainiertesModel(RecordSettings):
         self.model = None
         self.zeahler: int = 0
         self.isbackgroundvisible = False
-        self.selectcamera = 1
         self.leerzeit = 0
         self.currenttime = 0
         
@@ -105,7 +104,7 @@ class TrainiertesModel(RecordSettings):
         self.model.eval()
         label_names = self.loadlabeldata()
        
-        cap = cv2.VideoCapture(self.selectcamera) 
+        cap = cv2.VideoCapture(self.choicedcamera) 
         cap.set(cv2.CAP_PROP_FRAME_WIDTH, self.width)
         cap.set(cv2.CAP_PROP_FRAME_HEIGHT, self.height) # 0 steht für die erste angeschlossene Kamera
         start_time = time.time()
@@ -160,7 +159,7 @@ class TrainiertesModel(RecordSettings):
         class_label_names = open(self.kidata.pfad_label, "r").readlines()
 
         # CAMERA can be 0 or 1 based on default camera of your computer
-        camera = cv2.VideoCapture(0)
+        camera = cv2.VideoCapture(self.choicedcamera)
         
         progressring.visible = False
         progressring.update()

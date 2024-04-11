@@ -1,4 +1,7 @@
 
+from pydantic import BaseModel, Field
+
+
 class LaufZeitConfig():
     islaufzeit:bool = False
     istrainingactive: bool = False
@@ -17,6 +20,14 @@ class SaveDictName():
     kimodel: str = "kimodel"
     classcreatorsettings: str = "classcreatorsettings"
     kidatenzwischenspeicher: str = "kidatenzwischenspeicher"
+
+
+
+class TempSettings(BaseModel):
+    Camera: int = Field(default=0)
+
+
+    
 #!!!!!nicht löschen dient als erinnerung!!!!#
 
 

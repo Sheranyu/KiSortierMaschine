@@ -1,3 +1,6 @@
+from configordner.settings import TempSettings
+
+
 class RecordSettings:
     def __init__(self) -> None:
         self.width = 640  # Mögliche Kameraauflösungen (bei mir): 640x380, 640x380, 640x640, 1280x720
@@ -15,3 +18,4 @@ class RecordSettings:
         self.framegap = 0.05  # für automatisierte Bildaufnahme, delay muss in der Schleife einkommentiert werden
         self.MEINEFARBE = (255, 255, 255)
         self.THICKNESS1 = 2
+        self.choicedcamera = TempSettings.Camera

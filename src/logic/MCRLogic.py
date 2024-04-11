@@ -49,18 +49,12 @@ class SchwanzenBewegungNachFarbe(SerialInit):
            
             response = b""
             while response.rstrip() != MCRMeldungen.SERVO_GEDREHT:
-                response = await recv(self.reader)
-
-
+                response = await asyncio.wait_for(recv(self.reader),timeout=5)
+             
+            return   
+        finally:
             self.writer.close()
             await self.writer.wait_closed()
-             
-            return
-        except:
-            
-            print("Program terminated.")
-        finally:
-            pass
     
     
     async def start_raddrehen(self):
@@ -68,17 +62,19 @@ class SchwanzenBewegungNachFarbe(SerialInit):
         await self._raddrehen()  
             
     async def _raddrehen(self):
-        await self._initserial()
-        data_to_send = "go"
-        self.writer.write(data_to_send.encode())
-        
-        response = ""
-        while response.rstrip() != MCRMeldungen.GEDREHT:
-            response = await recv(self.reader)
+        try:
+            await self._initserial()
+            data_to_send = "go"
+            self.writer.write(data_to_send.encode())
+            
+            response = ""
+            while response.rstrip() != MCRMeldungen.GEDREHT:
+                response = await asyncio.wait_for(recv(self.reader),timeout=5)
 
-        self.writer.close()
-        await self.writer.wait_closed()
-        return
+            return
+        finally:
+            self.writer.close()
+            await self.writer.wait_closed()
             
             
 class LedSteuerung(SerialInit):
@@ -86,32 +82,36 @@ class LedSteuerung(SerialInit):
         super().__init__()
         
     async def setledcolor(self,kilaufdaten: KiData):
-        await self._initserial()
+        
+       
         label = kilaufdaten.label_name.strip()
 
         if label in SchnazenSteuerungFarbe.BLUE.value:
-            self._change_color(LeuchtFarbenLampe.BLAU)
+            await self._change_color(LeuchtFarbenLampe.BLAU)
         elif label in SchnazenSteuerungFarbe.GREEN.value:
-            self._change_color(LeuchtFarbenLampe.GRUEN)
+            await self._change_color(LeuchtFarbenLampe.GRUEN)
         
         elif label in SchnazenSteuerungFarbe.ROT.value:
-            self._change_color(LeuchtFarbenLampe.ROT)
+            await self._change_color(LeuchtFarbenLampe.ROT)
         
         elif label in SchnazenSteuerungFarbe.SONSTIGES.value:
-            self._change_color(LeuchtFarbenLampe.SONSTIGES)
+            await self._change_color(LeuchtFarbenLampe.SONSTIGES)
         else:
             print("Dürfte nicht hier drin sein zeile 95: LEDSteuerung")
      
     async def _change_color(self, ledcolor: LeuchtFarbenLampe):
-        data_to_send = ledcolor.value.strip()
-        self.writer.write(data_to_send.encode())
-        
-        response = ""
-        while response.rstrip() != MCRMeldungen.LED_UMGESCHALTET:
-            response = await recv(self.reader)
-            # time.sleep(0.1)
+        try:
+            await self._initserial()
+            data_to_send = ledcolor.value.strip()
+            self.writer.write(data_to_send.encode())
+            
+            response = ""
+            while response.rstrip() != MCRMeldungen.LED_UMGESCHALTET:
+                response = asyncio.wait_for(await recv(self.reader),timeout=5)
+            # await asyncio.sleep(0.1)
             # self.timeout += 0.1
             # if self.timeout> self.TIMEOUTEND:
             #     raise TimeoutError(WarnStatus.TIMEOUT_WARN)
-        self.writer.close()
-        await self.writer.wait_closed()
+        finally:
+            self.writer.close()
+            await self.writer.wait_closed()
