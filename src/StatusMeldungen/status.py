@@ -26,6 +26,6 @@ class TypeErrorMessages:
 
 
 class MCRMeldungen:
-    GEDREHT: str = "gedreht"
-    SERVO_GEDREHT: str = "servo_gedreht"
-    LED_UMGESCHALTET: str = "led_umgeschaltet"
+    GEDREHT: bytes = b"gedreht"
+    SERVO_GEDREHT: bytes = b"servo_gedreht"
+    LED_UMGESCHALTET: bytes = b"led_umgeschaltet"

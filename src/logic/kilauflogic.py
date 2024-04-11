@@ -28,7 +28,7 @@ class KiDatenVerarbeitung():
         self.aktuellelaufzeit = None
         self.currentkidata: KiData = None
         self.kidatenlist: List[KiData] = []
-        #self.schanze = SchwanzenBewegungNachFarbe()
+        self.schanze = SchwanzenBewegungNachFarbe()
         self.isamdrehen = False
         self.colorchange = LedSteuerung()
         self.ismoveschanzeaktiv = False
@@ -48,7 +48,7 @@ class KiDatenVerarbeitung():
     async def _start_ki_verarbeitung(self, shareddata: asyncio.Queue):  
             while True:            
                 item: KiData = await shareddata.get()
-                #self._MoveSchanze(item)
+                await self._MoveSchanze(item)
                 await asyncio.sleep(5)
                 self.ismoveschanzeaktiv = False
 
@@ -90,10 +90,10 @@ class KiDatenVerarbeitung():
     
     async def _MoveSchanze(self, Kidata: KiData):
         if Kidata.erkannter_modus == Erkanntermodus.FARBE and Kidata.label_name != "background":
-            self.schanze.start_changeposition(Kidata)
-            self._change_color(Kidata)
-            time.sleep(0.5)
-            self.schanze.start_raddrehen()
+            await self.schanze.start_changeposition(Kidata)
+            await self._change_color(Kidata)
+            await self.schanze.start_raddrehen()
+        await asyncio.sleep(0.01)
     
     def _delete_tmp_data(self):
         KiDataManager.deleteSessionData(SaveDictName.kidatenzwischenspeicher)
