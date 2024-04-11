@@ -1,4 +1,9 @@
-from configordner.settings import TempSettings
+
+
+
+from configordner.settings import SaveDictName
+from logic.KiDatenManager import KiDataManager
+from modele.InterneDatenModele import CameraSettings
 
 
 class RecordSettings:
@@ -18,4 +23,9 @@ class RecordSettings:
         self.framegap = 0.05  # für automatisierte Bildaufnahme, delay muss in der Schleife einkommentiert werden
         self.MEINEFARBE = (255, 255, 255)
         self.THICKNESS1 = 2
-        self.choicedcamera = TempSettings.Camera
+        try:
+            data = KiDataManager.ladeDaten(SaveDictName.camerasettings,CameraSettings)
+        except:
+            data = CameraSettings
+            
+        self.choicedcamera = data

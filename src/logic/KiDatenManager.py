@@ -21,12 +21,16 @@ class KiDataManager():
         
         return KIModelloaderData(json_data)
     
+   
+
+
     @classmethod
     def ladeDaten(cls, dictname: str, typ: Type[T]):
         if not isinstance(dictname, str):
             raise TypeError(TypeErrorMessages.DICT_IS_NO_STRING)
-        json_data = cls.Pagedata.client_storage.get(dictname)
-        if json_data is None:
+        try:
+            json_data = cls.Pagedata.client_storage.get(dictname)
+        except:
             raise ValueError("No data found for the given dictname")
 
         return typ(**json_data)

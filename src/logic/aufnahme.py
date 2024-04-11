@@ -11,7 +11,7 @@ from configordner.settings import LaufZeitConfig, SaveDictName
 from logic.KiDatenManager import KiDataManager
 from modele.InterneDatenModele import (
     AufnahmeDaten,
-    ClassCreatorSettingsModel,
+    CameraSettings,
     KiClassList,
 )
 from flet import ProgressRing, TextField
@@ -24,7 +24,7 @@ class WebcamAufnahme(RecordSettings):
 
     def changeSettings(self):
         self.CCSWSettings = KiDataManager.ladeDaten(
-            SaveDictName.classcreatorsettings, ClassCreatorSettingsModel
+            SaveDictName.camerasettings, CameraSettings
         )
         self.framegap = 1/self.CCSWSettings.aufnahmeges
 
@@ -32,7 +32,7 @@ class WebcamAufnahme(RecordSettings):
         self, classdata: KiClassList, pr: ProgressRing
     ) -> Generator[AufnahmeDaten, Any, None]:
         self.changeSettings()
-        cap = cv2.VideoCapture(self.choicedcamera)
+        cap = cv2.VideoCapture(self.choicedcamera.Camera)
         cap.set(cv2.CAP_PROP_FRAME_WIDTH, self.width)
         cap.set(cv2.CAP_PROP_FRAME_HEIGHT, self.height)
 

@@ -104,7 +104,7 @@ class TrainiertesModel(RecordSettings):
         self.model.eval()
         label_names = self.loadlabeldata()
        
-        cap = cv2.VideoCapture(self.choicedcamera) 
+        cap = cv2.VideoCapture(self.choicedcamera.Camera) 
         cap.set(cv2.CAP_PROP_FRAME_WIDTH, self.width)
         cap.set(cv2.CAP_PROP_FRAME_HEIGHT, self.height) # 0 steht für die erste angeschlossene Kamera
         start_time = time.time()

@@ -84,9 +84,9 @@ class AufnahmeDaten(BaseModel):
    
         
         
-class ClassCreatorSettingsModel(BaseModel):
-    aufnahmeges: int
-
+class CameraSettings(BaseModel):
+    aufnahmeges: int = Field(default=10)
+    Camera: int = Field(default=0)
     
 
 class KiModeltrainingConfigdata(BaseModel):
