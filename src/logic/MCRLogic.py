@@ -8,7 +8,7 @@ import serial_asyncio
 from StatusMeldungen.status import MCRMeldungen, WarnStatus
 from modele.InterneDatenModele import KiData, LeuchtFarbenLampe, SchnazenSteuerungFarbe
 
-COMMODE = "COM5"
+COMMODE = "COM6"
 async def recv(stream: StreamReader):
     return await stream.readline()
 
@@ -16,7 +16,7 @@ class SerialInit:
     async def _initserial(self):
         self.timeout = 0
         self.TIMEOUTEND = 5
-        self.reader ,self.writer = await serial_asyncio.open_serial_connection(COMMODE, 115200)
+        self.reader ,self.writer = await serial_asyncio.open_serial_connection(url=COMMODE, baudrate=115200)
 
 class SchwanzenBewegungNachFarbe(SerialInit):
     def __init__(self):
@@ -51,6 +51,9 @@ class SchwanzenBewegungNachFarbe(SerialInit):
             while response.rstrip() != MCRMeldungen.SERVO_GEDREHT:
                 response = await recv(self.reader)
 
+
+            self.writer.close()
+            await self.writer.wait_closed()
              
             return
         except:
@@ -65,14 +68,16 @@ class SchwanzenBewegungNachFarbe(SerialInit):
         await self._raddrehen()  
             
     async def _raddrehen(self):
-        self._initserial()
+        await self._initserial()
         data_to_send = "go"
         self.writer.write(data_to_send.encode())
         
         response = ""
         while response.rstrip() != MCRMeldungen.GEDREHT:
             response = await recv(self.reader)
- 
+
+        self.writer.close()
+        await self.writer.wait_closed()
         return
             
             
@@ -81,7 +86,7 @@ class LedSteuerung(SerialInit):
         super().__init__()
         
     async def setledcolor(self,kilaufdaten: KiData):
-        self._initserial()
+        await self._initserial()
         label = kilaufdaten.label_name.strip()
 
         if label in SchnazenSteuerungFarbe.BLUE.value:
@@ -108,4 +113,5 @@ class LedSteuerung(SerialInit):
             # self.timeout += 0.1
             # if self.timeout> self.TIMEOUTEND:
             #     raise TimeoutError(WarnStatus.TIMEOUT_WARN)
-        
+        self.writer.close()
+        await self.writer.wait_closed()

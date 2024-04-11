@@ -50,7 +50,7 @@ class TrainiertesModel(RecordSettings):
         self.model = None
         self.zeahler: int = 0
         self.isbackgroundvisible = False
-        self.selectcamera = 0
+        self.selectcamera = 1
         self.leerzeit = 0
         self.currenttime = 0
         
