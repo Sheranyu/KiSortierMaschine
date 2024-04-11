@@ -17,7 +17,7 @@ class Erkanntermodus(Enum):
     FORM = "Formmodus"
 
 
-class SchnazenSteuerungFarbe(Enum):
+class SchanzenSteuerungFarbe(Enum):
     ROT = "rot"
     GREEN = "green"
     BLUE = "blue"
@@ -38,6 +38,11 @@ class LeuchtFarbenLampe(Enum):
     SCHWARZ = "schwarz"
     GELB = "gelb"
     SONSTIGES = "sonstiges"   
+
+
+class ErkanntermoduModel(BaseModel):
+    modus: Optional[Erkanntermodus]
+    
 
 
 class KiData(BaseModel):
@@ -87,6 +92,9 @@ class AufnahmeDaten(BaseModel):
 class CameraSettings(BaseModel):
     aufnahmeges: int = Field(default=10)
     Camera: int = Field(default=0)
+
+class SerialConfig(BaseModel):
+    COM: str = Field(default="COM5")
     
 
 class KiModeltrainingConfigdata(BaseModel):

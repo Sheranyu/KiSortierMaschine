@@ -11,7 +11,8 @@ class WarnStatus():
     PFAD_IS_EMPTY = "Es wurde kein Speicherort angeben"
     FORBIDDEN_TWO_VIDEO_REC = "Es dürfen keine 2 Aufnahmen gleichzeitig laufen!"
     TIMEOUT_WARN = "Zeitüberschreitung"
-    
+    ONLY_CPU = "Trainieren eines Models funktioniert nur über die CPU"
+    FORBIDDEN_TWO_TRAINING = "Aktuell funktioniert Model training hintereinander nicht neustart des Programm nötig!"
     
 
 def check_and_warn(openbanner: Callable[[str], None],condition, warn_status) -> bool:

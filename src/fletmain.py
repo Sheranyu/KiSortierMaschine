@@ -2,6 +2,7 @@ import flet as ft
 
 from Ki.opencvcode import TrainiertesModel
 from logic.aufnahme import WebcamAufnahme
+from modele.InterneDatenModele import ErkanntermoduModel, Erkanntermodus
 from windows.fletmaininhalt import Mainwindow 
 from Router import Router
 from logic.KiDatenManager import KiDataManager
@@ -20,6 +21,7 @@ def main(page: ft.Page):
     page.on_route_change = router.routechange
     page.on_view_pop = router.view_pop
     page.go("/")
+    
 
 ft.app(target=main)
 

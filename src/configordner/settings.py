@@ -20,6 +20,7 @@ class SaveDictName():
     kimodel: str = "kimodel"
     camerasettings: str = "classcreatorsettings"
     kidatenzwischenspeicher: str = "kidatenzwischenspeicher"
+    serialsettings: str = "serialsettings"
 
 
 

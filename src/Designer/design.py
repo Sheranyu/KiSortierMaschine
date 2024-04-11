@@ -2,7 +2,8 @@ from abc import ABC, abstractmethod
 import flet as ft
 
 from StatusMeldungen.messageinfo import ClassCreatorSettingsMessage as CCSM
-from modele.InterneDatenModele import ModelTyp
+from StatusMeldungen.status import WarnStatus
+from modele.InterneDatenModele import Erkanntermodus, ModelTyp
 
 
 class AnwendungstartPageDesign(ft.UserControl, ABC):
@@ -20,13 +21,13 @@ class AnwendungstartPageDesign(ft.UserControl, ABC):
             "Abbruch", bgcolor=ft.colors.RED, on_click=self.abbruch, visible=False
         )
         
+
+        self.alertwarntext = ft.Text("Entweder das Model wurde nicht geladen oder die Kamera wurde nicht erkannt")
         self.bildvideo = ft.Image("./",fit=ft.ImageFit.CONTAIN)
         self.alertwarn = ft.AlertDialog(
             modal=False,
             title=ft.Text("Ein Fehler ist aufgetreten"),
-            content=ft.Text(
-                "Entweder das Model wurde nicht geladen oder die Kamera wurde nicht erkannt"
-            ),
+            content=self.alertwarntext
         )
         self.pr = ft.ProgressRing(width=32, height=32, stroke_width=3, visible=False)
 
@@ -80,7 +81,7 @@ class CreateModelPageDesign(ABC, ft.UserControl):
         self.title = ft.Text("Modell erstellen", theme_style=ft.TextThemeStyle.HEADLINE_LARGE)
         self.instructions = ft.Text("Neues Modell erstellen")
         self.model_name = ft.TextField(label="Modell Name")
-        self.warnhinweis_title_text = ft.Text("Warnhinweis")
+        self.warnhinweis_title_text = ft.Text("Warnhinweis", text_align="center")
         self.save_file_pfad = ft.Text()
         self.modeltyplist = ft.Dropdown(
             width=200,
@@ -104,10 +105,11 @@ class CreateModelPageDesign(ABC, ft.UserControl):
         )
 
         self.warhinweistext = ft.Text(
-            "Trainieren eines Models funktioniert nur über die CPU"
+                WarnStatus.ONLY_CPU + "\n--------\n" + WarnStatus.FORBIDDEN_TWO_TRAINING, text_align=ft.TextAlign.CENTER,
+                width=300
         )
         self.alertWarnhinweis = ft.AlertDialog(
-            modal=False, title=self.warnhinweis_title_text, content=self.warhinweistext
+            modal=False, title=self.warnhinweis_title_text, content=ft.Column([ft.Divider(),self.warhinweistext],tight=True)
         )
 
         self.bannerfailtextcontent = ft.Text(
@@ -173,6 +175,19 @@ class LoadModelPageDesign(ABC, ft.UserControl):
         self.text_lade_label = ft.Text(
             "Wähle das label dazu aus", text_align=ft.TextAlign.CENTER
         )
+        self.segmenterkanntermodus = ft.SegmentedButton(
+            on_change=self.changedsegment,
+            selected_icon=ft.Icon(ft.icons.RADIO_BUTTON_CHECKED,color=ft.colors.GREEN), allow_empty_selection=False,
+            selected={"1"},
+            segments=[
+                ft.Segment(value=Erkanntermodus.FARBE.value, 
+                           label=ft.Text(Erkanntermodus.FARBE.value), 
+                           icon=ft.Icon(ft.icons.LOOKS_ONE)),
+                ft.Segment(value=Erkanntermodus.FORM.value, 
+                           label=ft.Text(Erkanntermodus.FORM.value), 
+                           icon=ft.Icon(ft.icons.LOOKS_TWO)),
+            ]
+        )
 
         self.isloadedcheckbox = ft.Icon(visible=True, color=ft.colors.GREEN)
         self.isloadedcheckboxlabel = ft.Icon(visible=True, color=ft.colors.GREEN)
@@ -213,6 +228,10 @@ class LoadModelPageDesign(ABC, ft.UserControl):
         )
 
         self.loaddatabutton = ft.FilledButton("Load Data", on_click=self.loaddata)
+
+
+    def changedsegment(self,e):
+        pass
 
     def close_banner(self):
         pass

@@ -57,13 +57,13 @@ class StartApplicationPage(AnwendungstartPageDesign):
         LaufZeitConfig.islaufzeit = True
         toggle_two_buttons(self, False, True)
         try:
-             for data in self.ki_logic.start_application(self.CamAnzeige, self.pr,self.DatenAnzeige):
-                if LaufZeitConfig.islaufzeit == False:
-                    return
+            self.ki_logic.start_application(self.CamAnzeige, self.pr,self.DatenAnzeige)
+            if LaufZeitConfig.islaufzeit == False:
+                return
             
         except Exception as err:
             print(f"Fehler: {err}")
-            self.openwarndialog()
+            self.openwarndialog(err)
             
 
         toggle_two_buttons(self, True, False)
@@ -91,10 +91,14 @@ class StartApplicationPage(AnwendungstartPageDesign):
         LaufZeitConfig.islaufzeit = False
 
         
-    def openwarndialog(self):
+    def openwarndialog(self, err:str= None):
         self.pr.visible = False
         self.page.dialog = self.alertwarn # type: ignore
         self.alertwarn.open = True
+
+        if err:
+            self.alertwarntext.value = err
+            
         LaufZeitConfig.islaufzeit == False
         self.page.update()# type: ignore
 

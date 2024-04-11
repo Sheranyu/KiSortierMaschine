@@ -6,7 +6,10 @@ import time
 from sqlalchemy import null
 import serial_asyncio
 from StatusMeldungen.status import MCRMeldungen, WarnStatus
-from modele.InterneDatenModele import KiData, LeuchtFarbenLampe, SchnazenSteuerungFarbe
+from configordner.settings import SaveDictName
+from logic.KiDatenManager import KiDataManager
+from modele.InterneDatenModele import KiData, LeuchtFarbenLampe, SchanzenSteuerungFarbe, SerialConfig
+from modele.SchanzenModelle import SchanzenSteuerungForm
 
 COMMODE = "COM6"
 async def recv(stream: StreamReader):
@@ -14,11 +17,15 @@ async def recv(stream: StreamReader):
 
 class SerialInit:
     async def _initserial(self):
+        try:
+            commode = KiDataManager.ladeDaten(SaveDictName.serialsettings, SerialConfig)
+        except:
+            raise ValueError("Bitte COM angeben in den Settings")
         self.timeout = 0
         self.TIMEOUTEND = 5
-        self.reader ,self.writer = await serial_asyncio.open_serial_connection(url=COMMODE, baudrate=115200)
+        self.reader ,self.writer = await serial_asyncio.open_serial_connection(url=commode, baudrate=115200)
 
-class SchwanzenBewegungNachFarbe(SerialInit):
+class SchanzenBewegungNachFarbe(SerialInit):
     def __init__(self):
         super().__init__()
 
@@ -26,18 +33,18 @@ class SchwanzenBewegungNachFarbe(SerialInit):
     async def start_changeposition(self, kilaufdaten: KiData):
         label = kilaufdaten.label_name.strip()
     
-        if label in SchnazenSteuerungFarbe.BLUE.value:
+        if label in SchanzenSteuerungFarbe.BLUE.value or SchanzenSteuerungForm.acht.name:
             print("blue")
             await self._ChangePosition("b1")
-        if label in SchnazenSteuerungFarbe.GREEN.value:
+        if label in SchanzenSteuerungFarbe.GREEN.value or SchanzenSteuerungForm.sechs.name:
             print("green")
             await self._ChangePosition("b2")
         
-        if label in SchnazenSteuerungFarbe.ROT.value:
+        if label in SchanzenSteuerungFarbe.ROT.value or SchanzenSteuerungForm.zwanzig.name:
             print("rot")
             await self._ChangePosition("b3")
         
-        if label in SchnazenSteuerungFarbe.SONSTIGES.value:
+        if label in SchanzenSteuerungFarbe.SONSTIGES.value or SchanzenSteuerungForm.sonstig:
             await self._ChangePosition("b4")
             
     async def _ChangePosition(self, Positionsnummer: str):
@@ -86,15 +93,15 @@ class LedSteuerung(SerialInit):
        
         label = kilaufdaten.label_name.strip()
 
-        if label in SchnazenSteuerungFarbe.BLUE.value:
+        if label in SchanzenSteuerungFarbe.BLUE.value:
             await self._change_color(LeuchtFarbenLampe.BLAU)
-        elif label in SchnazenSteuerungFarbe.GREEN.value:
+        elif label in SchanzenSteuerungFarbe.GREEN.value:
             await self._change_color(LeuchtFarbenLampe.GRUEN)
         
-        elif label in SchnazenSteuerungFarbe.ROT.value:
+        elif label in SchanzenSteuerungFarbe.ROT.value:
             await self._change_color(LeuchtFarbenLampe.ROT)
         
-        elif label in SchnazenSteuerungFarbe.SONSTIGES.value:
+        elif label in SchanzenSteuerungFarbe.SONSTIGES.value:
             await self._change_color(LeuchtFarbenLampe.SONSTIGES)
         else:
             print("Dürfte nicht hier drin sein zeile 95: LEDSteuerung")

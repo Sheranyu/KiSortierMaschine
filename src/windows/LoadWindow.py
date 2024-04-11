@@ -5,7 +5,8 @@ from StatusMeldungen.status import WarnStatus
 import flet as ft
 
 from logic.aufnahme import WebcamAufnahme, ZeigeBildan
-from modele.InterneDatenModele import KIModelsaverData, KiClassList
+from modele.InterneDatenModele import Erkanntermodus, KIModelsaverData, KiClassList
+from modele.ModelCreater import modelCreatermodus
 
 class LoadModelPage(LoadModelPageDesign):
     def __init__(self):
@@ -48,6 +49,7 @@ class LoadModelPage(LoadModelPageDesign):
                 self.ismodelloadedrow,
                 self.text_lade_label,
                 self.islabelloaderrow,
+                self.segmenterkanntermodus,
                 self.selected_files,
             ],
             horizontal_alignment=ft.CrossAxisAlignment.CENTER,
@@ -82,8 +84,13 @@ class LoadModelPage(LoadModelPageDesign):
             controls=[self.title, self.card], spacing=10, horizontal_alignment=ft.CrossAxisAlignment.CENTER
         )
         self.rowcontainer = ft.Row([self.columcontainer],alignment=ft.MainAxisAlignment.CENTER)
-
+        modelCreatermodus.SetErkanntermodus(self.segmenterkanntermodus.selected.pop())
         return self.rowcontainer
+    
+    def changedsegment(self,e: ft.TapEvent):
+        eventdata = e.data
+        modelCreatermodus.SetErkanntermodus(eventdata[0])
+  
 
     def loaddata(self, e):
         if self.sind_alle_nicht_none() == False:
@@ -125,6 +132,7 @@ class LoadModelPage(LoadModelPageDesign):
         self.update()
 
     def did_mount(self):
+        
         self.page.overlay.append(self.pick_files_dialog)
         self.page.overlay.append(self.pick_file_label)
         self.page.banner = self.warnbanner
