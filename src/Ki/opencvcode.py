@@ -15,6 +15,8 @@ from torchvision import transforms
 from PIL import Image
 import asyncio
 
+from modele.ModelCreater import modelCreatermodus
+
 
 
 class ModelAblauf(RecordSettings):
@@ -92,7 +94,8 @@ class TrainiertesModel(RecordSettings):
         return open(self.kidata.pfad_label, "r").readlines()
     
     def loadmodelpytorch(self, progressring: ft.ProgressRing) -> Generator[Tuple[KiData,cv2.typing.MatLike], Any, Any]:
-
+        formoderfarbmodus = modelCreatermodus.modus
+     
         self.kidata = KiDataManager.ladeKImodel()
         self.normalizedata()
        
@@ -125,10 +128,8 @@ class TrainiertesModel(RecordSettings):
             label_name = label_names[confidence_class]
             self.UpdateZeahler(label_name,prediction_score.item())
             currenttime = round(time.time() - start_time,2)
-            erkannt = Erkanntermodus.FARBE
 
-
-            kidaten = KiData(label_name=label_name,confidence_score=int(np.round(confidence_class * 100)),erkannter_modus=erkannt, laufzeit=currenttime,anzahl=self.zeahler)
+            kidaten = KiData(label_name=label_name,confidence_score=int(np.round(confidence_class * 100)),erkannter_modus=formoderfarbmodus, laufzeit=currenttime,anzahl=self.zeahler)
             yield (kidaten, frame)
             
             self.leerzeit = time.time() - self.currenttime
