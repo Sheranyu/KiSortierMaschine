@@ -3,7 +3,7 @@
 
 from configordner.settings import SaveDictName
 from logic.KiDatenManager import KiDataManager
-from modele.InterneDatenModele import CameraSettings
+from modele.InterneDatenModele import CameraSettingsModel
 
 
 class RecordSettings:
@@ -24,8 +24,8 @@ class RecordSettings:
         self.MEINEFARBE = (255, 255, 255)
         self.THICKNESS1 = 2
         try:
-            data = KiDataManager.ladeDaten(SaveDictName.camerasettings,CameraSettings)
+            data = KiDataManager.ladeDaten(SaveDictName.camerasettings,CameraSettingsModel)
         except:
-            data = CameraSettings
+            data = CameraSettingsModel
             
         self.choicedcamera = data

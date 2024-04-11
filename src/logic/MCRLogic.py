@@ -8,7 +8,7 @@ import serial_asyncio
 from StatusMeldungen.status import MCRMeldungen, WarnStatus
 from configordner.settings import SaveDictName
 from logic.KiDatenManager import KiDataManager
-from modele.InterneDatenModele import KiData, LeuchtFarbenLampe, SchanzenSteuerungFarbe, SerialConfig
+from modele.InterneDatenModele import KiData, LeuchtFarbenLampe, SchanzenSteuerungFarbe, SerialConfigModel
 from modele.SchanzenModelle import SchanzenSteuerungForm
 
 COMMODE = "COM6"
@@ -18,7 +18,7 @@ async def recv(stream: StreamReader):
 class SerialInit:
     async def _initserial(self):
         try:
-            commode = KiDataManager.ladeDaten(SaveDictName.serialsettings, SerialConfig)
+            commode = KiDataManager.ladeDaten(SaveDictName.serialsettings, SerialConfigModel)
         except:
             raise ValueError("Bitte COM angeben in den Settings")
         self.timeout = 0

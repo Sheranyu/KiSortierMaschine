@@ -9,7 +9,7 @@ from Ki.opencvcode import TrainiertesModel
 from configordner.settings import LaufZeitConfig, SaveDictName
 from db.CRUD.EndStatistik import EndStatistik
 from logic.KiDatenManager import KiDataManager
-from logic.MCRLogic import LedSteuerung, SchanzenBewegungNachFarbe
+from logic.MCRLogic import LedSteuerung, SchwanzenBewegungNachFarbe
 from modele.InterneDatenModele import Erkanntermodus, KiData
 from typing import Any, Generator, List
 from datetime import datetime
@@ -28,7 +28,7 @@ class KiDatenVerarbeitung():
         self.aktuellelaufzeit = None
         self.currentkidata: KiData = None
         self.kidatenlist: List[KiData] = []
-        self.schanze = SchanzenBewegungNachFarbe()
+        #self.schanze = SchwanzenBewegungNachFarbe()
         self.isamdrehen = False
         self.colorchange = LedSteuerung()
         self.ismoveschanzeaktiv = False
@@ -48,19 +48,19 @@ class KiDatenVerarbeitung():
     async def _start_ki_verarbeitung(self, shareddata: asyncio.Queue):  
             while True:            
                 item: KiData = await shareddata.get()
-                print("in ki", item)
-                await self._MoveSchanze(item)
+                #self._MoveSchanze(item)
+                await asyncio.sleep(5)
                 self.ismoveschanzeaktiv = False
 
-    async def _startasync(self, shareddata: asyncio.Queue, progressring: ft.ProgressRing, callback, callbackinfos):
-        await self._drehe_rad()
+    async def _startasync(self, shareddata: asyncio.Queue, progressring: ft.ProgressRing, zeigebildan, callbackinfos):
+        #self._drehe_rad()
         timemulti = 1
         datum = self._erstelle_datum()
         with sessiongen() as session:
             datumid = self._createdatumindb(datum, session)
             for item, image in self.model.loadmodelpytorch(progressring):
 
-                callback(image)        
+                zeigebildan(image)        
                 callbackinfos(item) 
                 self._verarbeitedaten(item)
                 self.currentkidata = item
@@ -81,7 +81,7 @@ class KiDatenVerarbeitung():
                 if not LaufZeitConfig.islaufzeit:
                     self._savetime(self.currentkidata.laufzeit, datumid, session, self.currentkidata.anzahl)
                     break
-                await asyncio.sleep(0)         
+                            
             
 
     async def _change_color(self, kidaten: KiData):
@@ -89,12 +89,11 @@ class KiDatenVerarbeitung():
             self.colorchange.setledcolor(kidaten)
     
     async def _MoveSchanze(self, Kidata: KiData):
-        if Kidata.erkannter_modus == Erkanntermodus.FARBE:
-            await self.schanze.start_changeposition(Kidata)
-            
-            await self._change_color(Kidata)
-            await self.schanze.start_raddrehen()
-        await asyncio.sleep(0.01)
+        if Kidata.erkannter_modus == Erkanntermodus.FARBE and Kidata.label_name != "background":
+            self.schanze.start_changeposition(Kidata)
+            self._change_color(Kidata)
+            time.sleep(0.5)
+            self.schanze.start_raddrehen()
     
     def _delete_tmp_data(self):
         KiDataManager.deleteSessionData(SaveDictName.kidatenzwischenspeicher)
@@ -108,8 +107,8 @@ class KiDatenVerarbeitung():
         return datum
 
 
-    async def _drehe_rad(self):
-        await self.schanze.start_raddrehen()
+    def _drehe_rad(self):
+        self.schanze.start_raddrehen()
 
     def _verarbeite_entdaten(self,item: KiData,datumid:int, session: Session):
         if item.label_name.lower() != "background" and int(item.confidence_score) > 1:

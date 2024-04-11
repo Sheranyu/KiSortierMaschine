@@ -5,7 +5,7 @@ import flet as ft
 from Designer.design import ClassCreatorDesignPage
 from configordner.settings import SaveDictName
 from logic.KiDatenManager import KiDataManager
-from modele.InterneDatenModele import CameraSettings
+from modele.InterneDatenModele import CameraSettingsModel
 
 
 
@@ -24,7 +24,7 @@ class SettingsClassCreator(ClassCreatorDesignPage):
     
     def on_change(self, e: ft.ControlEvent):
         self.aufnahmegestextausgabe.value = f"{e.control.value} BPS"
-        modeldata = CameraSettings(aufnahmeges=int(e.control.value))
+        modeldata = CameraSettingsModel(aufnahmeges=int(e.control.value))
         #self.aufnahmegestext.value += str(e.control.value)
         self.page.client_storage.set(SaveDictName.camerasettings, modeldata)  
         self.update()
@@ -32,7 +32,7 @@ class SettingsClassCreator(ClassCreatorDesignPage):
     def did_mount(self):
         if self.page.client_storage.get(SaveDictName.camerasettings):
             
-            data = KiDataManager.ladeDaten(SaveDictName.camerasettings,CameraSettings)
+            data = KiDataManager.ladeDaten(SaveDictName.camerasettings,CameraSettingsModel)
             self.aufnahmeges.value = data.aufnahmeges
             self.aufnahmegestextausgabe.value = f"{data.aufnahmeges} BPS"
             self.update()

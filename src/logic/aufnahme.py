@@ -11,7 +11,7 @@ from configordner.settings import LaufZeitConfig, SaveDictName
 from logic.KiDatenManager import KiDataManager
 from modele.InterneDatenModele import (
     AufnahmeDaten,
-    CameraSettings,
+    CameraSettingsModel,
     KiClassList,
 )
 from flet import ProgressRing, TextField
@@ -24,7 +24,7 @@ class WebcamAufnahme(RecordSettings):
 
     def changeSettings(self):
         self.CCSWSettings = KiDataManager.ladeDaten(
-            SaveDictName.camerasettings, CameraSettings
+            SaveDictName.camerasettings, CameraSettingsModel
         )
         self.framegap = 1/self.CCSWSettings.aufnahmeges
 
