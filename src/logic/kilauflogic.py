@@ -9,7 +9,7 @@ from Ki.opencvcode import TrainiertesModel
 from configordner.settings import LaufZeitConfig, SaveDictName
 from db.CRUD.EndStatistik import EndStatistik
 from logic.KiDatenManager import KiDataManager
-from logic.MCRLogic import LedSteuerung, SchwanzenBewegungNachFarbe
+from logic.MCRLogic import LedSteuerung, SchanzenBewegungNachFarbe
 from modele.InterneDatenModele import Erkanntermodus, KiData
 from typing import Any, Generator, List
 from datetime import datetime
@@ -28,7 +28,7 @@ class KiDatenVerarbeitung():
         self.aktuellelaufzeit = None
         self.currentkidata: KiData = None
         self.kidatenlist: List[KiData] = []
-        #self.schanze = SchwanzenBewegungNachFarbe()
+        self.schanze = SchanzenBewegungNachFarbe()
         self.isamdrehen = False
         self.colorchange = LedSteuerung()
         self.ismoveschanzeaktiv = False

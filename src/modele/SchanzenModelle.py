@@ -1,8 +1,6 @@
 from pydantic import BaseModel, Field
 
 
-
-
 class SchanzeAcht(BaseModel):
     name:str = Field(default="acht")
     Topf:str = Field(default="b1")

@@ -7,10 +7,9 @@ class modelCreatermodus():
     @classmethod
     def SetErkanntermodus(cls,data:str):
         data = data.strip()
-        if Erkanntermodus.FARBE.value == data:
-            modelCreatermodus.SetErkanntermodus(Erkanntermodus.FARBE)
-        if Erkanntermodus.FORM.value == data:
-            modelCreatermodus.SetErkanntermodus(Erkanntermodus.FORM)
-    
+        if data in [mode.value for mode in Erkanntermodus]:
+            cls.modus = data
+        else:
+            print("Ungültiger Modus")
 
       

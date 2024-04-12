@@ -94,7 +94,7 @@ class TrainiertesModel(RecordSettings):
         return open(self.kidata.pfad_label, "r").readlines()
     
     def loadmodelpytorch(self, progressring: ft.ProgressRing) -> Generator[Tuple[KiData,cv2.typing.MatLike], Any, Any]:
-        formoderfarbmodus = modelCreatermodus.modus
+        formoderfarbmodus = modelCreatermodus().modus
      
         self.kidata = KiDataManager.ladeKImodel()
         self.normalizedata()

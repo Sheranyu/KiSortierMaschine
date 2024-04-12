@@ -84,12 +84,13 @@ class LoadModelPage(LoadModelPageDesign):
             controls=[self.title, self.card], spacing=10, horizontal_alignment=ft.CrossAxisAlignment.CENTER
         )
         self.rowcontainer = ft.Row([self.columcontainer],alignment=ft.MainAxisAlignment.CENTER)
-        modelCreatermodus.SetErkanntermodus(self.segmenterkanntermodus.selected.pop())
+        
         return self.rowcontainer
     
     def changedsegment(self,e: ft.TapEvent):
         eventdata = e.data
-        modelCreatermodus.SetErkanntermodus(eventdata[0])
+        eventdata = eventdata.strip('[]"')
+        modelCreatermodus.SetErkanntermodus(str(eventdata))
   
 
     def loaddata(self, e):
