@@ -23,9 +23,7 @@ class RecordSettings:
         self.framegap = 0.05  # für automatisierte Bildaufnahme, delay muss in der Schleife einkommentiert werden
         self.MEINEFARBE = (255, 255, 255)
         self.THICKNESS1 = 2
-        try:
-            data = KiDataManager.ladeDaten(SaveDictName.camerasettings,CameraSettingsModel)
-        except:
-            data = CameraSettingsModel
+        data = KiDataManager.ladeDaten(SaveDictName.camerasettings,CameraSettingsModel)
+        
             
         self.choicedcamera = data

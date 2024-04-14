@@ -66,6 +66,11 @@ class SelectCamera(ft.Column):
         
         
     def button_clicked(self,e: ft.TapEvent):
+
+        camerasettings = KiDataManager.ladeDaten(SaveDictName.camerasettings,CameraSettingsModel)
+        camerasettings.Camera = self.dd.value
+        KiDataManager.saveclientdata(SaveDictName.camerasettings,camerasettings)
+            
         self.t.value = f"Dropdown value is:  {self.dd.value}"
         self.update()
         

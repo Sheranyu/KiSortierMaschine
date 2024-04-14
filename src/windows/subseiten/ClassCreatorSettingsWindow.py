@@ -4,7 +4,7 @@ import flet as ft
 #from Designer.design import ClassCreatorDesignPage
 from Designer.design import ClassCreatorDesignPage
 from configordner.settings import SaveDictName
-from lib.Components import BPSSlider
+from libcomponents.Components import BPSSlider
 from logic.KiDatenManager import KiDataManager
 from modele.InterneDatenModele import CameraSettingsModel
 

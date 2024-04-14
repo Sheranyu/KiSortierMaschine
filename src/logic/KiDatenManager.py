@@ -31,7 +31,7 @@ class KiDataManager():
         try:
             json_data = cls.Pagedata.client_storage.get(dictname)
         except:
-            raise ValueError("No data found for the given dictname")
+            return typ()
 
         return typ(**json_data)
     
@@ -56,7 +56,14 @@ class KiDataManager():
 
     
     @classmethod
-    def saveSessionDaten(cls,dictname: str, data: Dict):
+    def saveclientdata(cls,dictname, data: dict):
+        if not isinstance(dictname, str):
+            raise TypeError(TypeErrorMessages.DICT_IS_NO_STRING)
+        
+        cls.Pagedata.client_storage.set(dictname,data)
+    
+    @classmethod
+    def saveSessionDaten(cls,dictname: str, data: dict):
         if not isinstance(dictname, str):
             raise TypeError(TypeErrorMessages.DICT_IS_NO_STRING)
         

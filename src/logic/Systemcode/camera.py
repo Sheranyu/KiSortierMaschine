@@ -1,6 +1,7 @@
 import asyncio
 import platform
 import subprocess
+from typing_extensions import deprecated
 import cv2
 from flet import ProgressRing
 if platform.system() == 'Windows':
@@ -18,19 +19,20 @@ class Camera:
     def get_camera_info(self) -> list[dict]:
         self.cameras = []
 
-        camera_indexes = self._get_camera_indexes()
+        #camera_indexes = self._get_camera_indexes()
 
-        if len(camera_indexes) == 0:
-            return self.cameras
+        # if len(camera_indexes) == 0:
+        #     return self.cameras
 
-        self.cameras = self._add_camera_information(camera_indexes)
+        self.cameras = self._add_camera_information()
 
         return self.cameras
-
+    @deprecated("prüft auf verfügbarkeit wurde entfernt aufgrund das es extrem langsam ist")
     def _get_camera_indexes(self):
         index = 0
         camera_indexes = []
         max_numbers_of_cameras_to_check = 10
+        print("test2")
         while max_numbers_of_cameras_to_check > 0:
             capture = cv2.VideoCapture(index)
             if capture.isOpened():
@@ -41,16 +43,19 @@ class Camera:
         return camera_indexes
 
     
-    def _add_camera_information(self, camera_indexes: list) -> list:
+    def _add_camera_information(self, camera_indexes: list = None) -> list:
         platform_name = platform.system()
         cameras = []
 
         if platform_name == 'Windows':
             cameras_info_windows = asyncio.run(self._get_camera_information_for_windows())
-
-            for camera_index in camera_indexes:
+            if cameras_info_windows.size <= 0:
+                return
+            
+            for camera_index in range(cameras_info_windows.size):
                 
                 camera_name = cameras_info_windows.get_at(camera_index).name.replace('\n', '')
+                
                 cameras.append({'camera_index': camera_index, 'camera_name': camera_name})
 
             return cameras
@@ -68,3 +73,8 @@ class Camera:
 
     async def _get_camera_information_for_windows(self):
         return await windows_devices.DeviceInformation.find_all_async(self.CAMERA_DEVICES)
+
+
+cameratets = Camera()
+
+print(cameratets.get_camera_info())

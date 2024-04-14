@@ -2,7 +2,7 @@
 
 import flet as ft
 from Designer.design import SettingsPageDesign
-from lib.Components import BPSSlider, SelectCamera
+from libcomponents.Components import BPSSlider, SelectCamera
 
 
 class SettingsWindow(SettingsPageDesign):
