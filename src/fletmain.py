@@ -14,7 +14,6 @@ def main(page: ft.Page):
     page.padding = 0
     page.window_width = 1400
     page.window_height = 800
-    
     page.window_center()
     router = Router(page)
     KiDataManager.classinit(page)

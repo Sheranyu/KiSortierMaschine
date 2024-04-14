@@ -77,26 +77,35 @@ class Mainwindow(BaseWindow):
             width=self.weite,
             height=self.breite,
         )
-        self.button5 = ft.Container(
+        self.exitbutton = ft.Container(
             content=ft.ElevatedButton(text="Exit!", on_click=self.exit_application,bgcolor=ft.colors.BLUE,),
             
             width=self.weite,
             height=self.breite,
         )
+        
+        self.settingbutton = ft.Container(
+            content=ft.ElevatedButton(text="settings", 
+                                      on_click=lambda e: self.page.go("/settings"),
+                                      bgcolor=ft.colors.BLUE),
+            width=self.weite,
+            height=self.breite,
+        )
 
-        self.row = ft.Column(
+        self.finalcolumn = ft.Column(
             controls=[
                 self.button1,
                 self.button2,
                 self.button3,
                 self.button4,
-                self.button5,
+                self.settingbutton,
+                self.exitbutton,
             ],
             alignment=ft.MainAxisAlignment.CENTER,
             spacing=20,
         )
-        self.container = ft.Container(content=self.row, expand=True)
-        self.container.alignment = ft.alignment.top_center
+        self.container = ft.Container(content=self.finalcolumn, expand=True, alignment=ft.alignment.top_center)
+        #self.container.alignment = ft.alignment.top_center
         return self.container
 
     def exit_application(self):

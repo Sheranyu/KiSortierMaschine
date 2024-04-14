@@ -7,6 +7,9 @@ def main(page: ft.Page):
         print(e.data)
 
     page.add(
+        
+        ft.Text("Hallow elt", theme_style=ft.TextThemeStyle.BODY_SMALL),
+        ft.Text("Hallow elt", theme_style=ft.TextThemeStyle.HEADLINE_LARGE),
         ft.SegmentedButton(
             on_change=handle_change,
             selected_icon=ft.Icon(ft.icons.ONETWOTHREE),

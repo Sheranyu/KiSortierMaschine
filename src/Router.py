@@ -3,6 +3,7 @@ from windows.AnwendunglaufWindow import StartApplicationPage
 #from windows.subseiten.ClassCreatorSettingsWindow import SettingsClassCreator
 from windows.CreateWindow import CreateModelPage
 from windows.LoadWindow import LoadModelPage
+from windows.SettingsWindow import SettingsWindow
 from windows.StatistikWindow import Statistiken
 
 from windows.fletmaininhalt import Mainwindow
@@ -64,6 +65,10 @@ class Router:
                 appbar=ft.AppBar(title=ft.Text("Statisiken"), bgcolor=ft.colors.SURFACE_VARIANT),
                 )
         
+        self.settings_view = ft.View("/settings", controls=[SettingsWindow()],
+                appbar=ft.AppBar(title=ft.Text("Settings"), bgcolor=ft.colors.SURFACE_VARIANT)
+                )
+        
         # self.classcreatorsettings_view = ft.View("/classcreatorsettings", controls=[SettingsClassCreator(self.page)],
         #                                          appbar=ft.AppBar(title=ft.Text("Settings"), bgcolor=ft.colors.SURFACE_VARIANT))
         
@@ -73,6 +78,7 @@ class Router:
             "/load-model": self.load_model_view,
             "/start-application": self.start_application_view,
             "/statistik": self.statistik_view,
+            "/settings": self.settings_view
             #"/classcreatorsettings": self.classcreatorsettings_view
         }
         

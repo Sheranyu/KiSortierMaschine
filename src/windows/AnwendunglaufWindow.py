@@ -32,7 +32,7 @@ class StartApplicationPage(AnwendungstartPageDesign):
                  ],
                 horizontal_alignment=ft.CrossAxisAlignment.CENTER,
             ),
-            bgcolor=ft.colors.BLUE,
+            
             expand=True,
             alignment=ft.alignment.top_center,
         )
@@ -61,8 +61,8 @@ class StartApplicationPage(AnwendungstartPageDesign):
         )
         # self.container = ft.Container(content=self.columendcontainer, alignment=ft.alignment.center)
         self.rowcont = ft.Container(self.gridview, width=self.page.width)
-        self.endrow = ft.Row([self.rowcont], alignment=ft.MainAxisAlignment.CENTER)
-        return self.endrow
+        
+        return self.rowcont
 
     def start_camera(self, e):
         self.pr.visible = True

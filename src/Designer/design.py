@@ -286,3 +286,12 @@ class ClassCreatorDesignPage(ft.UserControl,ABC):
     @abstractmethod    
     def on_change(self):
         raise NotImplementedError()
+    
+    
+    
+class SettingsPageDesign(ft.Column,ABC):
+    def __init__(self) -> None:
+        super().__init__()
+        
+        
+        
