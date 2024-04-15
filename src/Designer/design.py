@@ -6,7 +6,7 @@ from StatusMeldungen.status import WarnStatus
 from modele.InterneDatenModele import Erkanntermodus, ModelTyp
 
 
-class AnwendungstartPageDesign(ft.UserControl, ABC):
+class AnwendungstartPageDesign(ft.Column, ABC):
     def __init__(self) -> None:
         super().__init__()
         self.laufzeit = ft.TextField(label="laufzeit", value="N/A",border_color=ft.colors.RED, read_only=True, adaptive=True)

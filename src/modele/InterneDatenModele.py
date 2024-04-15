@@ -92,6 +92,7 @@ class AufnahmeDaten(BaseModel):
 class CameraSettingsModel(BaseModel):
     aufnahmeges: int = Field(default=10)
     Camera: int = Field(default=0)
+    CameraName: str = Field(default="Standart")
 
 class SerialConfigModel(BaseModel):
     COM: str = Field(default="COM5")

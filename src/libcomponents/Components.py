@@ -45,8 +45,9 @@ class SelectCamera(ft.Column):
         
         
     def build(self):
-        self.t = ft.Text()
-        self.dd = ft.Dropdown(
+        self.choicedcamera = ft.Text()
+        self.cameralist = ft.Dropdown(
+            label="hallo welt",
             on_change=self.button_clicked,
             expand=True,
         )
@@ -56,9 +57,9 @@ class SelectCamera(ft.Column):
                                      actions_alignment=ft.MainAxisAlignment.CENTER)
         self.progress = ft.ProgressRing(stroke_width=3, visible=False, bgcolor=ft.colors.BLUE)
         
-        self.row = ft.Row([self.dd, self.progress])
+        self.row = ft.Row([self.cameralist, self.progress])
         
-        return ft.Column([self.t,self.row],horizontal_alignment=ft.CrossAxisAlignment.CENTER)
+        return ft.Column([self.choicedcamera,self.row],horizontal_alignment=ft.CrossAxisAlignment.CENTER)
         
     def dismismodal(self,e):
         self.dialog.open = False
@@ -68,14 +69,20 @@ class SelectCamera(ft.Column):
     def button_clicked(self,e: ft.TapEvent):
 
         camerasettings = KiDataManager.ladeDaten(SaveDictName.camerasettings,CameraSettingsModel)
-        camerasettings.Camera = self.dd.value
+        camerasettings.Camera = self.cameralist.value
+     
+        camerasettings.CameraName = self.cameralist.options[int(self.cameralist.value)].text                                                                                                                                                   
         KiDataManager.saveclientdata(SaveDictName.camerasettings,camerasettings)
             
-        self.t.value = f"Dropdown value is:  {self.dd.value}"
+        self.choicedcamera.value = f"Dropdown value is:  {camerasettings.CameraName}"
         self.update()
         
     
     def did_mount(self):
+        cameradata = KiDataManager.ladeDaten(SaveDictName.camerasettings,CameraSettingsModel)
+        self.choicedcamera.value = cameradata.CameraName
+        self.cameralist.label = cameradata.CameraName
+      
         self.progress.visible = True
         self.update()
         self.cameras = Camera()
@@ -87,7 +94,7 @@ class SelectCamera(ft.Column):
                 index = camdata.get("camera_index")
                 camera_name = camdata.get("camera_name")
                 item = ft.dropdown.Option(index, camera_name)
-                self.dd.options.append(item)
+                self.cameralist.options.append(item)
         else:
             self.page.dialog = self.dialog
             self.dialog.open = True
