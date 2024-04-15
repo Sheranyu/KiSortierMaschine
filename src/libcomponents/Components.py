@@ -72,8 +72,6 @@ class SelectCamera(ft.Column):
      
         camerasettings.CameraName = self.cameralist.options[int(self.cameralist.value)].text                                                                                                                                                   
         KiDataManager.saveclientdata(SaveDictName.camerasettings,camerasettings)
-            
-        self.choicedcamera.value = f"Dropdown value is:  {camerasettings.CameraName}"
         self.update()
         
     
