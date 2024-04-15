@@ -1,44 +1,25 @@
 import flet as ft
 
-
 def main(page: ft.Page):
-    def handle_change(e):
-        print("on_change data : " + str(e.data))
-        print(e.data)
+    def button_clicked(e):
+        t.value = f"Dropdown value is:  {dd.value}"
+        page.update()
 
-    page.add(
-        
-        ft.Text("Hallow elt", theme_style=ft.TextThemeStyle.BODY_SMALL),
-        ft.Text("Hallow elt", theme_style=ft.TextThemeStyle.HEADLINE_LARGE),
-        ft.SegmentedButton(
-            on_change=handle_change,
-            selected_icon=ft.Icon(ft.icons.ONETWOTHREE),
-            selected={"1", "4"},
-            allow_multiple_selection=True,
-            segments=[
-                ft.Segment(
-                    value="1",
-                    label=ft.Text("1"),
-                    icon=ft.Icon(ft.icons.LOOKS_ONE),
-                ),
-                ft.Segment(
-                    value="2",
-                    label=ft.Text("2"),
-                    icon=ft.Icon(ft.icons.LOOKS_TWO),
-                ),
-                ft.Segment(
-                    value="3",
-                    label=ft.Text("3"),
-                    icon=ft.Icon(ft.icons.LOOKS_3),
-                ),
-                ft.Segment(
-                    value="4",
-                    label=ft.Text("4"),
-                    icon=ft.Icon(ft.icons.LOOKS_4),
-                ),
-            ],
-        )
+    t = ft.Text()
+    b = ft.ElevatedButton(text="Submit", on_click=button_clicked)
+    dd = ft.Dropdown(
+        width=100,
+        options=[
+            ft.dropdown.Option("Red"),
+            ft.dropdown.Option("Green"),
+            ft.dropdown.Option("Blue"),
+        ],
+       
+        icon=ft.icons.AC_UNIT,
+        border_radius=10,
+        border_width=2
     )
-
+   
+    page.add(dd, b, t)
 
 ft.app(target=main)

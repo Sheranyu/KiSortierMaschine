@@ -3,6 +3,7 @@ import flet as ft
 
 from StatusMeldungen.messageinfo import ClassCreatorSettingsMessage as CCSM
 from StatusMeldungen.status import WarnStatus
+from libcomponents.CustomTextField import TextFieldBCB
 from modele.InterneDatenModele import Erkanntermodus, ModelTyp
 
 
@@ -44,11 +45,11 @@ class CreateModelPageDesign(ABC, ft.UserControl):
     def __init__(self) -> None:
         super().__init__()
         border_radius = 6
-        self.maxeingelesendatenseatz = ft.TextField(border_radius=border_radius,label="Max Dateneinlesen", value=100, input_filter=ft.NumbersOnlyInputFilter(),border_color=ft.colors.BLUE, filled=True)
+        self.maxeingelesendatenseatz = TextFieldBCB(border_radius=border_radius,label="Max Dateneinlesen", value=100, input_filter=ft.NumbersOnlyInputFilter(), filled=True)
         
-        self.epoches = ft.TextField(border_radius=border_radius,label="Epoches", value=30, input_filter=ft.NumbersOnlyInputFilter(),border_color=ft.colors.BLUE, filled=True)
-        self.lernratetextfield = ft.TextField(border_radius=border_radius,label="Lern Rate", value=0.001, tooltip="lernrate zwischen 0.001 und 0.01",
-                                              input_filter=ft.InputFilter(regex_string=r"^[0-9.-]*$"), border_color=ft.colors.BLUE, filled=True)
+        self.epoches = TextFieldBCB(border_radius=border_radius,label="Epoches", value=30, input_filter=ft.NumbersOnlyInputFilter(), filled=True)
+        self.lernratetextfield = TextFieldBCB(border_radius=border_radius,label="Lern Rate", value=0.001, tooltip="lernrate zwischen 0.001 und 0.01",
+                                              input_filter=ft.InputFilter(regex_string=r"^[0-9.-]*$"), filled=True)
         self.batchsizetext = ft.Text("Batch Size")
         self.batchsize = ft.Slider(value=16, min=16, max=64, divisions=3, label="{value}", height=20)
         
@@ -57,7 +58,7 @@ class CreateModelPageDesign(ABC, ft.UserControl):
         #self.lernrate = ft.Slider(value=0.001, min=0.001, max=0.03, divisions=33, label="{value}", round=4)
         self.settingbuttonclass = ft.FloatingActionButton(content=ft.Icon(ft.icons.SETTINGS), on_click=lambda _: self.Open_Settings_Class())
         
-        self.zeigemomentanbildintext = ft.TextField(label="BildNummer", value="N/A", read_only=True, color=ft.colors.RED)
+        self.zeigemomentanbildintext = TextFieldBCB(label="BildNummer", value="N/A", read_only=True, color=ft.colors.RED)
         self.CameraContainer = ft.Image(src="./")
         self.progressring = ft.ProgressRing(visible=False,width=32, height=32, stroke_width=3 )
         self.classzeahler = 1
@@ -72,7 +73,7 @@ class CreateModelPageDesign(ABC, ft.UserControl):
 
         self.cameraaufnahmebutton = ft.FilledButton("Start Aufnahme", on_click=lambda e,anzahl=self.classzeahler :self.StartCamera(e,anzahl))
         #self.breakvideocapture = ft.FilledButton("beenden") findet man in der funktion: LadeListe()
-        self.firstclasstexteingabe = ft.TextField(label="class name")
+        self.firstclasstexteingabe = TextFieldBCB(label="class name")
         self.deleteclassbutton = ft.IconButton(icon=ft.icons.DELETE,bgcolor=ft.colors.RED, on_click=lambda e,index=self.classzeahler: self.DeleteClass(e,index) )
         
         self.floatedbutton = ft.FloatingActionButton(col=1,content=ft.Icon(ft.icons.ADD),on_click=lambda _: self._CreateNewTrainingClass())
@@ -80,7 +81,7 @@ class CreateModelPageDesign(ABC, ft.UserControl):
 
         self.title = ft.Text("Modell erstellen", theme_style=ft.TextThemeStyle.HEADLINE_LARGE)
         self.instructions = ft.Text("Neues Modell erstellen")
-        self.model_name = ft.TextField(label="Modell Name")
+        self.model_name = TextFieldBCB(label="Modell Name")
         self.warnhinweis_title_text = ft.Text("Warnhinweis", text_align="center")
         self.save_file_pfad = ft.Text()
         self.modeltyplist = ft.Dropdown(
@@ -90,6 +91,7 @@ class CreateModelPageDesign(ABC, ft.UserControl):
                 ft.dropdown.Option(ModelTyp.KERAS, "Kera Model"),
                 ft.dropdown.Option(ModelTyp.TORCH, "PyTorch Model"),
             ],
+            border_color=ft.colors.BLUE,
         )
         self.abbruchtrainingbtn = ft.ElevatedButton("abbruch",ft.icons.CANCEL, 
                                                     bgcolor=ft.colors.RED, on_click=self.cancel_ki_training, visible=False)

@@ -48,12 +48,11 @@ class KiDatenVerarbeitung():
     async def _start_ki_verarbeitung(self, shareddata: asyncio.Queue):  
             while True:            
                 item: KiData = await shareddata.get()
-                #self._MoveSchanze(item)
-                await asyncio.sleep(5)
+                await self._MoveSchanze(item)
                 self.ismoveschanzeaktiv = False
 
     async def _startasync(self, shareddata: asyncio.Queue, progressring: ft.ProgressRing, zeigebildan, callbackinfos):
-        #self._drehe_rad()
+        await self._drehe_rad()
         timemulti = 1
         datum = self._erstelle_datum()
         with sessiongen() as session:
@@ -86,14 +85,14 @@ class KiDatenVerarbeitung():
 
     async def _change_color(self, kidaten: KiData):
         if kidaten.erkannter_modus == Erkanntermodus.FARBE:
-            self.colorchange.setledcolor(kidaten)
+            await self.colorchange.setledcolor(kidaten)
     
     async def _MoveSchanze(self, Kidata: KiData):
         if Kidata.erkannter_modus == Erkanntermodus.FARBE and Kidata.label_name != "background":
-            self.schanze.start_changeposition(Kidata)
-            self._change_color(Kidata)
+            await self.schanze.start_changeposition(Kidata)
+            await self._change_color(Kidata)
             time.sleep(0.5)
-            self.schanze.start_raddrehen()
+            await self.schanze.start_raddrehen()
     
     def _delete_tmp_data(self):
         KiDataManager.deleteSessionData(SaveDictName.kidatenzwischenspeicher)
@@ -107,8 +106,8 @@ class KiDatenVerarbeitung():
         return datum
 
 
-    def _drehe_rad(self):
-        self.schanze.start_raddrehen()
+    async def _drehe_rad(self):
+        await self.schanze.start_raddrehen()
 
     def _verarbeite_entdaten(self,item: KiData,datumid:int, session: Session):
         if item.label_name.lower() != "background" and int(item.confidence_score) > 1:

@@ -17,13 +17,12 @@ async def recv(stream: StreamReader):
 
 class SerialInit:
     async def _initserial(self):
-        try:
-            commode = KiDataManager.ladeDaten(SaveDictName.serialsettings, SerialConfigModel)
-        except:
-            raise ValueError("Bitte COM angeben in den Settings")
+       
+        commode = KiDataManager.ladeDaten(SaveDictName.serialsettings, SerialConfigModel)
+        
         self.timeout = 0
         self.TIMEOUTEND = 5
-        self.reader ,self.writer = await serial_asyncio.open_serial_connection(url=commode, baudrate=115200)
+        self.reader ,self.writer = await serial_asyncio.open_serial_connection(url=commode.COM, baudrate=115200)
 
 class SchanzenBewegungNachFarbe(SerialInit):
     def __init__(self):
@@ -49,19 +48,20 @@ class SchanzenBewegungNachFarbe(SerialInit):
             
     async def _ChangePosition(self, Positionsnummer: str):
         await self._initserial()
-        try:
-            print(Positionsnummer)
-            data_to_send = Positionsnummer
-            self.writer.write(data_to_send.encode())
-           
-            response = b""
-            while response.rstrip() != MCRMeldungen.SERVO_GEDREHT:
-                response = await asyncio.wait_for(recv(self.reader),timeout=5)
-             
-            return   
-        finally:
-            self.writer.close()
-            await self.writer.wait_closed()
+        
+        print(Positionsnummer)
+        data_to_send = Positionsnummer
+        self.writer.write(data_to_send.encode())
+        
+        response = b""
+        while response.rstrip() != MCRMeldungen.SERVO_GEDREHT:
+            response = await asyncio.wait_for(recv(self.reader),timeout=5)
+            
+        self.writer.close()
+        await self.writer.wait_closed()
+        return   
+    
+      
     
     
     async def start_raddrehen(self):
@@ -69,8 +69,8 @@ class SchanzenBewegungNachFarbe(SerialInit):
         await self._raddrehen()  
             
     async def _raddrehen(self):
+        await self._initserial()
         try:
-            await self._initserial()
             data_to_send = "go"
             self.writer.write(data_to_send.encode())
             

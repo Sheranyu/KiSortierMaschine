@@ -95,7 +95,7 @@ class CameraSettingsModel(BaseModel):
     CameraName: str = Field(default="Standart")
 
 class SerialConfigModel(BaseModel):
-    COM: str = Field(default="COM5")
+    COM: str = Field(default="COM6")
     
 
 class KiModeltrainingConfigdata(BaseModel):

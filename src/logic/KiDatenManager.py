@@ -30,6 +30,8 @@ class KiDataManager():
             raise TypeError(TypeErrorMessages.DICT_IS_NO_STRING)
         try:
             json_data = cls.Pagedata.client_storage.get(dictname)
+            if json_data is None:
+                return typ()
         except:
             return typ()
 
