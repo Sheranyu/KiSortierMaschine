@@ -78,6 +78,7 @@ class SelectCamera(ft.Row):
             title=ft.Text("Error"),
             actions=[ft.TextButton("confirm", on_click=self.dismismodal)],
             actions_alignment=ft.MainAxisAlignment.CENTER,
+            content=ft.Text("Keine Kamera gefunden"),
         )
         self.progress = ft.ProgressRing(
             stroke_width=3, visible=False, bgcolor=ft.colors.BLUE
