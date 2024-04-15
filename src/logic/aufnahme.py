@@ -23,6 +23,7 @@ class WebcamAufnahme(RecordSettings):
         
 
     def changeSettings(self):
+        self.loadRecordSettings()
         self.CCSWSettings = KiDataManager.ladeDaten(
             SaveDictName.camerasettings, CameraSettingsModel
         )
