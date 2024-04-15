@@ -5,7 +5,9 @@ def main(page: ft.Page):
         t.value = f"Dropdown value is:  {dd.value}"
         page.update()
 
-    t = ft.Text()
+    
+    testspan = ft.TextSpan("hallowelt")
+    t = ft.Text("hallowelt",spans=[testspan])
     b = ft.ElevatedButton(text="Submit", on_click=button_clicked)
     dd = ft.Dropdown(
         width=100,
