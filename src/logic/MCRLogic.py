@@ -22,28 +22,36 @@ class SerialInit:
         
         self.timeout = 0
         self.TIMEOUTEND = 5
-        self.reader ,self.writer = await serial_asyncio.open_serial_connection(url=commode.COM, baudrate=115200)
+        self.reader ,self.writer = await serial_asyncio.open_serial_connection(url=COMMODE, baudrate=115200)
 
-class SchanzenBewegungNachFarbe(SerialInit):
+class SchanzenBewegungNachFarbe():
     def __init__(self):
         super().__init__()
+        
+    async def _initserial(self):
+       
+        commode = KiDataManager.ladeDaten(SaveDictName.serialsettings, SerialConfigModel)
+        
+        self.timeout = 0
+        self.TIMEOUTEND = 5
+        self.reader ,self.writer = await serial_asyncio.open_serial_connection(url=COMMODE, baudrate=115200)
 
        
     async def start_changeposition(self, kilaufdaten: KiData):
         label = kilaufdaten.label_name.strip()
     
-        if label in SchanzenSteuerungFarbe.BLUE.value or SchanzenSteuerungForm.acht.name:
+        if label in SchanzenSteuerungFarbe.BLUE.value:
             print("blue")
             await self._ChangePosition("b1")
-        if label in SchanzenSteuerungFarbe.GREEN.value or SchanzenSteuerungForm.sechs.name:
+        if label in SchanzenSteuerungFarbe.GREEN.value:
             print("green")
             await self._ChangePosition("b2")
         
-        if label in SchanzenSteuerungFarbe.ROT.value or SchanzenSteuerungForm.zwanzig.name:
+        if label in SchanzenSteuerungFarbe.ROT.value:
             print("rot")
             await self._ChangePosition("b3")
         
-        if label in SchanzenSteuerungFarbe.SONSTIGES.value or SchanzenSteuerungForm.sonstig:
+        if label in SchanzenSteuerungFarbe.SONSTIGES.value:
             await self._ChangePosition("b4")
             
     async def _ChangePosition(self, Positionsnummer: str):
@@ -53,9 +61,9 @@ class SchanzenBewegungNachFarbe(SerialInit):
         data_to_send = Positionsnummer
         self.writer.write(data_to_send.encode())
         
-        response = b""
+        response = ""
         while response.rstrip() != MCRMeldungen.SERVO_GEDREHT:
-            response = await asyncio.wait_for(recv(self.reader),timeout=5)
+            response = await asyncio.wait_for(recv(self.reader),timeout=10)
             
         self.writer.close()
         await self.writer.wait_closed()
@@ -70,23 +78,35 @@ class SchanzenBewegungNachFarbe(SerialInit):
             
     async def _raddrehen(self):
         await self._initserial()
-        try:
-            data_to_send = "go"
-            self.writer.write(data_to_send.encode())
-            
-            response = ""
-            while response.rstrip() != MCRMeldungen.GEDREHT:
-                response = await asyncio.wait_for(recv(self.reader),timeout=5)
+        
+        data_to_send = "go"
+        self.writer.write(data_to_send.encode())
+        
+        response = b""
+        while response.rstrip() != MCRMeldungen.GEDREHT:
+            response = await asyncio.wait_for(recv(self.reader),timeout=10)
+            print(response)
 
-            return
-        finally:
-            self.writer.close()
-            await self.writer.wait_closed()
+        
+        
+        self.writer.close()
+        await self.writer.wait_closed()
+        return
+        
             
             
-class LedSteuerung(SerialInit):
+            
+class LedSteuerung():
     def __init__(self) -> None:
-        super().__init__()
+        pass
+    
+    async def _initserial(self):
+       
+        commode = KiDataManager.ladeDaten(SaveDictName.serialsettings, SerialConfigModel)
+        
+        self.timeout = 0
+        self.TIMEOUTEND = 5
+        self.reader ,self.writer = await serial_asyncio.open_serial_connection(url=COMMODE, baudrate=115200)
         
     async def setledcolor(self,kilaufdaten: KiData):
         
@@ -107,18 +127,22 @@ class LedSteuerung(SerialInit):
             print("Dürfte nicht hier drin sein zeile 95: LEDSteuerung")
      
     async def _change_color(self, ledcolor: LeuchtFarbenLampe):
-        try:
-            await self._initserial()
-            data_to_send = ledcolor.value.strip()
-            self.writer.write(data_to_send.encode())
+    
+        await self._initserial()
+        data_to_send = ledcolor.value.strip()
+        self.writer.write(data_to_send.encode())
+        
+        response = b""
+        while response.rstrip() != MCRMeldungen.LED_UMGESCHALTET:
+            response = await asyncio.wait_for(recv(self.reader),timeout=10)
             
-            response = ""
-            while response.rstrip() != MCRMeldungen.LED_UMGESCHALTET:
-                response = asyncio.wait_for(await recv(self.reader),timeout=5)
+        print("nein")
+            
+            
             # await asyncio.sleep(0.1)
             # self.timeout += 0.1
             # if self.timeout> self.TIMEOUTEND:
             #     raise TimeoutError(WarnStatus.TIMEOUT_WARN)
-        finally:
-            self.writer.close()
-            await self.writer.wait_closed()
+        
+        self.writer.close()
+        await self.writer.wait_closed()

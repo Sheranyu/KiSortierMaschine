@@ -75,7 +75,7 @@ class KiDatenVerarbeitung():
                         await shareddata.put(item)
                         self.ismoveschanzeaktiv = True
                
-                
+                await asyncio.sleep(0)
                     
                 if not LaufZeitConfig.islaufzeit:
                     self._savetime(self.currentkidata.laufzeit, datumid, session, self.currentkidata.anzahl)
@@ -91,7 +91,6 @@ class KiDatenVerarbeitung():
         if Kidata.erkannter_modus == Erkanntermodus.FARBE and Kidata.label_name != "background":
             await self.schanze.start_changeposition(Kidata)
             await self._change_color(Kidata)
-            time.sleep(0.5)
             await self.schanze.start_raddrehen()
     
     def _delete_tmp_data(self):
