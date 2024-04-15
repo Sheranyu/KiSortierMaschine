@@ -45,7 +45,6 @@ class SelectCamera(ft.Column):
         
         
     def build(self):
-        self.choicedcamera = ft.Text()
         self.cameralist = ft.Dropdown(
             label="hallo welt",
             on_change=self.button_clicked,
@@ -59,7 +58,7 @@ class SelectCamera(ft.Column):
         
         self.row = ft.Row([self.cameralist, self.progress])
         
-        return ft.Column([self.choicedcamera,self.row],horizontal_alignment=ft.CrossAxisAlignment.CENTER)
+        return ft.Column([self.row],horizontal_alignment=ft.CrossAxisAlignment.CENTER)
         
     def dismismodal(self,e):
         self.dialog.open = False
@@ -80,7 +79,6 @@ class SelectCamera(ft.Column):
     
     def did_mount(self):
         cameradata = KiDataManager.ladeDaten(SaveDictName.camerasettings,CameraSettingsModel)
-        self.choicedcamera.value = cameradata.CameraName
         self.cameralist.label = cameradata.CameraName
       
         self.progress.visible = True
