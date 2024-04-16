@@ -64,14 +64,7 @@ class TrainiertesModel(RecordSettings):
             self.normalize,
         ])
     
-    def UpdateZeahler(self,predicted_class:str, predictprozent: int):
-        
-        if "background" in predicted_class.lower().strip() and predictprozent > 20:
-            
-            self.isbackgroundvisible = True
-        elif self.isbackgroundvisible == True:
-            self.zeahler += 1
-            self.isbackgroundvisible = False
+   
 
             
         
@@ -127,7 +120,7 @@ class TrainiertesModel(RecordSettings):
             confidence_class,prediction_score = self.predict_image(img_part)
 
             label_name = label_names[confidence_class]
-            self.UpdateZeahler(label_name,prediction_score.item())
+            
             currenttime = round(time.time() - start_time,2)
             farbe = Erkanntermodus.FARBE
             kidaten = KiData(label_name=label_name,confidence_score=int(np.round(prediction_score.item())),erkannter_modus=farbe, laufzeit=currenttime,anzahl=self.zeahler)

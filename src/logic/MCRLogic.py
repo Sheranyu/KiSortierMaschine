@@ -60,11 +60,12 @@ class SchanzenBewegungNachFarbe(SerialInit):
       
     
     
-    async def start_raddrehen(self):
+    async def start_raddrehen(self) -> str:
         #if kilaufdaten.label_name == SchnazenSteuerungFarbe.BACKGROUND.value:
-        await self._raddrehen()  
-            
-    async def _raddrehen(self):
+        responsedata = await self._raddrehen()  
+        return responsedata
+    
+    async def _raddrehen(self) -> str:
         await self._initserial()
         
         data_to_send = "go"
@@ -80,7 +81,7 @@ class SchanzenBewegungNachFarbe(SerialInit):
         
         self.writer.close()
         await self.writer.wait_closed()
-        return
+        return response
         
             
             
