@@ -1,25 +1,7 @@
-import flet as ft
+import micropip
 
-def main(page: ft.Page):
-    def button_clicked(e):
-        t.value = f"Dropdown value is:  {dd.value}"
-        page.update()
+async def install_opencv():
+    await micropip.install("opencv-python")
 
-    t = ft.Text()
-    b = ft.ElevatedButton(text="Submit", on_click=button_clicked)
-    dd = ft.Dropdown(
-        width=100,
-        options=[
-            ft.dropdown.Option("Red"),
-            ft.dropdown.Option("Green"),
-            ft.dropdown.Option("Blue"),
-        ],
-       
-        icon=ft.icons.AC_UNIT,
-        border_radius=10,
-        border_width=2
-    )
-   
-    page.add(dd, b, t)
-
-ft.app(target=main)
+# Führe die Funktion aus
+await install_opencv()

@@ -1,7 +1,7 @@
 
 import time
 from typing import Any, Generator, Tuple
-from keras.models import load_model  # TensorFlow is required for Keras to work
+ # TensorFlow is required for Keras to work
 import cv2  # Install opencv-python
 from torch.autograd import Variable
 import numpy as np
@@ -65,7 +65,8 @@ class TrainiertesModel(RecordSettings):
         ])
     
     def UpdateZeahler(self,predicted_class:str, predictprozent: int):
-        if "background" in predicted_class.lower().strip() and predictprozent > 0.5:
+        
+        if "background" in predicted_class.lower().strip() and predictprozent > 20:
             
             self.isbackgroundvisible = True
         elif self.isbackgroundvisible == True:
@@ -128,8 +129,8 @@ class TrainiertesModel(RecordSettings):
             label_name = label_names[confidence_class]
             self.UpdateZeahler(label_name,prediction_score.item())
             currenttime = round(time.time() - start_time,2)
-
-            kidaten = KiData(label_name=label_name,confidence_score=int(np.round(confidence_class * 100)),erkannter_modus=formoderfarbmodus, laufzeit=currenttime,anzahl=self.zeahler)
+            farbe = Erkanntermodus.FARBE
+            kidaten = KiData(label_name=label_name,confidence_score=int(np.round(confidence_class * 100)),erkannter_modus=farbe, laufzeit=currenttime,anzahl=self.zeahler)
             yield (kidaten, frame)
             
             self.leerzeit = time.time() - self.currenttime
@@ -144,57 +145,57 @@ class TrainiertesModel(RecordSettings):
         cap.release()  # Gib die Ressourcen der Webcam frei
         cv2.destroyAllWindows()
        
-    def loadmodelKera(self, progressring: ft.ProgressRing) -> Generator[Tuple[KiData,cv2.typing.MatLike], Any, Any]:
-        self.kidata = KiDataManager.ladeKImodel()
+    # def loadmodelKera(self, progressring: ft.ProgressRing) -> Generator[Tuple[KiData,cv2.typing.MatLike], Any, Any]:
+    #     self.kidata = KiDataManager.ladeKImodel()
         
-        if self.kidata is None:
-            print("error")
-            return
-        # Disable scientific notation for clarity
-        np.set_printoptions(suppress=True)
+    #     if self.kidata is None:
+    #         print("error")
+    #         return
+    #     # Disable scientific notation for clarity
+    #     np.set_printoptions(suppress=True)
 
-        # Load the model
-        model = load_model(self.kidata.pfad_model, compile=False)
+    #     # Load the model
+    #     model = load_model(self.kidata.pfad_model, compile=False)
 
-        # Load the labels
-        class_label_names = open(self.kidata.pfad_label, "r").readlines()
+    #     # Load the labels
+    #     class_label_names = open(self.kidata.pfad_label, "r").readlines()
 
-        # CAMERA can be 0 or 1 based on default camera of your computer
-        camera = cv2.VideoCapture(self.choicedcamera)
+    #     # CAMERA can be 0 or 1 based on default camera of your computer
+    #     camera = cv2.VideoCapture(self.choicedcamera)
         
-        progressring.visible = False
-        progressring.update()
-        start_time = time.time()
-        while True:
+    #     progressring.visible = False
+    #     progressring.update()
+    #     start_time = time.time()
+    #     while True:
             
-            # Grab the webcamera's image.
-            ret, image = camera.read()
-            # Resize the raw image into (256-height,256-width) pixels
-            image = cv2.resize(image, (256, 256), interpolation=cv2.INTER_AREA)
-            # Make the image a numpy array and reshape it to the models input shape.
-            imageresharp = np.asarray(image, dtype=np.float32).reshape(1, 256, 256, 3)
-            # Normalize the image array
-            imageresharp = (imageresharp / 127.5) - 1
-            # Predicts the model
-            prediction = model.predict(imageresharp)
-            index = np.argmax(prediction)
-            label_name = class_label_names[index]
-            confidence_score = prediction[0][index]
+    #         # Grab the webcamera's image.
+    #         ret, image = camera.read()
+    #         # Resize the raw image into (256-height,256-width) pixels
+    #         image = cv2.resize(image, (256, 256), interpolation=cv2.INTER_AREA)
+    #         # Make the image a numpy array and reshape it to the models input shape.
+    #         imageresharp = np.asarray(image, dtype=np.float32).reshape(1, 256, 256, 3)
+    #         # Normalize the image array
+    #         imageresharp = (imageresharp / 127.5) - 1
+    #         # Predicts the model
+    #         prediction = model.predict(imageresharp)
+    #         index = np.argmax(prediction)
+    #         label_name = class_label_names[index]
+    #         confidence_score = prediction[0][index]
 
-            # Print prediction and confidence score
-            #print("Class:", class_name[2:], end="")
-            self.currenttime = time.time() - start_time - self.leerzeit
-            #print("Confidence Score:", str(np.round(confidence_score * 100))[:-2], "%")
-            yield (KiData(label_name[2:],str(np.round(confidence_score * 100))[:-2],"form", laufzeit=self.currenttime), image)
-            self.leerzeit = time.time() - self.currenttime
-            # Listen to the keyboard for presses.
-            keyboard_input = cv2.waitKey(1)
+    #         # Print prediction and confidence score
+    #         #print("Class:", class_name[2:], end="")
+    #         self.currenttime = time.time() - start_time - self.leerzeit
+    #         #print("Confidence Score:", str(np.round(confidence_score * 100))[:-2], "%")
+    #         yield (KiData(label_name[2:],str(np.round(confidence_score * 100))[:-2],"form", laufzeit=self.currenttime), image)
+    #         self.leerzeit = time.time() - self.currenttime
+    #         # Listen to the keyboard for presses.
+    #         keyboard_input = cv2.waitKey(1)
 
-            # 27 is the ASCII for the esc key on your keyboard.
-            if keyboard_input == 27 or LaufZeitConfig.islaufzeit == False:
-                break
+    #         # 27 is the ASCII for the esc key on your keyboard.
+    #         if keyboard_input == 27 or LaufZeitConfig.islaufzeit == False:
+    #             break
 
-        self.destroycam(camera)
+    #     self.destroycam(camera)
 
     
   

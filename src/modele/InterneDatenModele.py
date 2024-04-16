@@ -21,7 +21,7 @@ class SchanzenSteuerungFarbe(Enum):
     ROT = "rot"
     GREEN = "green"
     BLUE = "blue"
-    SONSTIGES = "sonstiges"
+    SONSTIG = "sonstig"
     BACKGROUND = "background"
  
  

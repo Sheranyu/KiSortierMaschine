@@ -69,7 +69,7 @@ class KiDatenVerarbeitung():
                     timemulti += 1
                     self._delete_tmp_data()
                     self._verarbeite_entdaten(endkidata, datumid, session)
-                    print(item.laufzeit)
+                   
                 
                     if not self.ismoveschanzeaktiv:
                         await shareddata.put(item)

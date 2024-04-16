@@ -1,5 +1,4 @@
 import flet as ft
-from matplotlib.offsetbox import PaddedBox
 from StatusMeldungen.messageinfo import ClassCreatorSettingsMessage as CCSM
 from configordner.settings import SaveDictName
 from logic.KiDatenManager import KiDataManager
