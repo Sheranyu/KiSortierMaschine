@@ -32,6 +32,11 @@ class KiDataManager():
             json_data = cls.Pagedata.client_storage.get(dictname)
             if json_data is None:
                 return typ()
+            
+            expected_attributes = set(typ.__annotations__.keys())
+            json_attributes = set(json_data.keys())
+            if expected_attributes != json_attributes:
+                raise TypeError("JSON data does not match the expected type")
         except:
             return typ()
 

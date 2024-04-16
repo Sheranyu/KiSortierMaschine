@@ -2,21 +2,14 @@
 
 import flet as ft
 from Designer.design import SettingsPageDesign
-from libcomponents.Components import BPSSlider, SelectCamera
+from libcomponents.Components import BPSSlider, COMSelector, SelectCamera
 
 
 class SettingsWindow(SettingsPageDesign):
     def __init__(self) -> None:
         super().__init__()
-        
-        
-    def build(self):
         self.bpsslider = BPSSlider()
         self.cameraselecter = SelectCamera()
+        self.com = COMSelector()
+        self.controls = [self.bpsslider,self.cameraselecter,self.com]
         
-        self.columend = ft.Column([self.bpsslider,self.cameraselecter])
-        return self.columend
-        
-    def did_mount(self):
-        
-        pass

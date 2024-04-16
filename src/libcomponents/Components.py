@@ -1,9 +1,10 @@
 import flet as ft
 from StatusMeldungen.messageinfo import ClassCreatorSettingsMessage as CCSM
 from configordner.settings import SaveDictName
+from libcomponents.CustomTextField import TextFieldBCB
 from logic.KiDatenManager import KiDataManager
 from logic.Systemcode.camera import Camera
-from modele.InterneDatenModele import CameraSettingsModel
+from modele.InterneDatenModele import CameraSettingsModel, SerialConfigModel
 
 
 class BPSSlider(ft.Column):
@@ -59,11 +60,10 @@ class BPSSlider(ft.Column):
             self.update()
 
 
-class SelectCamera(ft.Column):
+class SelectCamera(ft.Row):
     def __init__(self):
         super().__init__(self)
 
-    def build(self):
         self.cameralist = ft.Dropdown(
             on_change=self.button_clicked,
             expand=True,
@@ -78,14 +78,13 @@ class SelectCamera(ft.Column):
             title=ft.Text("Error"),
             actions=[ft.TextButton("confirm", on_click=self.dismismodal)],
             actions_alignment=ft.MainAxisAlignment.CENTER,
+            content=ft.Text("Keine Kamera gefunden"),
         )
         self.progress = ft.ProgressRing(
             stroke_width=3, visible=False, bgcolor=ft.colors.BLUE
         )
-
+        self.controls = [self.cameralist, self.progress]
         self.row = ft.Row([self.cameralist, self.progress])
-
-        return ft.Column([self.row], horizontal_alignment=ft.CrossAxisAlignment.CENTER)
 
     def dismismodal(self, e):
         self.dialog.open = False
@@ -113,18 +112,35 @@ class SelectCamera(ft.Column):
         self.progress.visible = True
         self.update()
         self.cameras = Camera()
-        cameradata = self.cameras.get_camera_info()
+        getnewcameradata = self.cameras.get_camera_info()
         self.progress.visible = False
         self.update()
-        if len(cameradata) > 0:
-            for camdata in cameradata:
+        if getnewcameradata is not None and len(getnewcameradata) > 0:
+            for camdata in getnewcameradata:
                 index = camdata.get("camera_index")
                 camera_name = camdata.get("camera_name")
+                # Option für Dropdown-Menü erstellen und hinzufügen
                 item = ft.dropdown.Option(index, camera_name)
-
                 self.cameralist.options.append(item)
         else:
+            # Wenn keine Kameradaten abgerufen werden konnten, Dialog öffnen
             self.page.dialog = self.dialog
             self.dialog.open = True
             self.page.update()
         self.update()
+
+
+class COMSelector(ft.Row):
+    def __init__(self) -> None:
+       super().__init__()
+       self.serialconfigdata = KiDataManager.ladeDaten(SaveDictName.serialsettings, SerialConfigModel)
+       self.okbutton = ft.IconButton(icon=ft.icons.CHECK, on_click=self.savecomdata,highlight_color=ft.colors.GREEN)
+       self.comtext = TextFieldBCB(on_submit=self.savecomdata, value=self.serialconfigdata.COM)
+       self.controls = [self.comtext,self.okbutton]
+       self.alignment = ft.MainAxisAlignment.CENTER
+    
+    def savecomdata(self,e):
+        self.serialconfigdata.COM = self.comtext.value
+        KiDataManager.saveclientdata(SaveDictName.serialsettings,self.serialconfigdata)
+
+        
