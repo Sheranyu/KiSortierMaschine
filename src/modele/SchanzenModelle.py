@@ -1,3 +1,4 @@
+from enum import Enum
 from pydantic import BaseModel, Field
 
 
@@ -23,3 +24,11 @@ class SchanzenSteuerungForm(BaseModel):
     zwanzig: Schanzezwanzig
     sonstig: SchanzeSonstig
     background: str = Field(default="background")
+    
+    
+class SchanzenSteuerungformenum(Enum):
+    acht:str = "acht"
+    zwanzig: str = "zwanzig"
+    sechs: str = "sechs"
+    sonstig: str =  "sonstig"
+    

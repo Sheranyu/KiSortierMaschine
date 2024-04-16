@@ -21,7 +21,7 @@ class SchanzenSteuerungFarbe(Enum):
     ROT = "rot"
     GREEN = "green"
     BLUE = "blue"
-    SONSTIGES = "sonstiges"
+    SONSTIG = "sonstig"
     BACKGROUND = "background"
  
  
@@ -51,7 +51,7 @@ class KiData(BaseModel):
     erkannter_modus: Optional[Union[Erkanntermodus, str]] = Field(default=None)
     laufzeit: float
     confidence_score_max: Optional[int] = Field(default=None)
-    anzahl: int
+    anzahl: Optional[int]
     
 
  

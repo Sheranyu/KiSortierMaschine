@@ -6,7 +6,11 @@ from modele.InterneDatenModele import ErkanntermoduModel, Erkanntermodus
 from windows.fletmaininhalt import Mainwindow 
 from Router import Router
 from logic.KiDatenManager import KiDataManager
-#from Designer.designer import 
+#from Designer.designer import
+import sys
+
+
+
 
 def main(page: ft.Page):
     # RegisterDI(page)

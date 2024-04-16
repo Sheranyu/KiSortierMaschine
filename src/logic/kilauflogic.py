@@ -32,9 +32,11 @@ class KiDatenVerarbeitung():
         self.isamdrehen = False
         self.colorchange = LedSteuerung()
         self.ismoveschanzeaktiv = False
+        self.zeahler = 0
        
     
     def start_application(self,callback,progressring :ft.ProgressRing, callbackinfos) -> Generator[KiData,Any, Any]:
+        self.zeahler = 0
         asyncio.run(self._start_async_app(callback,progressring,callbackinfos))
     
 
@@ -58,7 +60,7 @@ class KiDatenVerarbeitung():
         with sessiongen() as session:
             datumid = self._createdatumindb(datum, session)
             for item, image in self.model.loadmodelpytorch(progressring):
-
+                item.anzahl = self.zeahler
                 zeigebildan(image)        
                 callbackinfos(item) 
                 self._verarbeitedaten(item)
@@ -69,7 +71,7 @@ class KiDatenVerarbeitung():
                     timemulti += 1
                     self._delete_tmp_data()
                     self._verarbeite_entdaten(endkidata, datumid, session)
-                    print(item.laufzeit)
+                   
                 
                     if not self.ismoveschanzeaktiv:
                         await shareddata.put(item)
@@ -86,12 +88,19 @@ class KiDatenVerarbeitung():
     async def _change_color(self, kidaten: KiData):
         if kidaten.erkannter_modus == Erkanntermodus.FARBE:
             await self.colorchange.setledcolor(kidaten)
-    
+            
+    def UpdateZeahler(self,gedreht: str):  
+        if "gedreht" in gedreht:
+            self.zeahler += 1
+
+            
+            
     async def _MoveSchanze(self, Kidata: KiData):
         if Kidata.erkannter_modus == Erkanntermodus.FARBE and Kidata.label_name != "background":
             await self.schanze.start_changeposition(Kidata)
             await self._change_color(Kidata)
-            await self.schanze.start_raddrehen()
+            drehinfo = await self.schanze.start_raddrehen()
+            self.UpdateZeahler(drehinfo)
     
     def _delete_tmp_data(self):
         KiDataManager.deleteSessionData(SaveDictName.kidatenzwischenspeicher)
