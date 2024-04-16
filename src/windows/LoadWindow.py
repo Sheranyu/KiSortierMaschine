@@ -109,7 +109,6 @@ class LoadModelPage(LoadModelPageDesign):
 
     def pick_files_result(self, e: ft.FilePickerResultEvent):
         if self.check_data_in_filepicker(e) is False:
-            self.warnbanner.open = True
             return
 
         self.kimodeldata.ModelName = e.files[0].name
@@ -140,6 +139,7 @@ class LoadModelPage(LoadModelPageDesign):
         self.page.update()
         
     def will_unmount(self):
+        self.page.banner.open = False
         self.page.overlay.clear()
         self.page.banner.clean()
         self.page.update()
