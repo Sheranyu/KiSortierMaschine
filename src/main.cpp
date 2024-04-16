@@ -42,6 +42,7 @@ void setup() {
     if (pressed) {
       motorRunning = !motorRunning;
       stepperMotor.setRunning(motorRunning);
+      servoControl.testServo();
     }
   });
   servoControl.setAngle(SERVO_INIT); // Setzt den Servo Motor bei Start auf den Start Wert (Becher 2)
