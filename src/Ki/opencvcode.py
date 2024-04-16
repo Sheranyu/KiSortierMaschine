@@ -130,7 +130,7 @@ class TrainiertesModel(RecordSettings):
             self.UpdateZeahler(label_name,prediction_score.item())
             currenttime = round(time.time() - start_time,2)
             farbe = Erkanntermodus.FARBE
-            kidaten = KiData(label_name=label_name,confidence_score=int(np.round(confidence_class * 100)),erkannter_modus=farbe, laufzeit=currenttime,anzahl=self.zeahler)
+            kidaten = KiData(label_name=label_name,confidence_score=int(np.round(prediction_score.item())),erkannter_modus=farbe, laufzeit=currenttime,anzahl=self.zeahler)
             yield (kidaten, frame)
             
             self.leerzeit = time.time() - self.currenttime
