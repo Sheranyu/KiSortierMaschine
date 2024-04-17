@@ -10,7 +10,7 @@ from modele.InterneDatenModele import Erkanntermodus, ModelTyp
 class AnwendungstartPageDesign(ft.Column, ABC):
     def __init__(self) -> None:
         super().__init__()
-        self.optionsbutton = ft.IconButton(ft.icons.SETTINGS, bgcolor="blue", highlight_color="green")
+        self.optionsbutton = ft.IconButton(ft.icons.SETTINGS, bgcolor="blue", highlight_color="green", on_click=self.change_setting_window)
         self.laufzeit = TextFieldBCB(label="laufzeit", value="N/A", read_only=True, adaptive=True)
         self.erkanntesobject = TextFieldBCB(label="Erkanntes Objekt: ",read_only=True, value="N/A", adaptive=True)
         self.erkanntermodus = TextFieldBCB(label="Erkannter Modus: ", read_only=True,value="N/A",adaptive=True)
@@ -33,6 +33,11 @@ class AnwendungstartPageDesign(ft.Column, ABC):
         )
         self.pr = ft.ProgressRing(width=32, height=32, stroke_width=3, visible=False)
 
+    
+    @abstractmethod
+    def change_setting_window(self,e):
+        pass
+    
     @abstractmethod
     def start_camera(self):
         pass

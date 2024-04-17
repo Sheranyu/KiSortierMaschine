@@ -6,13 +6,14 @@ from configordner.settings import LaufZeitConfig
 from logic.kilauflogic import KiDatenVerarbeitung
 
 from modele.InterneDatenModele import KIModelsaverData, KiData
+from windows.subseiten.AnwendungSettings import AnwendungSetting
 
 
 class StartApplicationPage(AnwendungstartPageDesign):
     def __init__(self):
         super().__init__()
         self.ki_logic = KiDatenVerarbeitung()
-
+        self.settingseite = AnwendungSetting()
     def build(self):
         centermain = ft.MainAxisAlignment.CENTER
 
@@ -36,6 +37,30 @@ class StartApplicationPage(AnwendungstartPageDesign):
             expand=True,
             alignment=ft.alignment.top_center,
         )
+        
+        #settingspage
+        
+        self.floatingpos = ft.FloatingActionButtonLocation.END_TOP
+        self.floatingsettingexit = ft.Container(
+            ft.FloatingActionButton(
+                icon=ft.icons.CLOSE, 
+                bgcolor=ft.colors.SURFACE,
+                on_click=self.change_setting_window
+                ),
+            padding=ft.padding.all(5))
+        self.settingpage = ft.Pagelet(content=AnwendungSetting(), 
+                                      bgcolor=ft.colors.SURFACE_VARIANT, 
+                                      visible=True, 
+                                      floating_action_button=self.floatingsettingexit, 
+                                      floating_action_button_location=self.floatingpos,
+                                      
+                                      )
+        self.settingocntainer = ft.Container(self.settingpage, border_radius=8, 
+                                             animate_scale=ft.animation.Animation(700,ft.AnimationCurve.EASE),
+                                             )
+        
+        #settingspageende
+        self.stack = ft.Stack([self.columendcontainerlinks,self.settingocntainer])
         self.columcontainerechts = ft.Container(
             ft.Column(
                 [
@@ -49,20 +74,31 @@ class StartApplicationPage(AnwendungstartPageDesign):
             padding=ft.padding.all(5),
             height=100,
         )
-        self.rowtest = ft.Row(
-            [self.columendcontainerlinks], alignment=ft.MainAxisAlignment.CENTER
-        )
+        
         self.anzeigekarte = ft.Card(content=self.columcontainerechts)
         # self.rowbilder = ft.Row([self.rowtest, self.anzeigekarte])
         self.gridview = ft.GridView(
             runs_count=2,
             child_aspect_ratio=1,
-            controls=[self.rowtest, self.anzeigekarte],
+            controls=[self.stack, self.anzeigekarte],
         )
         # self.container = ft.Container(content=self.columendcontainer, alignment=ft.alignment.center)
-        self.rowcont = ft.Container(self.gridview, width=self.page.width)
-        self.stack = ft.Stack([self.rowcont])
-        return self.stack
+        
+        
+        
+        return self.gridview
+
+    def change_setting_window(self,e):
+        if self.settingocntainer.scale == 0:
+            self.settingocntainer.scale = 1
+            #self.settingpage.visible = True
+        else:
+            self.settingocntainer.scale = 0
+            #self.settingpage.visible = False
+            
+        self.update()
+
+
 
     def start_camera(self, e):
         self.pr.visible = True
