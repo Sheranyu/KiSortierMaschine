@@ -88,7 +88,7 @@ class TrainiertesModel(RecordSettings):
         return open(self.kidata.pfad_label, "r").readlines()
     
     def loadmodelpytorch(self, progressring: ft.ProgressRing) -> Generator[Tuple[KiData,cv2.typing.MatLike], Any, Any]:
-        formoderfarbmodus = modelCreatermodus().modus
+        formoderfarbmodus = modelCreatermodus.modus
         self.loadRecordSettings()
         self.kidata = KiDataManager.ladeKImodel()
         self.normalizedata()
@@ -122,8 +122,8 @@ class TrainiertesModel(RecordSettings):
             label_name = label_names[confidence_class]
             
             currenttime = round(time.time() - start_time,2)
-            farbe = Erkanntermodus.FARBE
-            kidaten = KiData(label_name=label_name,confidence_score=int(np.round(prediction_score.item())),erkannter_modus=farbe, laufzeit=currenttime,anzahl=self.zeahler)
+           #farbe = Erkanntermodus.FARBE
+            kidaten = KiData(label_name=label_name,confidence_score=int(np.round(prediction_score.item())),erkannter_modus=formoderfarbmodus, laufzeit=currenttime,anzahl=self.zeahler)
             yield (kidaten, frame)
             
             self.leerzeit = time.time() - self.currenttime

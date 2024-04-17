@@ -90,6 +90,7 @@ class LoadModelPage(LoadModelPageDesign):
     def changedsegment(self,e: ft.TapEvent):
         eventdata = e.data
         eventdata = eventdata.strip('[]"')
+        print(eventdata)
         modelCreatermodus.SetErkanntermodus(str(eventdata))
   
 

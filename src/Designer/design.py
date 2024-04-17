@@ -41,7 +41,7 @@ class AnwendungstartPageDesign(ft.Column, ABC):
         pass
 
 
-class CreateModelPageDesign(ABC, ft.UserControl):
+class CreateModelPageDesign(ABC, ft.Column):
     def __init__(self) -> None:
         super().__init__()
         border_radius = 6
@@ -165,7 +165,7 @@ class CreateModelPageDesign(ABC, ft.UserControl):
         pass
 
 
-class LoadModelPageDesign(ABC, ft.UserControl):
+class LoadModelPageDesign(ABC, ft.Column):
     def __init__(self) -> None:
         super().__init__()
         self.title = ft.Text(

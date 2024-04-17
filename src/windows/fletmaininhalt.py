@@ -33,12 +33,13 @@ class BaseWindow:
         cls._page = page
 
 
-class Mainwindow(BaseWindow):
-    def __new__(self, page: ft.Page) -> ft.Row:
-
+class Mainwindow(ft.Column):
+    def __init__(self, page: ft.Page) -> ft.Row:
+        super().__init__()
         self.weite = 500
         self.breite = 75
         self.page = page
+        self.animasizedur = ft.animation.Animation(100)
         # cls.text1 = ft.Text("Neues Modell erstellen", theme_style=ft.TextTheme.label_large)
 
         self.button1 = ft.Container(
@@ -49,6 +50,8 @@ class Mainwindow(BaseWindow):
             ),
             width=self.weite,
             height=self.breite,
+            on_hover=self.animatecontainer,
+            animate_scale=self.animasizedur,
         )
         self.button2 = ft.Container(
             content=ft.ElevatedButton(
@@ -58,6 +61,8 @@ class Mainwindow(BaseWindow):
             ),
             width=self.weite,
             height=self.breite,
+            on_hover=self.animatecontainer,
+            animate_scale=self.animasizedur,
         )
         self.button3 = ft.Container(
             content=ft.ElevatedButton(
@@ -67,6 +72,8 @@ class Mainwindow(BaseWindow):
             ),
             width=self.weite,
             height=self.breite,
+            on_hover=self.animatecontainer,
+            animate_scale=self.animasizedur,
         )
         self.button4 = ft.Container(
             content=ft.ElevatedButton(
@@ -76,21 +83,33 @@ class Mainwindow(BaseWindow):
             ),
             width=self.weite,
             height=self.breite,
+            on_hover=self.animatecontainer,
+            animate_scale=self.animasizedur,
         )
         self.exitbutton = ft.Container(
             content=ft.ElevatedButton(text="Exit!", on_click=self.exit_application,bgcolor=ft.colors.BLUE,),
             
             width=self.weite,
             height=self.breite,
+            on_hover=self.animatecontainer,
+            animate_scale=self.animasizedur,
         )
         
         self.settingbutton = ft.Container(
             content=ft.ElevatedButton(text="settings", 
                                       on_click=lambda e: self.page.go("/settings"),
-                                      bgcolor=ft.colors.BLUE),
+                                      bgcolor=ft.colors.BLUE,
+                                    #   on_hover=self.animatecontainer,
+
+                                    #   on_blur=self.animatecontainer,
+                                      ),
+            on_hover=self.animatecontainer,
             width=self.weite,
             height=self.breite,
+            animate_scale=self.animasizedur,
+             
         )
+        
 
         self.finalcolumn = ft.Column(
             controls=[
@@ -103,12 +122,29 @@ class Mainwindow(BaseWindow):
             ],
             alignment=ft.MainAxisAlignment.CENTER,
             spacing=20,
+           
         )
-        self.container = ft.Container(content=self.finalcolumn, expand=True, alignment=ft.alignment.top_center)
+        
+        
+        
+        
+        self.container = ft.Container(content=self.finalcolumn ,alignment=ft.alignment.center, height=self.page.height)
         #self.container.alignment = ft.alignment.top_center
-        return self.container
+        self.controls = [self.container]
+        self.alignment = ft.MainAxisAlignment.CENTER
 
-    def exit_application(self):
+    def animatecontainer(self,e: ft.HoverEvent):          
+            if e.control.scale == 0.95:     
+                e.control.scale = 1
+                e.control.update()
+            else:
+                e.control.scale = 0.95
+                e.control.update()
+           
+  
+    
+    
+    def exit_application(self,e):
         self.page.window_close()
 
     def mainwindow(self):
