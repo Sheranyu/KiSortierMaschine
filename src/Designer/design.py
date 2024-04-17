@@ -10,10 +10,10 @@ from modele.InterneDatenModele import Erkanntermodus, ModelTyp
 class AnwendungstartPageDesign(ft.Column, ABC):
     def __init__(self) -> None:
         super().__init__()
-        self.laufzeit = ft.TextField(label="laufzeit", value="N/A",border_color=ft.colors.RED, read_only=True, adaptive=True)
-        self.erkanntesobject = ft.TextField(label="Erkanntes Objekt: ", border_color=ft.colors.RED,read_only=True, value="N/A", adaptive=True)
-        self.erkanntermodus = ft.TextField(label="Erkannter Modus: ",border_color=ft.colors.RED, read_only=True,value="N/A",adaptive=True)
-        self.anzahlsortierterobjekte = ft.TextField(label="anzahl",border_color=ft.colors.RED, value="N/A", read_only=True, adaptive=True)
+        self.laufzeit = TextFieldBCB(label="laufzeit", value="N/A", read_only=True, adaptive=True)
+        self.erkanntesobject = TextFieldBCB(label="Erkanntes Objekt: ",read_only=True, value="N/A", adaptive=True)
+        self.erkanntermodus = TextFieldBCB(label="Erkannter Modus: ", read_only=True,value="N/A",adaptive=True)
+        self.anzahlsortierterobjekte = TextFieldBCB(label="anzahl", value="N/A", read_only=True, adaptive=True)
         self.title = ft.Text("Start Application", theme_style="headlineMedium")
         self.startbutton = ft.ElevatedButton(
             "Start", bgcolor=ft.colors.BLUE, on_click=self.start_camera
