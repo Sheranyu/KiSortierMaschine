@@ -17,7 +17,7 @@ class StartApplicationPage(AnwendungstartPageDesign):
         centermain = ft.MainAxisAlignment.CENTER
 
         self.titlecolum = ft.Row([self.title],alignment=centermain)
-        self.startrow = ft.Row([self.startbutton, self.abbruchbutton],alignment=centermain)
+        self.startrow = ft.Row([self.startbutton, self.abbruchbutton,self.optionsbutton],alignment=centermain)
         self.bildvideoRow = ft.Row([self.bildvideo],alignment=centermain)
         
         self.floatbutton = ft.FloatingActionButton("test")
@@ -61,8 +61,8 @@ class StartApplicationPage(AnwendungstartPageDesign):
         )
         # self.container = ft.Container(content=self.columendcontainer, alignment=ft.alignment.center)
         self.rowcont = ft.Container(self.gridview, width=self.page.width)
-        
-        return self.rowcont
+        self.stack = ft.Stack([self.rowcont])
+        return self.stack
 
     def start_camera(self, e):
         self.pr.visible = True

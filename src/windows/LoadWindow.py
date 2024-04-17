@@ -94,7 +94,8 @@ class LoadModelPage(LoadModelPageDesign):
         modelCreatermodus.SetErkanntermodus(str(eventdata))
   
 
-    def loaddata(self, e):
+    def loaddata(self, e: ft.TapEvent):
+        
         if self.sind_alle_nicht_none() == False:
             self.warnbanner.open = True
             self.page.update()

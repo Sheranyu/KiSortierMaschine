@@ -10,6 +10,7 @@ from modele.InterneDatenModele import Erkanntermodus, ModelTyp
 class AnwendungstartPageDesign(ft.Column, ABC):
     def __init__(self) -> None:
         super().__init__()
+        self.optionsbutton = ft.IconButton(ft.icons.SETTINGS, bgcolor="blue", highlight_color="green")
         self.laufzeit = TextFieldBCB(label="laufzeit", value="N/A", read_only=True, adaptive=True)
         self.erkanntesobject = TextFieldBCB(label="Erkanntes Objekt: ",read_only=True, value="N/A", adaptive=True)
         self.erkanntermodus = TextFieldBCB(label="Erkannter Modus: ", read_only=True,value="N/A",adaptive=True)
@@ -229,7 +230,7 @@ class LoadModelPageDesign(ABC, ft.Column):
             on_click=lambda _: self.pick_file_label.pick_files(allow_multiple=False),
         )
 
-        self.loaddatabutton = ft.FilledButton("Load Data", on_click=self.loaddata)
+        self.loaddatabutton = ft.ElevatedButton("Load Data", on_click=self.loaddata, bgcolor="blue")
 
 
     def changedsegment(self,e):
