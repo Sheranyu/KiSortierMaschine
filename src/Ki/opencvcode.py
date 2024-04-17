@@ -123,7 +123,7 @@ class TrainiertesModel(RecordSettings):
             
             currenttime = round(time.time() - start_time,2)
            #farbe = Erkanntermodus.FARBE
-            print()
+            
             kidaten = KiData(label_name=label_name,confidence_score=int(np.round(prediction_score.item())),erkannter_modus=formoderfarbmodus, laufzeit=currenttime,anzahl=self.zeahler)
             yield (kidaten, frame)
             
