@@ -96,11 +96,13 @@ class KiDatenVerarbeitung():
             
             
     async def _MoveSchanze(self, Kidata: KiData):
-        if Kidata.erkannter_modus == Erkanntermodus.FARBE and Kidata.label_name != "background":
+        if (Kidata.erkannter_modus == Erkanntermodus.FARBE or Kidata.erkannter_modus == Erkanntermodus.FORM )and Kidata.label_name != "background":
             await self.schanze.start_changeposition(Kidata)
             await self._change_color(Kidata)
             drehinfo = await self.schanze.start_raddrehen()
             self.UpdateZeahler(drehinfo)
+        else:
+            print("Erkanntermodus nicht erkannt", Kidata.erkannter_modus)
     
     def _delete_tmp_data(self):
         KiDataManager.deleteSessionData(SaveDictName.kidatenzwischenspeicher)

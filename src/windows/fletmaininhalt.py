@@ -5,7 +5,6 @@ import sys
 from typing import List
 import cv2
 import flet as ft
-from StatusMeldungen.status import WarnStatus
 from logic.kilauflogic import KiDatenVerarbeitung
 from db.CRUD.DatumSpeicherung import CreateDatumSpeicherung
 from db.CRUD.Statistik import StatistikCreater

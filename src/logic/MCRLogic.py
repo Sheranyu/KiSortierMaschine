@@ -31,6 +31,7 @@ class SchanzenBewegungNachFarbe(SerialInit):
         if label in SchanzenSteuerungFarbe.BLUE.value or label in SchanzenSteuerungformenum.acht.value:
             print("blue")
             await self._ChangePosition("b1")
+
         if label in SchanzenSteuerungFarbe.GREEN.value or label in SchanzenSteuerungformenum.sechs.value:
             print("green")
             await self._ChangePosition("b2")
@@ -43,19 +44,25 @@ class SchanzenBewegungNachFarbe(SerialInit):
             await self._ChangePosition("b4")
             
     async def _ChangePosition(self, Positionsnummer: str):
-        await self._initserial()
-        
-        data_to_send = Positionsnummer
-        self.writer.write(data_to_send.encode())
-        
-        response = ""
-        while response.rstrip() != MCRMeldungen.SERVO_GEDREHT:
-            response = await recv(self.reader)
-            print(response)
+        try:
+
+            await self._initserial()
             
-        self.writer.close()
-        await self.writer.wait_closed()
-        return   
+            data_to_send = Positionsnummer
+            self.writer.write(data_to_send.encode())
+            
+            response = ""
+            while response.rstrip() != MCRMeldungen.SERVO_GEDREHT:
+                response = await recv(self.reader)
+                print(response)
+                
+            self.writer.close()
+            await self.writer.wait_closed()
+            return
+        except:
+            self.writer.close()
+            await self.writer.wait_closed()
+       
     
       
     
@@ -78,10 +85,10 @@ class SchanzenBewegungNachFarbe(SerialInit):
             
 
         
-        
+        resposne_str = response.decode().strip()
         self.writer.close()
         await self.writer.wait_closed()
-        return response
+        return resposne_str
         
             
             
@@ -111,14 +118,15 @@ class LedSteuerung(SerialInit):
             print("Dürfte nicht hier drin sein zeile 111: LEDSteuerung")
      
     async def _change_color(self, ledcolor: LeuchtFarbenLampe):
-    
-        await self._initserial()
-        data_to_send = ledcolor.value.strip()
-        self.writer.write(data_to_send.encode())
-        
-        response = b""
-        while response.rstrip() != MCRMeldungen.LED_UMGESCHALTET:
-            response = await asyncio.wait_for(recv(self.reader),timeout=10)
+        try:
+
+            await self._initserial()
+            data_to_send = ledcolor.value.strip()
+            self.writer.write(data_to_send.encode())
+            
+            response = b""
+            while response.rstrip() != MCRMeldungen.LED_UMGESCHALTET:
+                response = await asyncio.wait_for(recv(self.reader),timeout=10)
             
     
             
@@ -128,5 +136,8 @@ class LedSteuerung(SerialInit):
             # if self.timeout> self.TIMEOUTEND:
             #     raise TimeoutError(WarnStatus.TIMEOUT_WARN)
         
-        self.writer.close()
-        await self.writer.wait_closed()
+            self.writer.close()
+            await self.writer.wait_closed()
+        except:
+            self.writer.close()
+            await self.writer.wait_closed()
