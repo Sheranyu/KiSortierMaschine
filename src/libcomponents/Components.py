@@ -1,3 +1,5 @@
+from pyclbr import Class
+from turtle import st
 import flet as ft
 from StatusMeldungen.messageinfo import ClassCreatorSettingsMessage as CCSM
 from configordner.settings import SaveDictName
@@ -5,7 +7,7 @@ from libcomponents.CustomTextField import TextFieldBCB
 from logic.KiDatenManager import KiDataManager
 from logic.Systemcode.camera import Camera
 from modele.InterneDatenModele import CameraSettingsModel, SerialConfigModel
-
+from flet import canvas as cv
 
 class BPSSlider(ft.Column):
     def __init__(self) -> None:
@@ -143,4 +145,72 @@ class COMSelector(ft.Row):
         self.serialconfigdata.COM = self.comtext.value
         KiDataManager.saveclientdata(SaveDictName.serialsettings,self.serialconfigdata)
 
+
+
+class EOverlay(ft.Container):
+    def __init__(self) -> None:
+        super().__init__()
+        self.bgcolor = ft.colors.GREEN
+        self.height = 200
+        self.width = 150
+        
+        
+
+
+
+class EilmnerZeichner(ft.Container):
+    def __init__(self, becher_text: str,bottom=None, stroke_color: ft.colors = ft.colors.BLACK, stroke_innercolor: ft.colors = ft.colors.BLUE) -> None:
+        super().__init__()
+        
+        self.stroke_color = stroke_color
+        self.stroke_innercolor = stroke_innercolor
+        self.innerbecher = cv.Path(
+                [
+                    cv.Path.MoveTo(25, 25),
+                    cv.Path.LineTo(35, 90),
+                    cv.Path.LineTo(70, 90),
+                    cv.Path.LineTo(80, 25),
+                    cv.Path.LineTo(25, 25),
+                    cv.Path.Close()
+                ],
+                paint=ft.Paint(
+                    
+                    style=ft.PaintingStyle.FILL,
+                    stroke_width=4,
+                    color=self.stroke_innercolor
+                ),
+                    visible=False
+                )
+        
+        cp = ft.Container(cv.Canvas(
+        [
+            cv.Path(
+                [
+                    cv.Path.MoveTo(25, 25),
+                    cv.Path.LineTo(35, 90),
+                    cv.Path.LineTo(70, 90),
+                    cv.Path.LineTo(80, 25),
+                    cv.Path.LineTo(25, 25),
+                    cv.Path.Close()
+                ],
+                paint=ft.Paint(
+                    
+                    style=ft.PaintingStyle.STROKE,
+                    stroke_width=4,
+                    color=self.stroke_color
+                ),
+            ),
+            self.innerbecher,
+        ]
+        ),height=90, width=90, on_click=self.anklickbarer_container)
+        text = ft.TransparentPointer(ft.Text(becher_text,size=20),left=40,bottom=35)
+        stack = ft.Stack([cp,text])
+        self.content = stack
+        self.bottom = bottom
+        
+        
+    def anklickbarer_container(self,e: ft.ControlEvent):
+        print("klicked", self.stroke_color)
+        
+        
         

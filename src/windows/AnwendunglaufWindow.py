@@ -57,6 +57,7 @@ class StartApplicationPage(AnwendungstartPageDesign):
                                       )
         self.settingocntainer = ft.Container(self.settingpage, border_radius=8, 
                                              animate_scale=ft.animation.Animation(700,ft.AnimationCurve.EASE),
+                                             scale=ft.Scale(0)
                                              )
         
         #settingspageende
@@ -89,11 +90,11 @@ class StartApplicationPage(AnwendungstartPageDesign):
         return self.gridview
 
     def change_setting_window(self,e):
-        if self.settingocntainer.scale == 0:
-            self.settingocntainer.scale = 1
+        if self.settingocntainer.scale == 1:
+            self.settingocntainer.scale = 0
             #self.settingpage.visible = True
         else:
-            self.settingocntainer.scale = 0
+            self.settingocntainer.scale = 1
             #self.settingpage.visible = False
             
         self.update()

@@ -21,6 +21,7 @@ class SaveDictName():
     camerasettings: str = "classcreatorsettings"
     kidatenzwischenspeicher: str = "kidatenzwischenspeicher"
     serialsettings: str = "serialsettings"
+    topfmodus: str = "topfmodus"
 
 
 
