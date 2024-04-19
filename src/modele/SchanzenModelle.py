@@ -3,10 +3,13 @@ from typing import List
 from pydantic import BaseModel, Field
 
 
+
+class LabelData(BaseModel):
+    labeldata: List[str] = Field(default_factory=list)
+
+
 class SchanzeBase(BaseModel):
     Topf: str
-    Farbe: List[str] = Field(default_factory=list)
-    Form: List[str] = Field(default_factory=list)
     selected: str = Field(default="")
 
 class SchanzeB1(SchanzeBase):

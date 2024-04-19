@@ -4,9 +4,12 @@ from Designer.design import CreateModelPageDesign, LoadModelPageDesign
 from StatusMeldungen.status import WarnStatus
 import flet as ft
 
+from configordner.settings import SaveDictName
+from logic.KiDatenManager import KiDataManager
 from logic.aufnahme import WebcamAufnahme, ZeigeBildan
 from modele.InterneDatenModele import Erkanntermodus, KIModelsaverData, KiClassList
 from modele.ModelCreater import modelCreatermodus
+from modele.SchanzenModelle import LabelData
 
 class LoadModelPage(LoadModelPageDesign):
     def __init__(self):
@@ -102,8 +105,17 @@ class LoadModelPage(LoadModelPageDesign):
             return
             
         self.page.session.set("kimodel", self.kimodeldata.__dict__)
+        #self._loadlabeldata()
         self.isloadedfinal.name = ft.icons.CHECK_BOX_ROUNDED
         self.isloadedfinal.update()
+        
+    def _loadlabeldata(self):
+        label = LabelData()
+        with open(self.kimodeldata.ModelName + "_label.txt", 'r') as datei:
+            label.labeldata.extend(datei.readlines())
+            
+        KiDataManager.saveSessionDaten(SaveDictName.labellist,label)
+             
 
     def close_banner(self, e):
         self.warnbanner.open = False

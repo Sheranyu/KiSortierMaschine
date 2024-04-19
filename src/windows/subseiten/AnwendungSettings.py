@@ -2,8 +2,10 @@
 from typing import Any, Dict, Tuple
 import flet as ft
 
+from configordner.settings import SaveDictName
 from libcomponents.Components import EOverlay, EilmnerZeichner
-from modele.SchanzenModelle import SchanzenBecher
+from logic.KiDatenManager import KiDataManager
+from modele.SchanzenModelle import LabelData, SchanzenBecher
 
 class AnwendungSetting(ft.Container):
     def __init__(self, content: ft.Control | None = None, appbar: ft.AppBar | ft.CupertinoAppBar | None = None, navigation_bar: ft.NavigationBar | ft.CupertinoNavigationBar | None = None, bottom_app_bar: ft.BottomAppBar | None = None, bottom_sheet: ft.Control | None = None, drawer: ft.NavigationDrawer | None = None, end_drawer: ft.NavigationDrawer | None = None, floating_action_button: ft.FloatingActionButton | None = None, floating_action_button_location: ft.FloatingActionButtonLocation | None | ft.Offset | Tuple[float | int, float | int] = None, bgcolor: str | None = None, ref: ft.Ref | None = None, width: None | int | float = None, height: None | int | float = None, left: None | int | float = None, top: None | int | float = None, right: None | int | float = None, bottom: None | int | float = None, expand: None | bool | int = None, expand_loose: bool | None = None, col: Dict[str, int | float] | int | float | None = None, opacity: None | int | float = None, rotate: None | int | float | ft.Rotate = None, scale: None | int | float | ft.Scale = None, offset: None | ft.Offset | Tuple[float | int, float | int] = None, aspect_ratio: None | int | float = None, animate_opacity: None | bool | int | ft.Animation = None, animate_size: None | bool | int | ft.Animation = None, animate_position: None | bool | int | ft.Animation = None, animate_rotation: None | bool | int | ft.Animation = None, animate_scale: None | bool | int | ft.Animation = None, animate_offset: None | bool | int | ft.Animation = None, on_animation_end=None, tooltip: str | None = None, visible: bool | None = None, disabled: bool | None = None, data: Any = None, key: str | None = None, adaptive: bool | None = None):
@@ -33,6 +35,13 @@ class AnwendungSetting(ft.Container):
         
     def change_overlay(self,topf: SchanzenBecher):
         schanzendata = self.overlay1.create_schanze_class(topf)
+        labelda = KiDataManager.ladelistSessiondata(SaveDictName.labellist,LabelData)
+        if len(labelda.labeldata) > 0:
+            for labelname in labelda.labeldata:
+                radiobutton = ft.Radio(label=labelname,value=labelname)
+                self.overlay1.radiogroup.content.controls.append(radiobutton)
+        
+        
         self.overlay1.visible = not self.overlay1.visible
         self.overlay1.uetitle.controls[0].value = schanzendata.Topf
         self.overlay1.update()

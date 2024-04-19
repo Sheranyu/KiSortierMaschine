@@ -58,7 +58,7 @@ class KiData(BaseModel):
 class KIModelsaverData():
     def __init__(self,ModelName=None, pfad_model=None,label_datei_name=None,pfad_label=None, modeltyp = ModelTyp.KERAS.value) -> None:
       
-        self.ModelName = ModelName
+        self.ModelName: str = ModelName
         self.label_datei_name = label_datei_name
         self.pfad_model = pfad_model
         self.pfad_label = pfad_label

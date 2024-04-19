@@ -22,6 +22,7 @@ class SaveDictName():
     kidatenzwischenspeicher: str = "kidatenzwischenspeicher"
     serialsettings: str = "serialsettings"
     topfmodus: str = "topfmodus"
+    labellist: str = "labellist"
 
 
 
