@@ -1,13 +1,17 @@
 from pyclbr import Class
 from turtle import st
+from typing import Union
 import flet as ft
 from StatusMeldungen.messageinfo import ClassCreatorSettingsMessage as CCSM
 from configordner.settings import SaveDictName
+from fletest import SchanzeB1, SchanzeB2, SchanzeB3, SchanzeB4, SchanzenSteuerung
 from libcomponents.CustomTextField import TextFieldBCB
 from logic.KiDatenManager import KiDataManager
 from logic.Systemcode.camera import Camera
 from modele.InterneDatenModele import CameraSettingsModel, SerialConfigModel
 from flet import canvas as cv
+
+from modele.SchanzenModelle import SchanzenBecher
 
 class BPSSlider(ft.Column):
     def __init__(self) -> None:
@@ -169,6 +173,27 @@ class EOverlay(ft.Container):
         self.border_radius = 10
         self.shadow = ft.BoxShadow(2,2,ft.colors.BLUE)
         
+    def build(self):
+        return super().build()
+    
+    
+    def create_schanze_class(self,becher: SchanzenBecher):
+        dataschanze = KiDataManager.ladeSessiondata(SaveDictName.topfmodus,SchanzenSteuerung)
+        data = self.filterdata(dataschanze,becher)
+        return data
+        
+    def filterdata(self,data: SchanzenSteuerung, becher: SchanzenBecher):
+        if becher == SchanzenBecher.B1:
+            return data.acht
+        elif becher == SchanzenBecher.B2:
+            return data.sechs
+        elif becher == SchanzenBecher.B3:
+            return data.zwanzig
+        elif becher == SchanzenBecher.B4:
+            return data.sonstig
+        else:
+            raise ValueError("Ungültiger SchanzenBecher-Wert")
+            
         
         
         
@@ -176,7 +201,7 @@ class EOverlay(ft.Container):
 
 
 class EilmnerZeichner(ft.Container):
-    def __init__(self, becher_text: str,function_click,bottom=None, stroke_color: ft.colors = ft.colors.BLACK, stroke_innercolor: ft.colors = ft.colors.BLUE) -> None:
+    def __init__(self, becher_text: SchanzenBecher,function_click,bottom=None, stroke_color: ft.colors = ft.colors.BLACK, stroke_innercolor: ft.colors = ft.colors.BLUE) -> None:
         super().__init__()
         self.becher_text = becher_text
         self.function_click = function_click
@@ -221,7 +246,7 @@ class EilmnerZeichner(ft.Container):
             self.innerbecher,
         ]
         ),height=90, width=90, on_click=self.anklickbarer_container)
-        text = ft.TransparentPointer(ft.Text(self.becher_text,size=20),left=40,bottom=35)
+        text = ft.TransparentPointer(ft.Text(self.becher_text.value,size=20),left=40,bottom=35)
         stack = ft.Stack([cp,text])
         self.content = stack
         self.bottom = bottom

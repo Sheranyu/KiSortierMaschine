@@ -126,7 +126,7 @@ class KiDatenVerarbeitung():
 
     def _berechnedurchschnitt(self, laufzeit: float, anzahl: int, modus: str) ->KiData:
         
-        daten = KiDataManager.ladeSessiondata(SaveDictName.kidatenzwischenspeicher,List[KiData])   
+        daten = KiDataManager.ladelistSessiondata(SaveDictName.kidatenzwischenspeicher,List[KiData])   
         
         
         df = pd.DataFrame([vars(data)for data in daten])

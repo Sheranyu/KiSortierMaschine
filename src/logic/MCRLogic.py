@@ -7,7 +7,7 @@ from StatusMeldungen.status import MCRMeldungen, WarnStatus
 from configordner.settings import SaveDictName
 from logic.KiDatenManager import KiDataManager
 from modele.InterneDatenModele import KiData, LeuchtFarbenLampe, SchanzenSteuerungFarbe, SerialConfigModel
-from modele.SchanzenModelle import SchanzenSteuerungForm, SchanzenSteuerungformenum
+from modele.SchanzenModelle import  SchanzenSteuerungformenum
 
 COMMODE = "COM6"
 async def recv(stream: StreamReader):

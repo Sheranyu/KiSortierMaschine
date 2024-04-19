@@ -42,9 +42,28 @@ class KiDataManager():
 
         return typ(**json_data)
     
+    @classmethod
+    def ladeSessiondata(cls, dictname: str, typ: Type[T]):
+        if not isinstance(dictname, str):
+            raise TypeError(TypeErrorMessages.DICT_IS_NO_STRING)
+        try:
+            json_data = cls.Pagedata.session.get(dictname)
+            if json_data is None:
+                return typ()
+            
+            expected_attributes = set(typ.__annotations__.keys())
+            json_attributes = set(json_data.keys())
+            if expected_attributes != json_attributes:
+                raise TypeError("JSON data does not match the expected type")
+        except:
+            return typ()
+
+        return typ(**json_data)
+    
+    
     
     @classmethod
-    def ladeSessiondata(cls, dictname: str, typ: Type[T]) -> T:
+    def ladelistSessiondata(cls, dictname: str, typ: Type[T]) -> T:
         itemlist: typ = []
         if not isinstance(dictname, str):
             raise TypeError(TypeErrorMessages.DICT_IS_NO_STRING)
