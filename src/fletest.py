@@ -1,31 +1,20 @@
 import flet as ft
 
-def main(page: ft.Page):
-    st = ft.Stack(
-        [
-            ft.Image(
-                src=f"https://picsum.photos/300/300",
-                width=300,
-                height=300,
-                fit=ft.ImageFit.CONTAIN,
-            ),
-            ft.Row(
-                [
-                    ft.Text(
-                        "Image title",
-                        color="white",
-                        size=40,
-                        weight="bold",
-                        opacity=0.5,
-                    )
-                ],
-                alignment=ft.MainAxisAlignment.CENTER,
-            ),
-        ],
-        width=300,
-        height=300,
+def main(page):
+    page.add(
+        ft.Stack(
+            [
+                ft.CircleAvatar(
+                    foreground_image_url="https://avatars.githubusercontent.com/u/5041459?s=88&v=4"
+                ),
+                ft.Container(
+                    content=ft.Container(bgcolor="green",height=5,width=5),
+                    alignment=ft.alignment.bottom_left,
+                ),
+            ],
+            width=40,
+            height=40,
+        )
     )
 
-    page.add(st)
-
-ft.app(target=main)
+ft.app(target=main, view=ft.AppView.WEB_BROWSER)

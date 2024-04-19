@@ -11,20 +11,29 @@ class AnwendungSetting(ft.Container):
         
         self.textbox = ft.Text("das ist ein test",bgcolor="red")
         self.button = ft.FilledButton("hallo")
-        self.cp = EilmnerZeichner("b1",stroke_color=ft.colors.BLUE)
-        self.cp2 = EilmnerZeichner("b2")
-        self.cp3 = EilmnerZeichner("b3")
-        self.cp4 = EilmnerZeichner("b4")
-        overlay1 = EOverlay()
+        self.overlay1 = EOverlay()
+        self.cp = EilmnerZeichner("b1",stroke_color=ft.colors.BLUE,function_click=self.change_overlay)
+        self.cp2 = EilmnerZeichner("b2",function_click=self.change_overlay)
+        self.cp3 = EilmnerZeichner("b3", function_click=self.change_overlay)
+        self.cp4 = EilmnerZeichner("b4", function_click=self.change_overlay)
+        
+        self.overlay1.visible = False
+        
+        self.eilmercontainerrow = ft.Row([self.cp,self.cp2, self.cp3,self.cp4], 
+                                         alignment=ft.MainAxisAlignment.CENTER)
+        self.selectrow  = ft.Row([self.overlay1], alignment=ft.MainAxisAlignment.CENTER)
         
         
-        self.eilmercontainerrow = ft.Container(ft.Row([self.cp,self.cp2, self.cp3,self.cp4], 
-                                         alignment=ft.MainAxisAlignment.CENTER),bgcolor="blue")
-        self.expanendcontainer = ft.TransparentPointer(ft.Container(height=300,bgcolor="red"))
-        self.expanedstack = ft.Stack([self.expanendcontainer,self.eilmercontainerrow])
-        
-        self.platzhalter = ft.Container(bgcolor=ft.colors.TRANSPARENT,expand=True, expand_loose=True)
-        self.columcon =  ft.Column([self.textbox, self.button,self.platzhalter,self.expanedstack])
+        self.platzhalter = ft.Container(bgcolor=ft.colors.TRANSPARENT,expand=True)
+        self.columcon =  ft.Column([self.textbox, self.button,self.platzhalter,self.selectrow,self.eilmercontainerrow])
         self.padding = ft.padding.all(10)
         self.content = self.columcon
+        
+        
+    def change_overlay(self,box):
+        print(box)
+        self.overlay1.visible = not self.overlay1.visible
+        self.overlay1.uetitle.controls[0].value = box
+        self.overlay1.update()
+
         

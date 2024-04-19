@@ -150,18 +150,36 @@ class COMSelector(ft.Row):
 class EOverlay(ft.Container):
     def __init__(self) -> None:
         super().__init__()
-        self.bgcolor = ft.colors.GREEN
+        self.uetitle = ft.Row([ft.Text(text_align=ft.TextAlign.CENTER,
+                                       style=ft.TextStyle(20,weight=ft.FontWeight.W_700),
+                                       color=ft.colors.WHITE)],
+                            alignment=ft.MainAxisAlignment.CENTER)
+        self.bgcolor = ft.colors.BLACK
         self.height = 200
         self.width = 150
+        
+        self.radiogroup = ft.RadioGroup(ft.Column([
+            ft.Radio(value="rot", label="rot"),
+            ft.Radio(value="gruen", label="gruen"),
+            ft.Radio(value="blau", label="blau")
+        ]))
+        
+        self.colum = ft.Column([self.uetitle,self.radiogroup])
+        self.content = self.colum
+        self.border_radius = 10
+        self.shadow = ft.BoxShadow(2,2,ft.colors.BLUE)
+        
+        
         
         
 
 
 
 class EilmnerZeichner(ft.Container):
-    def __init__(self, becher_text: str,bottom=None, stroke_color: ft.colors = ft.colors.BLACK, stroke_innercolor: ft.colors = ft.colors.BLUE) -> None:
+    def __init__(self, becher_text: str,function_click,bottom=None, stroke_color: ft.colors = ft.colors.BLACK, stroke_innercolor: ft.colors = ft.colors.BLUE) -> None:
         super().__init__()
-        
+        self.becher_text = becher_text
+        self.function_click = function_click
         self.stroke_color = stroke_color
         self.stroke_innercolor = stroke_innercolor
         self.innerbecher = cv.Path(
@@ -203,7 +221,7 @@ class EilmnerZeichner(ft.Container):
             self.innerbecher,
         ]
         ),height=90, width=90, on_click=self.anklickbarer_container)
-        text = ft.TransparentPointer(ft.Text(becher_text,size=20),left=40,bottom=35)
+        text = ft.TransparentPointer(ft.Text(self.becher_text,size=20),left=40,bottom=35)
         stack = ft.Stack([cp,text])
         self.content = stack
         self.bottom = bottom
@@ -211,6 +229,7 @@ class EilmnerZeichner(ft.Container):
         
     def anklickbarer_container(self,e: ft.ControlEvent):
         print("klicked", self.stroke_color)
+        self.function_click(self.becher_text)
         
         
         
