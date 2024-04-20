@@ -2,10 +2,12 @@ import base64
 import flet as ft
 import cv2
 from Designer.design import AnwendungstartPageDesign
-from configordner.settings import LaufZeitConfig
+from configordner.settings import LaufZeitConfig, SaveDictName
+from logic.KiDatenManager import KiDataManager
 from logic.kilauflogic import KiDatenVerarbeitung
 
 from modele.InterneDatenModele import KIModelsaverData, KiData
+from modele.SchanzenModelle import SchanzenSteuerung
 from windows.subseiten.AnwendungSettings import AnwendungSetting
 
 
@@ -103,6 +105,7 @@ class StartApplicationPage(AnwendungstartPageDesign):
 
     def start_camera(self, e):
         self.pr.visible = True
+        topfdata =  KiDataManager.ladeSessiondata(SaveDictName.topfmodus,SchanzenSteuerung)
         # load configdata
         # daten = Statistik(class_name="testneu",  confidence_score=80)
         # DataCreater().savestatistik(daten)
