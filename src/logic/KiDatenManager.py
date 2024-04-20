@@ -5,6 +5,7 @@ from StatusMeldungen.status import TypeErrorMessages
 from configordner.settings import SaveDictName
 from modele.InterneDatenModele import KIModelloaderData, KIModelsaverData
 import flet as ft
+from pydantic.type_adapter import TypeAdapter
 
 T = TypeVar('T')
 
@@ -55,12 +56,12 @@ class KiDataManager():
                 json_attributes = set(json_data.keys())
                 if expected_attributes != json_attributes:
                     raise TypeError("JSON data does not match the expected type")
-                print("Dict: ", json_data)
+                #alte möglichkeit um datne in pydantic zu passen geht soweit gut solange keine liste im modle ist
                 return typ(**json_data)
             else:
                 
-                
-                return typ(**json_data)
+                # "model_validate" funktioniert auch mit listen im pydantic models/bessere und weniger fehler anfälliger weg
+                return typ.model_validate(json_data)
         except Exception as e:
             print("Exception occurred:", e)
             return typ()

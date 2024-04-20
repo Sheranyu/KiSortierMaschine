@@ -44,12 +44,11 @@ class WebcamAufnahme(RecordSettings):
         cur_class = classdata.classname
 
         img_path = f"{path}\{cur_class}"
-        print(img_path)
-
-        print(f"Label: {cur_class}")
+        
+        
         if not os.path.exists(f"{img_path}"):
             os.system(f"mkdir {img_path}")
-        print(os.path.exists(f"{img_path}"))
+        
         if LaufZeitConfig.islaufzeit == False:
             return
         pr.visible = False
@@ -78,7 +77,7 @@ class WebcamAufnahme(RecordSettings):
             imagewrite = img_path + bildername
             cv2.imwrite(imagewrite, img_part)
             i += 1
-            print(i)
+            
             # f"{str(i).zfill(4)} Bild, Klasse: {cur_class} Aufloesung: {l}x{w}, x-Richtung: {self.cx}...{self.cx + self.rw}, y-Richtung: {self.cy}...{self.cy + self.rh} {img_path + f'/{str(i).zfill(4)}.png'}"
 
             # Bild anzeigen, Leertaste beendet

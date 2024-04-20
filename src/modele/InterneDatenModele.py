@@ -37,7 +37,7 @@ class LeuchtFarbenLampe(Enum):
     WEISS = "weiss"
     SCHWARZ = "schwarz"
     GELB = "gelb"
-    SONSTIGES = "sonstiges"   
+    SONSTIG = "sonstig"   
 
 
 class ErkanntermoduModel(BaseModel):

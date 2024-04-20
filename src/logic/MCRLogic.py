@@ -5,9 +5,10 @@ from sqlalchemy import null
 import serial_asyncio
 from StatusMeldungen.status import MCRMeldungen, WarnStatus
 from configordner.settings import SaveDictName
+from libcomponents.filterdata import filterschanzennachlabel
 from logic.KiDatenManager import KiDataManager
-from modele.InterneDatenModele import KiData, LeuchtFarbenLampe, SchanzenSteuerungFarbe, SerialConfigModel
-from modele.SchanzenModelle import  SchanzenSteuerungformenum
+from modele.InterneDatenModele import Erkanntermodus, KiData, LeuchtFarbenLampe, SchanzenSteuerungFarbe, SerialConfigModel
+from modele.SchanzenModelle import  SchanzenSteuerungformenum, SchanzenSteuerung
 
 COMMODE = "COM6"
 async def recv(stream: StreamReader):
@@ -20,28 +21,38 @@ class SerialInit:
         self.timeout = 0
         self.TIMEOUTEND = 5
         self.reader ,self.writer = await serial_asyncio.open_serial_connection(url=commode.COM, baudrate=115200)
-
-class SchanzenBewegungNachFarbe(SerialInit):
+    
+    
+    def loadschanzendata(self):
+        return KiDataManager.ladeSessiondata(SaveDictName.topfmodus,SchanzenSteuerung)
+        
+class SchanzenBewegung(SerialInit):
     def __init__(self):
         super().__init__()
         
+        
     async def start_changeposition(self, kilaufdaten: KiData):
         label = kilaufdaten.label_name.strip()
-    
-        if label in SchanzenSteuerungFarbe.BLUE.value or label in SchanzenSteuerungformenum.acht.value:
-            print("blue")
-            await self._ChangePosition("b1")
+        topfdata = self.loadschanzendata()
+        filtereddata = filterschanzennachlabel(topfdata,label)
+        
+        await self._ChangePosition(filtereddata.Topf)
+        
+        
+        # if label in SchanzenSteuerungFarbe.BLUE.value or label in SchanzenSteuerungformenum.acht.value:
+        #     print("blue")
+        #     await self._ChangePosition("b1")
 
-        if label in SchanzenSteuerungFarbe.GREEN.value or label in SchanzenSteuerungformenum.sechs.value:
-            print("green")
-            await self._ChangePosition("b2")
+        # if label in SchanzenSteuerungFarbe.GREEN.value or label in SchanzenSteuerungformenum.sechs.value:
+        #     print("green")
+        #     await self._ChangePosition("b2")
         
-        if label in SchanzenSteuerungFarbe.ROT.value or label in  SchanzenSteuerungformenum.zwanzig.value:
-            print("rot")
-            await self._ChangePosition("b3")
+        # if label in SchanzenSteuerungFarbe.ROT.value or label in  SchanzenSteuerungformenum.zwanzig.value:
+        #     print("rot")
+        #     await self._ChangePosition("b3")
         
-        if label in SchanzenSteuerungFarbe.SONSTIG.value or label in SchanzenSteuerungformenum.sonstig.value:
-            await self._ChangePosition("b4")
+        # if label in SchanzenSteuerungFarbe.SONSTIG.value or label in SchanzenSteuerungformenum.sonstig.value:
+        #     await self._ChangePosition("b4")
             
     async def _ChangePosition(self, Positionsnummer: str):
         try:
@@ -92,36 +103,40 @@ class SchanzenBewegungNachFarbe(SerialInit):
         
             
             
-            
+         
 class LedSteuerung(SerialInit):
     def __init__(self) -> None:
         pass
     
         
     async def setledcolor(self,kilaufdaten: KiData):
-        
-       
         label = kilaufdaten.label_name.strip()
-
-        if label in SchanzenSteuerungFarbe.BLUE.value:
-            await self._change_color(LeuchtFarbenLampe.BLAU)
-        elif label in SchanzenSteuerungFarbe.GREEN.value:
-            await self._change_color(LeuchtFarbenLampe.GRUEN)
-        
-        elif label in SchanzenSteuerungFarbe.ROT.value:
-            
-            await self._change_color(LeuchtFarbenLampe.ROT)
-        
-        elif label == SchanzenSteuerungFarbe.SONSTIG.value:
-            await self._change_color(LeuchtFarbenLampe.SONSTIGES)
+        topfdata = self.loadschanzendata()
+        filtereddata = filterschanzennachlabel(topfdata,label)
+        if kilaufdaten.erkannter_modus == Erkanntermodus.FARBE:
+            await self._change_color(filtereddata.selected)
         else:
-            print("Dürfte nicht hier drin sein zeile 111: LEDSteuerung")
+            await self._change_color(filtereddata.formcolor)
+
+        # if label in SchanzenSteuerungFarbe.BLUE.value:
+        #     await self._change_color(LeuchtFarbenLampe.BLAU)
+        # elif label in SchanzenSteuerungFarbe.GREEN.value:
+        #     await self._change_color(LeuchtFarbenLampe.GRUEN)
+        
+        # elif label in SchanzenSteuerungFarbe.ROT.value:
+            
+        #     await self._change_color(LeuchtFarbenLampe.ROT)
+        
+        # elif label == SchanzenSteuerungFarbe.SONSTIG.value:
+        #     await self._change_color(LeuchtFarbenLampe.SONSTIGES)
+        # else:
+        #     print("Dürfte nicht hier drin sein zeile 111: LEDSteuerung")
      
-    async def _change_color(self, ledcolor: LeuchtFarbenLampe):
+    async def _change_color(self, ledcolor: str):
         try:
 
             await self._initserial()
-            data_to_send = ledcolor.value.strip()
+            data_to_send = ledcolor.strip()
             self.writer.write(data_to_send.encode())
             
             response = b""

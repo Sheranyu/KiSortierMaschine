@@ -1,17 +1,15 @@
-from pyclbr import Class
-from turtle import st
-from typing import Union
+
 import flet as ft
 from StatusMeldungen.messageinfo import ClassCreatorSettingsMessage as CCSM
 from configordner.settings import SaveDictName
-from fletest import SchanzeB1, SchanzeB2, SchanzeB3, SchanzeB4, SchanzenSteuerung
 from libcomponents.CustomTextField import TextFieldBCB
+from libcomponents.filterdata import filterschanzendata
 from logic.KiDatenManager import KiDataManager
 from logic.Systemcode.camera import Camera
 from modele.InterneDatenModele import CameraSettingsModel, SerialConfigModel
 from flet import canvas as cv
 
-from modele.SchanzenModelle import SchanzenBecher
+from modele.SchanzenModelle import SchanzenBecher, SchanzenSteuerung
 
 class BPSSlider(ft.Column):
     def __init__(self) -> None:
@@ -157,42 +155,35 @@ class EOverlay(ft.Container):
                                        color=ft.colors.WHITE)],
                             alignment=ft.MainAxisAlignment.CENTER)
         self.bgcolor = ft.colors.BLACK
-        self.height = 200
+        
         self.width = 150
         
         self.radiogroup = ft.RadioGroup(ft.Column([
             
-        ]),on_change=self.on_radio_button_change)
+        ]),on_change=self.change_radio_inhalt)
         
         self.colum = ft.Column([self.uetitle,self.radiogroup])
         self.content = self.colum
         self.border_radius = 10
         self.shadow = ft.BoxShadow(2,2,ft.colors.BLUE)
      
-    def on_radio_button_change(self,e: ft.ControlEvent):
-        print(e.control) 
-     
+    def change_radio_inhalt(self,e: ft.ControlEvent):
+        self.data.selected = e.control.value
+        #self.data ist ein teilobjekt von self.datenschanze 
+        KiDataManager.saveSessionDaten(SaveDictName.topfmodus, self.dataschanze)
+        
+
        
     def build(self):
         return super().build()
     
     
     def create_schanze_class(self,becher: SchanzenBecher):
-        dataschanze = KiDataManager.ladeSessiondata(SaveDictName.topfmodus,SchanzenSteuerung)
-        data = self.filterdata(dataschanze,becher)
-        return data
+        self.dataschanze = KiDataManager.ladeSessiondata(SaveDictName.topfmodus,SchanzenSteuerung)
+        self.data = filterschanzendata(self.dataschanze,becher)
+        return self.data
         
-    def filterdata(self,data: SchanzenSteuerung, becher: SchanzenBecher):
-        if becher == SchanzenBecher.B1:
-            return data.acht
-        elif becher == SchanzenBecher.B2:
-            return data.sechs
-        elif becher == SchanzenBecher.B3:
-            return data.zwanzig
-        elif becher == SchanzenBecher.B4:
-            return data.sonstig
-        else:
-            raise ValueError("Ungültiger SchanzenBecher-Wert")
+
             
         
         

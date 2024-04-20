@@ -1,5 +1,5 @@
 class DependencyInjector:
-    _registered_classes = {}
+    _registered_classes: dict = {}
 
     @classmethod
     def register_class(cls, key, class_instance):

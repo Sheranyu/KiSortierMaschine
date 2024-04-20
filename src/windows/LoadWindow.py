@@ -112,9 +112,9 @@ class LoadModelPage(LoadModelPageDesign):
     def _loadlabeldata(self):
         label = LabelData()
         with open(self.kimodeldata.label_datei_name, 'r') as datei:
-            data = datei.readlines()
-            print(data)
-            label.labeldata.extend(data)
+            for data in datei: 
+                print(data)
+                label.labeldata.append(data)
         print(label)
         KiDataManager.saveSessionDaten(SaveDictName.labellist,label)
              
