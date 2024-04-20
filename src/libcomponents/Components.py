@@ -236,7 +236,8 @@ class EilmnerZeichner(ft.Container):
             ),
             self.innerbecher,
         ]
-        ),height=90, width=90, on_click=self.anklickbarer_container)
+        ),height=90+25, width=80+25, on_click=self.anklickbarer_container,
+                          ink=False,ink_color=ft.colors.BLUE)
         text = ft.TransparentPointer(ft.Text(self.becher_text.value,size=20),left=40,bottom=35)
         stack = ft.Stack([cp,text])
         self.content = stack
@@ -245,6 +246,8 @@ class EilmnerZeichner(ft.Container):
         
     def anklickbarer_container(self,e: ft.ControlEvent):
         if self.function_click is not None:
+            self.innerbecher.visible = not self.innerbecher.visible
+            self.update()
             self.function_click(self.becher_text)
         
         

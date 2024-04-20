@@ -23,6 +23,7 @@ class Router:
         self.page.go(top_view.route)
         
     def routechange(self,route):
+        
         if self.vorherigelement != self.page.route:
             self.view_list.append(self.page.route)
         self.page.views.clear()

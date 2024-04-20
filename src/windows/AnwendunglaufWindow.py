@@ -58,7 +58,7 @@ class StartApplicationPage(AnwendungstartPageDesign):
                                       
                                       )
         self.settingocntainer = ft.Container(self.settingpage, border_radius=8, 
-                                             animate_scale=ft.animation.Animation(700,ft.AnimationCurve.EASE),
+                                             animate_scale=ft.animation.Animation(550,ft.AnimationCurve.EASE),
                                              scale=ft.Scale(0)
                                              )
         
