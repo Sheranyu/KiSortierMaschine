@@ -35,12 +35,15 @@ class AnwendungSetting(ft.Container):
         
     def change_overlay(self,topf: SchanzenBecher):
         schanzendata = self.overlay1.create_schanze_class(topf)
-        labelda = KiDataManager.ladelistSessiondata(SaveDictName.labellist,LabelData)
-        if len(labelda.labeldata) > 0:
-            for labelname in labelda.labeldata:
+        labelinhalt = KiDataManager.ladeSessiondata(SaveDictName.labellist,LabelData)
+        print(labelinhalt)
+        if len(labelinhalt.labeldata) > 0:
+            for labelname in labelinhalt.labeldata:
                 radiobutton = ft.Radio(label=labelname,value=labelname)
                 self.overlay1.radiogroup.content.controls.append(radiobutton)
-        
+        else:
+            #TODO: User wissen lassen 
+            print("länge ist null")
         
         self.overlay1.visible = not self.overlay1.visible
         self.overlay1.uetitle.controls[0].value = schanzendata.Topf

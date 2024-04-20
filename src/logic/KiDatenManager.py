@@ -47,18 +47,25 @@ class KiDataManager():
         if not isinstance(dictname, str):
             raise TypeError(TypeErrorMessages.DICT_IS_NO_STRING)
         try:
-            json_data = cls.Pagedata.session.get(dictname)
+            json_data = cls.Pagedata.session.get(dictname)  
             if json_data is None:
                 return typ()
-            
-            expected_attributes = set(typ.__annotations__.keys())
-            json_attributes = set(json_data.keys())
-            if expected_attributes != json_attributes:
-                raise TypeError("JSON data does not match the expected type")
-        except:
+            if isinstance(json_data, dict):
+                expected_attributes = set(typ.__annotations__.keys())
+                json_attributes = set(json_data.keys())
+                if expected_attributes != json_attributes:
+                    raise TypeError("JSON data does not match the expected type")
+                print("Dict: ", json_data)
+                return typ(**json_data)
+            else:
+                
+                
+                return typ(**json_data)
+        except Exception as e:
+            print("Exception occurred:", e)
             return typ()
-
-        return typ(**json_data)
+        
+        
     
     
     

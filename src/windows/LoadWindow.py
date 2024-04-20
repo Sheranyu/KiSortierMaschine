@@ -105,15 +105,17 @@ class LoadModelPage(LoadModelPageDesign):
             return
             
         self.page.session.set("kimodel", self.kimodeldata.__dict__)
-        #self._loadlabeldata()
+        self._loadlabeldata()
         self.isloadedfinal.name = ft.icons.CHECK_BOX_ROUNDED
         self.isloadedfinal.update()
         
     def _loadlabeldata(self):
         label = LabelData()
-        with open(self.kimodeldata.ModelName + "_label.txt", 'r') as datei:
-            label.labeldata.extend(datei.readlines())
-            
+        with open(self.kimodeldata.label_datei_name, 'r') as datei:
+            data = datei.readlines()
+            print(data)
+            label.labeldata.extend(data)
+        print(label)
         KiDataManager.saveSessionDaten(SaveDictName.labellist,label)
              
 

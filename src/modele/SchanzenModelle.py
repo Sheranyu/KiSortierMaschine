@@ -5,7 +5,7 @@ from pydantic import BaseModel, Field
 
 
 class LabelData(BaseModel):
-    labeldata: List[str] = Field(default_factory=list)
+    labeldata: List[str]
 
 
 class SchanzeBase(BaseModel):

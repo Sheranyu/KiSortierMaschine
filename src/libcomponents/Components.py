@@ -125,11 +125,9 @@ class SelectCamera(ft.Row):
             for camdata in getnewcameradata:
                 index = camdata.get("camera_index")
                 camera_name = camdata.get("camera_name")
-                # Option für Dropdown-Menü erstellen und hinzufügen
                 item = ft.dropdown.Option(index, camera_name)
                 self.cameralist.options.append(item)
         else:
-            # Wenn keine Kameradaten abgerufen werden konnten, Dialog öffnen
             self.page.dialog = self.dialog
             self.dialog.open = True
             self.page.update()
@@ -163,16 +161,18 @@ class EOverlay(ft.Container):
         self.width = 150
         
         self.radiogroup = ft.RadioGroup(ft.Column([
-            ft.Radio(value="rot", label="rot"),
-            ft.Radio(value="gruen", label="gruen"),
-            ft.Radio(value="blau", label="blau")
-        ]))
+            
+        ]),on_change=self.on_radio_button_change)
         
         self.colum = ft.Column([self.uetitle,self.radiogroup])
         self.content = self.colum
         self.border_radius = 10
         self.shadow = ft.BoxShadow(2,2,ft.colors.BLUE)
-        
+     
+    def on_radio_button_change(self,e: ft.ControlEvent):
+        print(e.control) 
+     
+       
     def build(self):
         return super().build()
     
@@ -253,8 +253,8 @@ class EilmnerZeichner(ft.Container):
         
         
     def anklickbarer_container(self,e: ft.ControlEvent):
-        print("klicked", self.stroke_color)
-        self.function_click(self.becher_text)
+        if self.function_click is not None:
+            self.function_click(self.becher_text)
         
         
         
