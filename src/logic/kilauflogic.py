@@ -147,4 +147,4 @@ class KiDatenVerarbeitung():
         return CreateDatumSpeicherung().CreateDatum(session, datum) 
         
     def _savetime(self,laufzeit: float,datumid:int, session: Session,aktuellestueckzahl: int):
-        EndStatistik().createzeitdaten(laufzeit,datumid, session,aktuellestueckzahl)
+        EndStatistik().createzeitdaten(laufzeit,aktuellestueckzahl,datumid,session)
