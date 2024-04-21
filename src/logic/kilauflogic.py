@@ -63,10 +63,10 @@ class KiDatenVerarbeitung():
                 item.anzahl = self.zeahler
                 zeigebildan(image)        
                 callbackinfos(item) 
-                self._verarbeitedaten(item)
+                self._speicherdateninlist(item)
                 self.currentkidata = item
 
-                if item.laufzeit >= 2 * timemulti:
+                if item.laufzeit >= 1 * timemulti:
                     endkidata = self._berechnedurchschnitt(item.laufzeit, item.anzahl, modus=item.erkannter_modus)
                     timemulti += 1
                     self._delete_tmp_data()
@@ -139,7 +139,7 @@ class KiDatenVerarbeitung():
 
         
 
-    def _verarbeitedaten(self,item: KiData):
+    def _speicherdateninlist(self,item: KiData):
         self.kidatenlist.append(item)
         KiDataManager.saveSessionDaten(SaveDictName.kidatenzwischenspeicher,self.kidatenlist)
     
