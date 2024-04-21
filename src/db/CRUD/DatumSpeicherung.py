@@ -1,7 +1,6 @@
 
 
 import datetime
-from typing import List
 from db.db_and_models.models import DatumSpeicherung
 from sqlalchemy.orm.session import Session
 from sqlalchemy import insert

@@ -1,18 +1,12 @@
 
-from genericpath import isfile
-import json
-from os.path import isdir, join
+from os.path import isdir
 import os
 import random
-import time
-from typing import Type
 import torch
-import torch.nn as nn
 import torch.nn.functional as F
 from torch.autograd import Variable
 import torch.optim as optim
-from torchvision import datasets, transforms
-from torch.utils.data import DataLoader
+from torchvision import  transforms
 from PIL import Image
 from os import listdir
 from configordner.settings import LaufZeitConfig

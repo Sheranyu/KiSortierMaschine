@@ -3,7 +3,6 @@ import platform
 import subprocess
 from typing_extensions import deprecated
 import cv2
-from flet import ProgressRing
 if platform.system() == 'Windows':
     import winsdk.windows.devices.enumeration as windows_devices
 

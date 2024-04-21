@@ -1,8 +1,5 @@
 import asyncio
 import datetime
-from io import TextIOWrapper
-import time
-
 import flet as ft
 from sqlalchemy.orm import Session
 from Ki.opencvcode import TrainiertesModel
@@ -14,7 +11,6 @@ from modele.InterneDatenModele import Erkanntermodus, KiData
 from typing import Any, Generator, List
 from datetime import datetime
 import pandas as pd
-
 from db.CRUD.Statistik import  StatistikCreater
 from db.CRUD.DatumSpeicherung import CreateDatumSpeicherung
 from db.db_and_models.session import sessiongen
@@ -125,10 +121,7 @@ class KiDatenVerarbeitung():
         
 
     def _berechnedurchschnitt(self, laufzeit: float, anzahl: int, modus: str) ->KiData:
-        
         daten = KiDataManager.ladelistSessiondata(SaveDictName.kidatenzwischenspeicher,List[KiData])   
-        
-        
         df = pd.DataFrame([vars(data)for data in daten])
         
         result_label_name = df['label_name'].value_counts().idxmax()
