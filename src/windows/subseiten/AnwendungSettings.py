@@ -4,7 +4,7 @@ import flet as ft
 from sympy import false
 
 from configordner.settings import SaveDictName
-from libcomponents.Components import EOverlay, EilmnerZeichner
+from libcomponents.Components import COMSelector, EOverlay, EilmnerZeichner, SelectCamera
 from libcomponents.filterdata import filterschanzendata
 from logic.KiDatenManager import KiDataManager
 from modele.SchanzenModelle import LabelData, SchanzenBecher, SchanzenSteuerung
@@ -13,6 +13,15 @@ class AnwendungSetting(ft.Container):
     def __init__(self, content: ft.Control | None = None, appbar: ft.AppBar | ft.CupertinoAppBar | None = None, navigation_bar: ft.NavigationBar | ft.CupertinoNavigationBar | None = None, bottom_app_bar: ft.BottomAppBar | None = None, bottom_sheet: ft.Control | None = None, drawer: ft.NavigationDrawer | None = None, end_drawer: ft.NavigationDrawer | None = None, floating_action_button: ft.FloatingActionButton | None = None, floating_action_button_location: ft.FloatingActionButtonLocation | None | ft.Offset | Tuple[float | int, float | int] = None, bgcolor: str | None = None, ref: ft.Ref | None = None, width: None | int | float = None, height: None | int | float = None, left: None | int | float = None, top: None | int | float = None, right: None | int | float = None, bottom: None | int | float = None, expand: None | bool | int = None, expand_loose: bool | None = None, col: Dict[str, int | float] | int | float | None = None, opacity: None | int | float = None, rotate: None | int | float | ft.Rotate = None, scale: None | int | float | ft.Scale = None, offset: None | ft.Offset | Tuple[float | int, float | int] = None, aspect_ratio: None | int | float = None, animate_opacity: None | bool | int | ft.Animation = None, animate_size: None | bool | int | ft.Animation = None, animate_position: None | bool | int | ft.Animation = None, animate_rotation: None | bool | int | ft.Animation = None, animate_scale: None | bool | int | ft.Animation = None, animate_offset: None | bool | int | ft.Animation = None, on_animation_end=None, tooltip: str | None = None, visible: bool | None = None, disabled: bool | None = None, data: Any = None, key: str | None = None, adaptive: bool | None = None):
         super().__init__(content, appbar, navigation_bar, bottom_app_bar, bottom_sheet, drawer, end_drawer, floating_action_button, floating_action_button_location, bgcolor, ref, width, height, left, top, right, bottom, expand, expand_loose, col, opacity, rotate, scale, offset, aspect_ratio, animate_opacity, animate_size, animate_position, animate_rotation, animate_scale, animate_offset, on_animation_end, tooltip, visible, disabled, data, key, adaptive)
         self.flag_visible_topf: bool = False
+        
+        self.comselector = COMSelector()
+        self.titletext = ft.Text("Anwendung Setting", 
+                                  
+                                 theme_style=ft.TextThemeStyle.HEADLINE_MEDIUM)
+        
+        self.rowtitle = ft.Container(ft.Row([self.titletext],alignment=ft.MainAxisAlignment.CENTER),margin=ft.margin.all(5))
+        
+        
         
         self.overlay1 = EOverlay()
         self.cp = EilmnerZeichner(SchanzenBecher.B1,function_click=self.change_overlay)
@@ -31,10 +40,10 @@ class AnwendungSetting(ft.Container):
         self.eilmercontainerrow = ft.Row([self.cp,self.cp2, self.cp3,self.cp4], 
                                          alignment=ft.MainAxisAlignment.CENTER)
         self.selectrow  = ft.Row([self.overlay1], alignment=ft.MainAxisAlignment.CENTER)
-        
+        self.camerasettings = SelectCamera()
         
         self.platzhalter = ft.Container(bgcolor=ft.colors.TRANSPARENT,expand=True)
-        self.columcon =  ft.Column([self.platzhalter,self.selectrow,self.eilmercontainerrow])
+        self.columcon =  ft.Column([self.rowtitle,self.camerasettings,self.comselector,self.platzhalter,self.selectrow,self.eilmercontainerrow])
         self.padding = ft.padding.all(10)
         self.content = self.columcon
         

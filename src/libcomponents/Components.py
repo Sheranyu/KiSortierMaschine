@@ -160,12 +160,12 @@ class EOverlay(ft.Container):
         
         self.radiogroup = ft.RadioGroup(ft.Column([
             
-        ]),on_change=self.change_radio_inhalt)
+        ],height=200,scroll=True),on_change=self.change_radio_inhalt)
         
-        self.colum = ft.Column([self.uetitle,self.radiogroup])
-        self.content = self.colum
+        self.colum = ft.Column([self.uetitle,self.radiogroup],scroll=True)
         self.border_radius = 10
         self.shadow = ft.BoxShadow(2,2,ft.colors.BLUE)
+        self.content = self.colum
      
     def change_radio_inhalt(self,e: ft.ControlEvent):
         self.data.selected = e.control.value
