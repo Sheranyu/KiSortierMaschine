@@ -34,8 +34,11 @@ class SchanzenBewegung(SerialInit):
     async def start_changeposition(self, kilaufdaten: KiData):
         label = kilaufdaten.label_name.strip()
         topfdata = self.loadschanzendata()
+        print(topfdata)
         filtereddata = filterschanzennachlabel(topfdata,label)
-        
+        if filtereddata is None:
+            return None
+        print(filtereddata)
         await self._ChangePosition(filtereddata.Topf)
         
         
@@ -62,7 +65,7 @@ class SchanzenBewegung(SerialInit):
             data_to_send = Positionsnummer
             self.writer.write(data_to_send.encode())
             
-            response = ""
+            response = b""
             while response.rstrip() != MCRMeldungen.SERVO_GEDREHT:
                 response = await recv(self.reader)
                 print(response)
@@ -113,6 +116,8 @@ class LedSteuerung(SerialInit):
         label = kilaufdaten.label_name.strip()
         topfdata = self.loadschanzendata()
         filtereddata = filterschanzennachlabel(topfdata,label)
+        if filtereddata is None:
+            return None
         if kilaufdaten.erkannter_modus == Erkanntermodus.FARBE:
             await self._change_color(filtereddata.selected)
         else:

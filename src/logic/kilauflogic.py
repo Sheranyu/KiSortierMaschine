@@ -93,7 +93,9 @@ class KiDatenVerarbeitung():
             
     async def _MoveSchanze(self, Kidata: KiData):
         if (Kidata.erkannter_modus == Erkanntermodus.FARBE or Kidata.erkannter_modus == Erkanntermodus.FORM )and Kidata.label_name != "background":
-            await self.schanze.start_changeposition(Kidata)
+            data = await self.schanze.start_changeposition(Kidata)
+            # if data is None:
+            #     return
             await self._change_color(Kidata)
             drehinfo = await self.schanze.start_raddrehen()
             self.UpdateZeahler(drehinfo)

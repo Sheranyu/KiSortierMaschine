@@ -15,23 +15,25 @@ def filterschanzendata(data: SchanzenSteuerung, becher: SchanzenBecher):
             raise ValueError("Ungültiger SchanzenBecher-Wert")
         
 def filterschanzennachlabel(data: SchanzenSteuerung, label: str):
-        # if label == data.B1.selected:
-        #     return data.B1  
-        # elif label == data.B2.selected:
-        #     return data.B2
-        # elif label == data.B3.selected:
-        #     return data.B3
-        # elif label == data.B4.selected:
-        #     return data.B4
-        # else:
-        #     pass
+        label = label.strip()
         
-    for attr_name in data.model_fields.keys():
-        # Prüfe, ob das Attribut ein Subtyp von SchanzeBase ist
-        if isinstance(getattr(data, attr_name), SchanzeBase):
-            # Prüfe, ob das Label mit dem ausgewählten Wert übereinstimmt
-            if label == getattr(data, attr_name).selected:
-                # Gib den entsprechenden SchanzenBase-Subtyp zurück
-                return getattr(data, attr_name)
-    # Wenn kein passendes Label gefunden wurde, gib None zurück
-    return None
+        if label in data.B1.selected:
+            return data.B1  
+        elif label in data.B2.selected:
+            return data.B2
+        elif label in data.B3.selected:
+            return data.B3
+        elif label in data.B4.selected:
+            return data.B4
+        else:
+            return None
+      
+    # for attr_name in data.model_fields.keys():
+    #     # Prüfe, ob das Attribut ein Subtyp von SchanzeBase ist
+    #     if isinstance(getattr(data, attr_name), SchanzeBase):
+    #         # Prüfe, ob das Label mit dem ausgewählten Wert übereinstimmt
+    #         if label == getattr(data, attr_name).selected:
+    #             # Gib den entsprechenden SchanzenBase-Subtyp zurück
+    #             return getattr(data, attr_name)
+    # # Wenn kein passendes Label gefunden wurde, gib None zurück
+    # return None
