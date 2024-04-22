@@ -124,7 +124,7 @@ class TrainiertesModel(RecordSettings):
             currenttime = round(time.time() - start_time,2)
            #farbe = Erkanntermodus.FARBE
             
-            kidaten = KiData(label_name=label_name,confidence_score=int(np.round(prediction_score.item())),erkannter_modus=formoderfarbmodus, laufzeit=currenttime,anzahl=self.zeahler)
+            kidaten = KiData(label_name=label_name,confidence_score=int(np.round(prediction_score)),erkannter_modus=formoderfarbmodus, laufzeit=currenttime,anzahl=self.zeahler)
             yield (kidaten, frame)
             
             self.leerzeit = time.time() - self.currenttime
