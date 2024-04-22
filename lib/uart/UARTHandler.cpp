@@ -72,9 +72,12 @@ void UARTHandler::processInput() {
       else if (incomingCommand.startsWith("led")) {
         processLEDCommand(incomingCommand);
       }
-      else if (incomingCommand == "blau" || incomingCommand == "rot" || incomingCommand == "gruen" ||
-            incomingCommand == "lila" || incomingCommand == "weiss" || incomingCommand == "schwarz" ||
-            incomingCommand == "gelb" || incomingCommand == "sonstig") {
+      else if (incomingCommand == "blau" || incomingCommand == "blue" || incomingCommand == "gruen" ||
+            incomingCommand == "green" || incomingCommand == "weiss" || incomingCommand == "white" ||
+            incomingCommand == "gelb" || incomingCommand == "yellow" || incomingCommand == "rot" ||
+            incomingCommand == "red" || incomingCommand == "lila" || incomingCommand == "purple" ||
+            incomingCommand == "schwarz" || incomingCommand == "black" || incomingCommand == "sonstig" ||
+            incomingCommand == "other") {
             ledObj.setColorByName(incomingCommand);
       }
       else if (incomingCommand.startsWith("testservo")) {
