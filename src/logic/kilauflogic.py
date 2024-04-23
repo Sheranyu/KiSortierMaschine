@@ -22,7 +22,6 @@ class KiDatenVerarbeitung():
     def __init__(self) -> None:
         self.model = TrainiertesModel()
         self.aktuellelaufzeit = None
-        self.currentkidata: KiData = None
         self.kidatenlist: List[KiData] = []
         self.schanze = SchanzenBewegung()
         self.isamdrehen = False
@@ -51,6 +50,7 @@ class KiDatenVerarbeitung():
 
     async def _startasync(self, shareddata: asyncio.Queue, progressring: ft.ProgressRing, zeigebildan, callbackinfos):
         await self._drehe_rad()
+        endkidata = KiData()
         timemulti = 1
         datum = self._erstelle_datum()
         with sessiongen() as session:
@@ -60,7 +60,7 @@ class KiDatenVerarbeitung():
                 zeigebildan(image)        
                 callbackinfos(item) 
                 self._speicherdateninlist(item)
-                self.currentkidata = item
+                
 
                 if item.laufzeit >= 1 * timemulti:
                     endkidata = self._berechnedurchschnitt(item.laufzeit, item.anzahl, modus=item.erkannter_modus)
@@ -76,7 +76,7 @@ class KiDatenVerarbeitung():
                 await asyncio.sleep(0)
                     
                 if not LaufZeitConfig.islaufzeit:
-                    self._savetime(self.currentkidata.laufzeit, datumid, session, self.currentkidata.anzahl)
+                    self._savetime(endkidata.laufzeit, datumid, session, endkidata.anzahl)
                     break
                             
             
@@ -93,7 +93,7 @@ class KiDatenVerarbeitung():
             
     async def _MoveSchanze(self, Kidata: KiData):
         if (Kidata.erkannter_modus == Erkanntermodus.FARBE or Kidata.erkannter_modus == Erkanntermodus.FORM )and Kidata.label_name != "background":
-            data = await self.schanze.start_changeposition(Kidata)
+            await self.schanze.start_changeposition(Kidata)
             # if data is None:
             #     return
             await self._change_color(Kidata)
