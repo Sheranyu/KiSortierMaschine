@@ -7,6 +7,7 @@ from windows.SettingsWindow import SettingsWindow
 from windows.StatistikWindow import Statistiken
 
 from windows.fletmaininhalt import Mainwindow
+from windows.info_window import Infoseite
 
 class Router:
     def __init__(self, page: ft.Page) -> None:
@@ -29,7 +30,12 @@ class Router:
         self.page.views.clear()
    
         self.page.views.append(
-            ft.View("/",controls=[Mainwindow(self.page)], appbar=ft.AppBar(title=ft.Text("Sortiermaschine"), bgcolor=ft.colors.BLUE))
+            ft.View("/",controls=[Mainwindow(self.page)], 
+                    appbar=ft.AppBar(title=ft.Text("Sortiermaschine"),
+                                     actions=[ft.IconButton(ft.icons.INFO,ft.colors.BLACK,40, on_click=lambda _: self.page.go("/info"))],
+                    bgcolor=ft.colors.BLUE),
+                    
+                    )
         )  
         for route in self.view_list:
             for key, value in self.routes.items():
@@ -64,13 +70,16 @@ class Router:
         # self.classcreatorsettings_view = ft.View("/classcreatorsettings", controls=[SettingsClassCreator(self.page)],
         #                                          appbar=ft.AppBar(title=ft.Text("Settings"), bgcolor=ft.colors.SURFACE_VARIANT))
         
+        self.infoview = ft.View("/info",controls=[Infoseite()], 
+                                appbar=ft.AppBar(title=ft.Text("info")))
         
         self.routes = {
             "/create-model": self.create_model_view,
             "/load-model": self.load_model_view,
             "/start-application": self.start_application_view,
             "/statistik": self.statistik_view,
-            "/settings": self.settings_view
+            "/settings": self.settings_view,
+            "/info": self.infoview,
             #"/classcreatorsettings": self.classcreatorsettings_view
         }
         

@@ -109,7 +109,7 @@ class Mainwindow(ft.Column):
              
         )
         
-
+        
         self.finalcolumn = ft.Column(
             controls=[
                 self.button1,
