@@ -3,11 +3,12 @@
 #include <Servo.h>
 
 extern Servo servo;
-extern StepperMotor stepperMotor; // Definiere dies extern, um Zugriff darauf zu haben
+extern StepperMotor stepperMotor;
 
+// Konstruktor: Initialisiert den UART-Handler mit einer Referenz auf ein LED-Objekt und setzt Standardwerte.
 UARTHandler::UARTHandler(LED& led) : ledObj(led), servoControl(nullptr) {
-    motorRunning = false;
-    incomingCommand = "";
+    motorRunning = false; // Initialisiert den Motorbetriebszustand auf "aus"
+    incomingCommand = ""; // Initialisiert die eingehende Befehlszeichenkette
 }
 
 void UARTHandler::processInput() {
@@ -94,25 +95,25 @@ void UARTHandler::processInput() {
 }
 
 void UARTHandler::setMotorRunning(bool running) {
-  motorRunning = running;
+  motorRunning = running; // Ändert den Betriebszustand des Motors
 }
 
 void UARTHandler::processLEDCommand(String command) {
   if (command.startsWith("led")) {
-    int R = command.substring(3, 6).toInt();
-    int G = command.substring(6, 9).toInt();
-    int B = command.substring(9, 12).toInt();
-    Serial.println("Setze LED auf " + command.substring(3, 12));
-    ledObj.setColor(R, G, B);
+    int R = command.substring(3, 6).toInt(); // Extrahiert den Rot-Wert
+    int G = command.substring(6, 9).toInt(); // Extrahiert den Grün-Wert
+    int B = command.substring(9, 12).toInt(); // Extrahiert den Blau-Wert
+    Serial.println("Setze LED auf " + command.substring(3, 12)); // Gibt den Farbwert aus
+    ledObj.setColor(R, G, B); // Stellt die LED-Farbe ein
   }
 }
 
 void UARTHandler::setServoAngle(int angle) {
-    if (servoControl != nullptr) {
-        servoControl->setAngle(angle);
-    }
+  if (servoControl != nullptr) { // Stellt sicher, dass das ServoControl-Objekt gesetzt ist
+    servoControl->setAngle(angle); // Stellt den Servo-Winkel ein
+  }
 }
 
 void UARTHandler::setServoControl(ServoControl& servoControl) {
-    this->servoControl = &servoControl;
+  this->servoControl = &servoControl; // Setzt das ServoControl-Objekt
 }
