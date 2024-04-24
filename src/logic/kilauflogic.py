@@ -47,6 +47,8 @@ class KiDatenVerarbeitung():
                 item: KiData = await shareddata.get()
                 await self._MoveSchanze(item)
                 self.ismoveschanzeaktiv = False
+                if not LaufZeitConfig.islaufzeit:
+                    break
 
     async def _startasync(self, shareddata: asyncio.Queue, progressring: ft.ProgressRing, zeigebildan, callbackinfos):
         await self._drehe_rad()
@@ -87,8 +89,10 @@ class KiDatenVerarbeitung():
         if kidaten.erkannter_modus == Erkanntermodus.FARBE:
             await self.colorchange.setledcolor(kidaten)
             
-    def UpdateZeahler(self,gedreht: str):  
-        if "gedreht" in gedreht:
+    def UpdateZeahler(self,gedreht: str):
+        if gedreht is None:
+            return 
+        if "servo_gedreht" in gedreht:
             self.zeahler += 1
 
             

@@ -1,6 +1,8 @@
 import base64
+
 import flet as ft
 import cv2
+from sympy import false
 from Designer.design import AnwendungstartPageDesign
 from configordner.settings import LaufZeitConfig, SaveDictName
 from logic.KiDatenManager import KiDataManager
@@ -106,6 +108,16 @@ class StartApplicationPage(AnwendungstartPageDesign):
     def start_camera(self, e):
         self.pr.visible = True
         topfdata =  KiDataManager.ladeSessiondata(SaveDictName.topfmodus,SchanzenSteuerung)
+        topfdictdata = topfdata.model_dump()
+        # Annahme: topfdata ist ein Dictionary oder ein Objekt von Pydantic
+        attribute_list = ['B1', 'B2', 'B3',"B4"]
+        print(topfdata.model_dump())
+        # Überprüfen, ob mindestens eines der Attribute den Wert 'selected' hat
+        if any(data.get('selected') for data in topfdictdata.values()):
+            print("Mindestens ein Element hat den Wert 'selected'.")
+        else:
+            print("Keines der Elemente hat den Wert 'selected'.")
+
         # load configdata
         # daten = Statistik(class_name="testneu",  confidence_score=80)
         # DataCreater().savestatistik(daten)

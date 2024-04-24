@@ -54,4 +54,6 @@ class EndStastik(Base):
 
     datumspeicherung: Mapped['DatumSpeicherung'] = relationship('DatumSpeicherung', back_populates='EndStastik')
     def __init__(self,datumspeicherung_id: decimal.Decimal, laufzeit: float,stueckzahl: int):
-        pass
+        self.datumspeicherung_id = datumspeicherung_id
+        self.laufzeit = laufzeit
+        self.stueckzahl = stueckzahl
