@@ -1,55 +1,43 @@
-#include "LED.h"
+#include "LED.h"  // Inkludiert die Definition der LED-Klasse
 
+// Konstruktor der Klasse LED
 LED::LED(int pinR, int pinG, int pinB) {
-  pinRed = pinR;
-  pinGreen = pinG;
-  pinBlue = pinB;
-  pinMode(pinRed, OUTPUT);
-  pinMode(pinGreen, OUTPUT);
-  pinMode(pinBlue, OUTPUT);
+  pinRed = pinR;  // Setzt den Pin für die rote LED
+  pinGreen = pinG;  // Setzt den Pin für die grüne LED
+  pinBlue = pinB;  // Setzt den Pin für die blaue LED
+  pinMode(pinRed, OUTPUT);  // Konfiguriert den Roten Pin als Ausgang
+  pinMode(pinGreen, OUTPUT);  // Konfiguriert den Grünen Pin als Ausgang
+  pinMode(pinBlue, OUTPUT);  // Konfiguriert den Blauen Pin als Ausgang
 }
 
+// Setzt die Farbe der LED durch direkte Angabe der RGB-Werte
 void LED::setColor(int R, int G, int B) {
-  analogWrite(pinRed, R);
-  analogWrite(pinGreen, G);
-  analogWrite(pinBlue, B);
-  Serial.println("led_umgeschaltet");
+  analogWrite(pinRed, R);  // Setzt die Intensität der roten LED
+  analogWrite(pinGreen, G);  // Setzt die Intensität der grünen LED
+  analogWrite(pinBlue, B);  // Setzt die Intensität der blauen LED
+  Serial.println("led_umgeschaltet");  // Gibt eine Nachricht über den Farbwechsel aus
 }
 
+// Setzt die LED-Farbe basierend auf einem übergebenen Farbnamen
 void LED::setColorByName(String colorName) {
-    if (colorName == "rot") {
-        setColor(255, 0, 0);
-    } else if (colorName == "red") {
-        setColor(255, 0, 0);
-    } else if (colorName == "gruen") {
-        setColor(0, 255, 0);
-    } else if (colorName == "green") {
-        setColor(0, 255, 0);
-    } else if (colorName == "blau") {
-        setColor(0, 0, 255);
-    } else if (colorName == "blue") {
-        setColor(0, 0, 255);
-    } else if (colorName == "lila") {
-        setColor(153, 0, 153);
-    } else if (colorName == "purple") {
-        setColor(153, 0, 153);
-    } else if (colorName == "weiss") {
-        setColor(255, 255, 255);
-    } else if (colorName == "white") {
-        setColor(255, 255, 255);
-    } else if (colorName == "schwarz") {
-        setColor(0, 0, 0);
-    } else if (colorName == "black") {
-        setColor(0, 0, 0);
-    } else if (colorName == "gelb") {
-        setColor(158, 94, 0);
-    } else if (colorName == "yellow") {
-        setColor(158, 94, 0);
-    } else if (colorName == "sonstig") {
-        setColor(0, 255, 255); // Cyan
-    } else if (colorName == "other") {
-        setColor(0, 255, 255); // Cyan
+    // Überprüft den Farbnamen und setzt die entsprechenden RGB-Werte
+    if (colorName == "rot" || colorName == "red") {
+        setColor(255, 0, 0);  // Rot
+    } else if (colorName == "gruen" || colorName == "green") {
+        setColor(0, 255, 0);  // Grün
+    } else if (colorName == "blau" || colorName == "blue") {
+        setColor(0, 0, 255);  // Blau
+    } else if (colorName == "lila" || colorName == "purple") {
+        setColor(153, 0, 153);  // Lila
+    } else if (colorName == "weiss" || colorName == "white") {
+        setColor(255, 255, 255);  // Weiß
+    } else if (colorName == "schwarz" || colorName == "black") {
+        setColor(0, 0, 0);  // Schwarz
+    } else if (colorName == "gelb" || colorName == "yellow") {
+        setColor(158, 94, 0);  // Gelb
+    } else if (colorName == "sonstig" || colorName == "other") {
+        setColor(0, 255, 255);  // Cyan
     } else {
-        Serial.println("Unbekannter Farbbefehl: " + colorName);
+        Serial.println("Unbekannter Farbbefehl: " + colorName);  // Meldung bei unbekanntem Farbnamen
     }
 }
