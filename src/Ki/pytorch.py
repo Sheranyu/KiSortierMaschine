@@ -127,7 +127,7 @@ class KiTraining():
                 epoche, batch_id * len(data), len(self.train_data),
                 100. * batch_id / len(self.train_data), loss.item()))
             if LaufZeitConfig.istrainingactive == False:
-                break
+                self.train_data.clear()
          
         self.progress.value = epoche/self.maxepoche
         self.savekidata()
@@ -167,7 +167,7 @@ class KiTraining():
             img_tensor = self.transformation(img)
             self.train_data_list.append(img_tensor)
             self.target_list.append(self.target)
-            print(self.target_list)
+            
             self.target = []
             if len(self.train_data_list) >= self.bachsize:
                 self.train_data.append((torch.stack(self.train_data_list), self.target_list))
