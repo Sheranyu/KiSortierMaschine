@@ -41,6 +41,9 @@ class Statistik(Base):
         self.modus = modus
         self.fremd_id = fremd_id
 
+
+
+
 class EndStastik(Base):
     __tablename__ = 'EndStastik'
 

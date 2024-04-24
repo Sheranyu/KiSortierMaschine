@@ -113,7 +113,7 @@ class CreateModelPageDesign(ABC, ft.Column):
         )
 
         self.warhinweistext = ft.Text(
-                WarnStatus.ONLY_CPU + "\n--------\n" + WarnStatus.FORBIDDEN_TWO_TRAINING, text_align=ft.TextAlign.CENTER,
+                WarnStatus.ONLY_CPU + "\n--------\n", text_align=ft.TextAlign.CENTER,
                 width=300
         )
         self.alertWarnhinweis = ft.AlertDialog(

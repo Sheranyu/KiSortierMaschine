@@ -50,7 +50,7 @@ class KiDatenVerarbeitung():
 
     async def _startasync(self, shareddata: asyncio.Queue, progressring: ft.ProgressRing, zeigebildan, callbackinfos):
         await self._drehe_rad()
-        endkidata = KiData()
+        endkidata = None
         timemulti = 1
         datum = self._erstelle_datum()
         with sessiongen() as session:
@@ -76,7 +76,9 @@ class KiDatenVerarbeitung():
                 await asyncio.sleep(0)
                     
                 if not LaufZeitConfig.islaufzeit:
+                    print(endkidata)
                     self._savetime(endkidata.laufzeit, datumid, session, endkidata.anzahl)
+                    await asyncio.sleep(2)
                     break
                             
             
@@ -93,11 +95,11 @@ class KiDatenVerarbeitung():
             
     async def _MoveSchanze(self, Kidata: KiData):
         if (Kidata.erkannter_modus == Erkanntermodus.FARBE or Kidata.erkannter_modus == Erkanntermodus.FORM )and Kidata.label_name != "background":
-            await self.schanze.start_changeposition(Kidata)
+            drehinfo = await self.schanze.start_changeposition(Kidata)
             # if data is None:
             #     return
             await self._change_color(Kidata)
-            drehinfo = await self.schanze.start_raddrehen()
+            await self.schanze.start_raddrehen()
             self.UpdateZeahler(drehinfo)
         else:
             print("Erkanntermodus nicht erkannt", Kidata.erkannter_modus)

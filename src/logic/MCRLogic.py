@@ -38,8 +38,8 @@ class SchanzenBewegung(SerialInit):
         filtereddata = filterschanzennachlabel(topfdata,label)
         if filtereddata is None:
             return None
-        print(filtereddata)
-        await self._ChangePosition(filtereddata.Topf)
+        
+        return await self._ChangePosition(filtereddata.Topf)
         
         
         # if label in SchanzenSteuerungFarbe.BLUE.value or label in SchanzenSteuerungformenum.acht.value:
@@ -69,10 +69,10 @@ class SchanzenBewegung(SerialInit):
             while response.rstrip() != MCRMeldungen.SERVO_GEDREHT:
                 response = await recv(self.reader)
                 print(response)
-                
+            response_str = response.decode().strip()
             self.writer.close()
             await self.writer.wait_closed()
-            return
+            return response_str
         except:
             self.writer.close()
             await self.writer.wait_closed()
@@ -83,8 +83,8 @@ class SchanzenBewegung(SerialInit):
     
     async def start_raddrehen(self) -> str:
         #if kilaufdaten.label_name == SchnazenSteuerungFarbe.BACKGROUND.value:
-        responsedata = await self._raddrehen()  
-        return responsedata
+        await self._raddrehen()  
+    
     
     async def _raddrehen(self) -> str:
         await self._initserial()
@@ -102,7 +102,7 @@ class SchanzenBewegung(SerialInit):
         resposne_str = response.decode().strip()
         self.writer.close()
         await self.writer.wait_closed()
-        return resposne_str
+        return 
         
             
             
