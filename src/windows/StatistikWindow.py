@@ -1,21 +1,19 @@
 import flet as ft
 from Designer.design import StatistikPageDesign
+from db.db_and_models.models import EndStastik
+from logic.Statistikloader import KIStatistikLoader
 class Statistiken(StatistikPageDesign):
     def __init__(self):
         super().__init__()
         # Initialize UI elements
-
+        self.Statistiklaoder = KIStatistikLoader()
 
     def build(self):
         # Create the title element
         title = ft.Text("Alle Statistiken", size=20, text_align="center")
 
         # Create buttons column
-        buttons_column = ft.Column(controls=[
-            self.bekomme_daten_button,
-            self.laden_button,
-            self.speichern_button
-        ])
+
 
         # Central column for all elements
         main_layout = ft.Column(controls=[
@@ -23,10 +21,9 @@ class Statistiken(StatistikPageDesign):
             self.search_statistikdata,
             self.teile_sortiert,
             self.modus_anzeige,
-            self.mehr_sortiert,
+            self.durchschnittsprozent,
+            self.avg_erkennung,
             self.laufzeit_anzeige,
-            self.motor_drehung,
-            buttons_column
         ], expand=True)
 
         # Container for the main layout
@@ -34,9 +31,26 @@ class Statistiken(StatistikPageDesign):
 
         return center_container
 
+    def loadinitdata(self,e):
+        pass
+        
+        
     def getdata(self, e):
         # Implementation for loading data
         pass
+
+    def close_anchor(self, e: ft.ControlEvent):
+        text = f"{e.control.title.value}"
+        data = self.Statistiklaoder.loadendstatistik(e.control.data)
+        if data:
+            self.laufzeit_anzeige.value = data.laufzeit
+            self.teile_sortiert.value = data.stueckzahl
+        else:
+            self.laufzeit_anzeige.value = "N/A"
+            self.teile_sortiert.value = "N/A"
+            
+        self.search_statistikdata.close_view(text)
+        self.update()
 
     def savedata(self, e):
         # Implementation for saving data
@@ -45,3 +59,18 @@ class Statistiken(StatistikPageDesign):
     def on_enter_search(self, e):
         # Implementation for the search function
         pass
+    
+    def on_change_search(self,e: ft.TapEvent):
+        pass
+    
+    
+    def will_unmount(self):
+        self.search_statistikdata.controls.clear()
+    
+    def did_mount(self):
+        result = KIStatistikLoader().loaddatum()
+        for data in result:
+            listdata = ft.ListTile(5,title=ft.Text(data.Datum), on_click=self.close_anchor,data=data.Id)
+            self.search_statistikdata.controls.append(listdata)
+        self.search_statistikdata.controls.reverse()
+        self.update()

@@ -1,10 +1,10 @@
 
-from typing import List
+from typing import List, Sequence, Tuple
 from db.db_and_models.models import Statistik, DatumSpeicherung
 from sqlalchemy.orm.session import Session
 from db.db_and_models.session import sessiongen
 from modele.InterneDatenModele import KiData
-
+from sqlalchemy import Row, select
 class StatistikCreater():
     def savestatistik(self,daten: KiData,aktulles_datum_id: int ,session: Session):
         
@@ -17,11 +17,10 @@ class StatistikCreater():
         session.commit()
 
 class StatistikReader():
-    def Readdata():
-        with sessiongen() as session:
-            statisiken: List[Statistik] = session.query(Statistik).all()
-            for item in statisiken:
-                pass
+    def Readdata(datum_id: int,session: Session):
+        smt = select(Statistik).where(Statistik.fremd_id == datum_id).order_by()
+        result = session.execute(smt).scalars()
+        return result.fetchall()
 
 
 class UpdateStatistik():

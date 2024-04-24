@@ -1,6 +1,7 @@
 
 
 
+from sqlalchemy import select
 from sqlalchemy.orm.session import Session
 
 from db.db_and_models.models import EndStastik
@@ -17,3 +18,9 @@ class EndStatistik():
         session.commit()
             
         print("angekommen")
+        
+    def getStatistik(self,aktulles_datum_id,session: Session):
+        result = session.execute(select(EndStastik).where(EndStastik.datumspeicherung_id == aktulles_datum_id)).scalar()
+        return result
+        
+        

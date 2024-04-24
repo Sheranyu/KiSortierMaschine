@@ -261,15 +261,18 @@ Bei allen anderen Modelen nutzen sie bitte den: """,
 class StatistikPageDesign(ft.Column,ABC):
     def __init__(self) -> None:
         super().__init__()
-        self.teile_sortiert = ft.TextField(label="Sortierte Teile", value="0", read_only=True)
-        self.modus_anzeige = ft.TextField(label="Modus", value="N/A", read_only=True)
-        self.mehr_sortiert = ft.TextField(label="Mehr sortiert (Farbe/Form)", value="N/A", read_only=True)
-        self.laufzeit_anzeige = ft.TextField(label="Laufzeit", value="0", read_only=True)
-        self.motor_drehung = ft.TextField(label="Motor Drehung", value="0", read_only=True)
-        self.laden_button = ft.ElevatedButton(text="Daten laden", on_click=self.getdata)
-        self.speichern_button = ft.ElevatedButton(text="Daten speichern", on_click=self.savedata)
-        self.bekomme_daten_button = ft.ElevatedButton(text="Bekomme Daten", on_click=self.getdata)
-        self.search_statistikdata = ft.SearchBar(on_submit=self.on_enter_search, divider_color=ft.colors.AMBER)
+        self.teile_sortiert = TextFieldBCB(label="Sortierte Teile", value="0", read_only=True)
+        self.modus_anzeige = TextFieldBCB(label="Modus", value="N/A", read_only=True)
+        
+        self.laufzeit_anzeige = TextFieldBCB(label="Laufzeit", value="0", read_only=True)
+        self.durchschnittsprozent = TextFieldBCB(label="Erkannter Prozent", value="N/A",)
+        self.avg_erkennung = TextFieldBCB(label="Am meisten erkanntes Objekt", value="N/A")
+        self.search_statistikdata = ft.SearchBar(on_submit=self.on_enter_search,
+                                                 on_tap=self.loadinitdata, 
+                                                 on_change=self.on_change_search,
+                                                 divider_color=ft.colors.AMBER,
+                                                 
+                                                 )
 
     @abstractmethod
     def getdata(self):
@@ -277,6 +280,17 @@ class StatistikPageDesign(ft.Column,ABC):
     @abstractmethod
     def on_enter_search(self):
         raise NotImplementedError()
+    
+    @abstractmethod
+    def on_change_search(self):
+        pass
+    @abstractmethod
+    def loadinitdata(self):
+        pass
+    
+    @abstractmethod
+    def close_anchor(self,e):
+        pass
     
     
     
