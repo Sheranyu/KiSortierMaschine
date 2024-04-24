@@ -214,12 +214,15 @@ class LoadModelPageDesign(ABC, ft.Column):
         self.pick_file_label = ft.FilePicker(on_result=self.pick_file_label_result)
 
         self.modelhinweistext = ft.Text(
-            "aktuell können nur Kera Modelle geladen werden",
+"""Den Farbmodus nur wählen, wenn Sie das trainierte Farbmodel nutzen.
+Bei allen anderen Modelen nutzen sie bitte den: """,
+
             color=ft.colors.YELLOW,
-            text_align=ft.TextAlign.CENTER,
+            spans=[ft.TextSpan("Formodus", style=ft.TextStyle(color=ft.colors.RED))],
+            text_align=ft.TextAlign.CENTER,theme_style=ft.TextThemeStyle.BODY_LARGE
         )
         self.modelhinweistextue = ft.Text(
-            "Hinweis", color=ft.colors.YELLOW, text_align=ft.TextAlign.CENTER
+            "Hinweis", color=ft.colors.YELLOW, text_align=ft.TextAlign.CENTER, theme_style=ft.TextThemeStyle.BODY_LARGE
         )
         self.cardseperator = ft.Divider(thickness=2)
         self.selected_files = ft.Text(visible=False)

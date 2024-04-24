@@ -71,7 +71,7 @@ class Router:
         #                                          appbar=ft.AppBar(title=ft.Text("Settings"), bgcolor=ft.colors.SURFACE_VARIANT))
         
         self.infoview = ft.View("/info",controls=[Infoseite()], 
-                                appbar=ft.AppBar(title=ft.Text("info")))
+                                appbar=ft.AppBar(title=ft.Text("info"),bgcolor=ft.colors.SURFACE_VARIANT))
         
         self.routes = {
             "/create-model": self.create_model_view,
