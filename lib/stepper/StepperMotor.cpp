@@ -1,5 +1,7 @@
 #include "StepperMotor.h" // Inkludiert die Header-Datei für die StepperMotor-Klasse.
 
+#define STEPPER_SPEED 2 // in ms
+
 // Konstruktor der Klasse StepperMotor, der die Pins für die Motoransteuerung initialisiert.
 StepperMotor::StepperMotor(int pin1, int pin2, int pin3, int pin4) : totalSteps(0) {
   // Zuweisen der Pins zu einem Array, welches die Steuerung des Schrittmotors ermöglicht.
@@ -55,7 +57,7 @@ void StepperMotor::setRunning(bool running) {
 void StepperMotor::runIfNeeded() {
     if (running) {
         oneStep(direction); // Richtung ist bereits als Zustand gespeichert
-        delay(10); // Anpassbare Verzögerung zur Geschwindigkeitskontrolle
+        delay(STEPPER_SPEED); // Anpassbare Verzögerung zur Geschwindigkeitskontrolle
     }
 }
 
@@ -65,7 +67,7 @@ void StepperMotor::moveSteps(int steps) {
     for(int i = 0; i < abs(steps); i++) {
         oneStep(steps > 0);
         totalSteps += (steps > 0) ? 1 : -1;
-        delay(10); // Kurze Verzögerung für den Schritt
+        delay(STEPPER_SPEED); // Kurze Verzögerung für den Schritt
     }
     Serial.println("gedreht");
 }
