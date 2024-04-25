@@ -1,6 +1,6 @@
 #include "StepperMotor.h" // Inkludiert die Header-Datei für die StepperMotor-Klasse.
 
-#define STEPPER_SPEED 2 // in ms
+#define STEPPER_SPEED 8 // in ms
 
 // Konstruktor der Klasse StepperMotor, der die Pins für die Motoransteuerung initialisiert.
 StepperMotor::StepperMotor(int pin1, int pin2, int pin3, int pin4) : totalSteps(0) {
