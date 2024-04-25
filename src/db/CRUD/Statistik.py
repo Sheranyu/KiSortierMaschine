@@ -17,9 +17,11 @@ class StatistikCreater():
         session.commit()
 
 class StatistikReader():
-    def Readdata(datum_id: int,session: Session):
+    def Readdata(self,datum_id: int,session: Session):
         smt = select(Statistik).where(Statistik.fremd_id == datum_id).order_by()
         result = session.execute(smt).scalars()
+       
+        
         return result.fetchall()
 
 

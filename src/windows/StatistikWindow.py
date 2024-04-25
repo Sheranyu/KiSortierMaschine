@@ -2,6 +2,7 @@ import flet as ft
 from Designer.design import StatistikPageDesign
 from db.db_and_models.models import EndStastik
 from logic.Statistikloader import KIStatistikLoader
+from logic.datenverarbeitung import Stastikverarbeiter
 class Statistiken(StatistikPageDesign):
     def __init__(self):
         super().__init__()
@@ -42,9 +43,17 @@ class Statistiken(StatistikPageDesign):
     def close_anchor(self, e: ft.ControlEvent):
         text = f"{e.control.title.value}"
         data = self.Statistiklaoder.loadendstatistik(e.control.data)
+        
+        laufzeitdata = self.Statistiklaoder.loadstatistik(e.control.data)
+      
+        lzddurchschnitt = Stastikverarbeiter().getDurchnschnittDaten(laufzeitdata)
+            
         if data:
             self.laufzeit_anzeige.value = data.laufzeit
             self.teile_sortiert.value = data.stueckzahl
+            self.avg_erkennung.value = lzddurchschnitt.max_vorkommen
+            self.durchschnittsprozent.value = lzddurchschnitt.durchschnitprozent
+            self.modus_anzeige.value = lzddurchschnitt.modus
         else:
             self.laufzeit_anzeige.value = "N/A"
             self.teile_sortiert.value = "N/A"
