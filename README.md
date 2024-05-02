@@ -14,6 +14,10 @@ Diese Datei bietet eine Übersicht über alle verfügbaren UART-Befehle, ihre Fu
 - **Beschreibung**: Stoppt den Steppermotor.
 - **Befehl**: `stop`
 
+### Befehl zum Drehen des Steppermotors
+- **Beschreibung**: Dreht den Steppermotor um 1/3 des Rads.
+- **Befehl**: `go`
+
 ### Einstellen der Drehrichtung des Steppermotors
 - **Beschreibung**: Ändert die Drehrichtung des Steppermotors. `1` für im Uhrzeigersinn, `0` für gegen den Uhrzeigersinn.
 - **Befehl**: `dir{Richtung}`
@@ -112,10 +116,6 @@ Diese Datei bietet eine Übersicht über alle verfügbaren UART-Befehle, ihre Fu
     ```
     "sonstig" oder "other"
     ```
-
-### Befehl zum Drehen des Steppermotors
-- **Beschreibung**: Dreht den Steppermotor um 1/3 Umdrehung.
-- **Befehl**: `go`
 
 ### Unbekannter Befehl
 - **Beschreibung**: Wird ausgegeben, wenn ein eingegebener Befehl nicht erkannt wird.
