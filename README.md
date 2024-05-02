@@ -9,49 +9,49 @@ Diese Datei bietet eine Übersicht über alle verfügbaren UART-Befehle, ihre Fu
 
 ### Starten des Steppermotors
 - **Beschreibung**: Startet den Steppermotor.
-- **Befehl**: `start;`
+- **Befehl**: `start`
 
 ### Stoppen des Steppermotors
 - **Beschreibung**: Stoppt den Steppermotor.
-- **Befehl**: `stop;`
+- **Befehl**: `stop`
 
 ### Einstellen der Drehrichtung des Steppermotors
 - **Beschreibung**: Ändert die Drehrichtung des Steppermotors. `1` für im Uhrzeigersinn, `0` für gegen den Uhrzeigersinn.
-- **Befehl**: `dir{Richtung};`
+- **Befehl**: `dir{Richtung}`
 - **Beispiele**:
   - Im Uhrzeigersinn:
     ```
-    dir1;
+    diru
     ```
   - Gegen den Uhrzeigersinn:
     ```
-    dir0;
+    dirgu
     ```
 
 ### Einstellen der Servoposition
 - **Beschreibung**: Einstellen der Position des Servomotors. Die Position sollte eine Zahl zwischen 0 und 180 sein.
-- **Befehl**: `sg1{Position};`
+- **Befehl**: `sg1{Position}`
 - **Beispiel**:
   - Auf 120 Grad drehen:
     ```
-    sg1120;
+    sg1120
     ```
 
 ### Einstellen der LED-Farbe
 - **Beschreibung**: Einstellen der Farbe der LED über RGB-Werte. Jeder Wert kann zwischen 0 und 255 liegen.
-- **Befehl**: `led{Rot}{Grün}{Blau};`
+- **Befehl**: `led{Rot}{Grün}{Blau}`
 - **Beispiele**:
   - Rotes Licht:
     ```
-    led255000000;
+    led255000000
     ```
   - Grünes Licht:
     ```
-    led000255000;
+    led000255000
     ```
   - Blaues Licht:
     ```
-    led000000255;
+    led000000255
     ```
 
 ### Bewegen des Servos zu einem Becher
@@ -59,28 +59,25 @@ Diese Datei bietet eine Übersicht über alle verfügbaren UART-Befehle, ihre Fu
 - **Befehle**:
   - Becher 1:
     ```
-    b1;
+    b1
     ```
   - Becher 2:
     ```
-    b2;
+    b2
     ```
   - Becher 3:
     ```
-    b3;
+    b3
     ```
   - Becher 4:
     ```
-    b4;
+    b4
     ```
 
-### Initialisierung des Steppermotors
-- **Beschreibung**: Fahre den Steppermotor in die Initialisierungsposition.
-- **Befehl**: `init;`
 
 ### Testmodus für den Servo
 - **Beschreibung**: Aktiviert den Testmodus für den Servo.
-- **Befehl**: `testservo;`
+- **Befehl**: `testservo`
 
 ### LED-Farbe einstellen nach Namen
 - **Beschreibung**: Stellt die LED-Farbe ein basierend auf dem Namen der Farbe.
