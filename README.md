@@ -1,5 +1,4 @@
-#### Die Anleitung zum ausführen des KI-Projekts befindet sich im main branch.
-
+#### Die Anleitung zum Ausführen des KI-Projekts befindet sich im main branch.
 
 # Befehlsübersicht für das Arduino-Projekt
 
@@ -74,7 +73,6 @@ Diese Datei bietet eine Übersicht über alle verfügbaren UART-Befehle, ihre Fu
     b4
     ```
 
-
 ### Testmodus für den Servo
 - **Beschreibung**: Aktiviert den Testmodus für den Servo.
 - **Befehl**: `testservo`
@@ -84,17 +82,40 @@ Diese Datei bietet eine Übersicht über alle verfügbaren UART-Befehle, ihre Fu
 - **Beispiele**:
   - Für Blau:
     ```
-    blue;
+    "blue" oder "blau"
     ```
   - Für Grün:
     ```
-    green;
+    "green" oder "gruen"
     ```
   - Für Weiß:
     ```
-    white;
+    "white" oder "weiss"
     ```
-  - Weitere Farben wie gelb, rot, lila, schwarz und andere sind auch möglich.
+  - Für Schwarz:
+    ```
+    "black" oder "schwarz"
+    ```
+  - Für Lila:
+    ```
+    "purple" oder "lila"
+    ```
+  - Für Rot:
+    ```
+    "red" oder "rot"
+    ```
+  - Für Gelb:
+    ```
+    "yellow" oder "gelb"
+    ```
+  - Für Sonstiges (leuchtet Cyan):
+    ```
+    "sonstig" oder "other"
+    ```
+
+### Befehl zum Drehen des Steppermotors
+- **Beschreibung**: Dreht den Steppermotor um 1/3 Umdrehung.
+- **Befehl**: `go`
 
 ### Unbekannter Befehl
 - **Beschreibung**: Wird ausgegeben, wenn ein eingegebener Befehl nicht erkannt wird.
