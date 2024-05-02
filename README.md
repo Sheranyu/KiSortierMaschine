@@ -1,5 +1,17 @@
 #### Die Anleitung zum Ausführen des KI-Projekts befindet sich im main branch.
 
+
+
+
+
+![Modellansicht der Anlage](3D_Modell.png)
+
+
+
+
+
+
+
 # Befehlsübersicht für das Arduino-Projekt
 
 Diese Datei bietet eine Übersicht über alle verfügbaren UART-Befehle, ihre Funktionen und Beispiele für ihre Verwendung.
