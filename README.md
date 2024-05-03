@@ -130,6 +130,8 @@ Nach Eingabe dieses Befehls, sollte links im Terminal (myvenv) stehen:
 
 Nun installieren wir alle nötigen Module mit dem Befehl `pip install -r requirements.txt` (Auch dieser Vorgang kann etwas dauern, ggf. muss man wenn im Terminal längere Zeit nichts passiert mal reinklicken und ENTER drücken.):
 
-
+![](/src/assets/prausf009.png)
+![](/src/assets/prausf010.png)
+![](/src/assets/prausf011.png)
 
 Als letztes kann das Projekt mit dem Befehl `flet run src` ausgeführt werden:
