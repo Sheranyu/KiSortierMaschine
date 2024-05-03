@@ -30,6 +30,20 @@ SOFTWARE.
 Die Sortiermaschine sortiert D&D (Dungeons and Dragons) Würfel mit Hilfe von KI. Ein KI-Modell sortiert die Würfel nach 3 Farben (Klassen: rot, grün, blau, sonstig und Background), während das andere Modell die Formen der Würfel sortiert (Klassen: 20er Würfel, 8er Würfel, 6er Würfel, sonstig und Background).
 Andere Farben oder Formen, die der KI nicht bekannt sind, werden in die 4 Behälter sortiert. Diese haben in den KI-Modellen die Klasse Sonstig.
 
+# Komponenten
+
+## Die Anlage besteht aus folgenden Komponenten:
+
+- **Mikrocontroller**
+- **Board für externe Spannungsversorgung für die Motoren**
+- **Webcam**
+- **Servomotor SG90**
+- **Schrittmotor mit Treiber-Modul**
+- **Breadboard**
+- **RGB LED**
+- **Push Button**
+
+
 
 # Die Anleitung zum Ausführen des KI-Projekts befindet sich im main branch.
 
