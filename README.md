@@ -38,7 +38,7 @@ Andere Farben oder Formen, die der KI nicht bekannt sind, werden in die 4 Behäl
 - **Board für externe Spannungsversorgung für die Motoren**
 - **Webcam**
 - **Servomotor SG90**
-- **Schrittmotor mit Treiber-Modul**
+- **Schrittmotor (28BYJ-48) mit Treiber-Modul**
 - **Breadboard**
 - **RGB LED**
 - **Push Button**
