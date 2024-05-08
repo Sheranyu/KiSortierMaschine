@@ -25,6 +25,7 @@ class MeinNetz(nn.Module):
         x = self.conv3(x)
         x = F.max_pool2d(x, 2)
         x = F.relu(x)
+        
         x = self.conv4(x)  # Neue Convolutional-Schicht
         x = F.max_pool2d(x, 2)
         x = F.relu(x)

@@ -36,7 +36,7 @@ class WebcamAufnahme(RecordSettings):
         cap = cv2.VideoCapture(self.choicedcamera.Camera)
         if cap.set(cv2.CAP_PROP_AUTOFOCUS, 0):
             cap.set(cv2.CAP_PROP_FOCUS, 10)
-            print("Manueller Fokus wurde")
+            print("Manueller Fokus wurde gesetzt")
         cap.set(cv2.CAP_PROP_FRAME_WIDTH, self.width)
         cap.set(cv2.CAP_PROP_FRAME_HEIGHT, self.height)
 
