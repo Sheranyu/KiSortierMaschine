@@ -102,9 +102,9 @@ class TrainiertesModel(RecordSettings):
         label_names = self.loadlabeldata()
        
         cap = cv2.VideoCapture(self.choicedcamera.Camera) 
-        if cap.set(cv2.CAP_PROP_AUTOFOCUS, 0):
-            cap.set(cv2.CAP_PROP_FOCUS, 10)
-            print("Manueller Fokus wurde")
+        #if cap.set(cv2.CAP_PROP_AUTOFOCUS, 0):
+        cap.set(cv2.CAP_PROP_FOCUS, 2)
+        print("Manueller Fokus wurde")
             
         cap.set(cv2.CAP_PROP_FRAME_WIDTH, self.width)
         cap.set(cv2.CAP_PROP_FRAME_HEIGHT, self.height) # 0 steht für die erste angeschlossene Kamera
