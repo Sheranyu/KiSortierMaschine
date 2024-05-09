@@ -86,7 +86,7 @@ class KiDatenVerarbeitung():
             
 
     async def _change_color(self, kidaten: KiData):
-        if kidaten.erkannter_modus == Erkanntermodus.FARBE:
+        #if kidaten.erkannter_modus == Erkanntermodus.FARBE:
             await self.colorchange.setledcolor(kidaten)
             
     def UpdateZeahler(self,gedreht: str):

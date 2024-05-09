@@ -55,10 +55,12 @@ class KiTraining():
             transforms.RandomResizedCrop(224),
             #transforms.RandomAdjustSharpness(2, p=0.1),
             transforms.RandomGrayscale(),
+            
             # Zufällige Skalierung und Zuschneiden
             #transforms.ColorJitter(brightness=0.1, contrast=0.1, saturation=0.1),  # Farbtransformationen
             transforms.ToTensor(),  # Konvertierung in Tensor
             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+            transforms.RandomVerticalFlip(),
             # Normalisierung
         ])
 

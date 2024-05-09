@@ -13,7 +13,7 @@ class MeinNetz(nn.Module):
         self.conv4 = nn.Conv2d(18, 24, kernel_size=5)  # Neu hinzugefügte Convolutional-Schicht
         self.fc1 = nn.Linear(24 * 10 * 10, 1500)  # Aktualisierte Eingangsgröße für die erste lineare Schicht
         self.fc2 = nn.Linear(1500, outputs)
-        self.dropout = nn.Dropout(p=0.2)
+        self.dropout = nn.Dropout(p=0.3)
 
     def forward(self, x):
         x = self.conv1(x)
@@ -25,6 +25,7 @@ class MeinNetz(nn.Module):
         x = self.conv3(x)
         x = F.max_pool2d(x, 2)
         x = F.relu(x)
+        
         x = self.conv4(x)  # Neue Convolutional-Schicht
         x = F.max_pool2d(x, 2)
         x = F.relu(x)

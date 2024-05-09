@@ -77,12 +77,14 @@ class AnwendungSetting(ft.Container):
         self.update()
         
         if len(labelinhalt.labeldata) > 0:
+            self.overlay1.textinfo.visible = False
             for labelname in labelinhalt.labeldata:
                 radiobutton = ft.Radio(label=labelname,value=labelname)
                 self.overlay1.radiogroup.content.controls.append(radiobutton)
         else:
             #TODO: User wissen lassen 
-            print("länge ist null")
+            self.overlay1.textinfo.value = "Es muss ein Label ausgewählt sein"
+            self.overlay1.textinfo.visible = True
         
         if schanzendata.selected:
             self.overlay1.radiogroup.value = schanzendata.selected

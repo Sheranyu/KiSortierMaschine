@@ -156,13 +156,13 @@ class EOverlay(ft.Container):
                             alignment=ft.MainAxisAlignment.CENTER)
         self.bgcolor = ft.colors.BLACK
         
-        self.width = 150
+        self.width = 160
         
         self.radiogroup = ft.RadioGroup(ft.Column([
             
         ],height=200,scroll=True),on_change=self.change_radio_inhalt)
-        
-        self.colum = ft.Column([self.uetitle,self.radiogroup],scroll=True)
+        self.textinfo = ft.Text(visible=False)
+        self.colum = ft.Column([self.uetitle,self.textinfo,self.radiogroup],scroll=True)
         self.border_radius = 10
         self.shadow = ft.BoxShadow(2,2,ft.colors.BLUE)
         self.content = self.colum
